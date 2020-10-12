@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #define POT 0;
+typedef enum faciem {LEFT, RIGHT, CENTER, PASS} faces;
 uint32_t left(uint32_t pos, uint32_t players) {
   return ((pos + players - 1) % players);
 };
@@ -12,13 +13,13 @@ uint32_t right(uint32_t pos, uint32_t players) {
 };
 
 int rand_num(int seed);
-void play_game(int player, int seed, int arr[], const char *arr2[]);
-void die_rules(int play, int times, int seed, const char *arr2[]);
-
+void play_game(int player, int seed, int arr[], const char *arr2[], faces die[]);
+void die_rules(int play, int times, int seed, const char *arr2[], faces die[]);
+const char* die_choice(int die_roll);
 
 int main(void)
 {
-  typedef enum faciem {LEFT, RIGHT, CENTER, PASS} faces;
+  
   faces die[] = {LEFT, RIGHT, CENTER, PASS, PASS, PASS};
   const char *names[] = {"Happy", "Sleepy", "Sneezy", "Dopey",
                          "Bashful", "Grumpy", "Doc", "Mirror",
@@ -37,7 +38,7 @@ int main(void)
   }
 
   
-  play_game(player, seed, money_players, names);  
+  play_game(player, seed, money_players, names, die);  
   
    
 
@@ -52,21 +53,48 @@ int rand_num(int seed)
   return rand_val;
 }
 
-void play_game(int player, int seed, int money_players[], const char *names[])
+void play_game(int player, int seed, int money_players[], const char *names[], faces die[])
 {
   int play_pos = 0;
   if (money_players[play_pos] >= 3)
   {
-    die_rules(play_pos, 3, seed, names);
+    die_rules(play_pos, 3, seed, names, die);
   }    
 }
 
-void die_rules(int play, int times, int seed, const char *names[])
+void die_rules(int play, int times, int seed, const char *names[], faces die[])
 {
- for (int i = 0; i < times; i++)
+  printf("%s" " rolls... " , names[play] );
+ 
+  for (int i = 0; i < times; i++)
  {
+
    int dice_num = rand_num(seed);
-   printf("%s", names[0] );
+   int  die_value = die[dice_num];
+   const char *die_play = die_choice(die_value);
+   printf("%s"  "gets a " , die_play );
  }
  
+}
+
+const char *die_choice(int die_roll)
+{
+  switch(die_roll)
+  {
+    case 0:
+      return "left";
+      break;
+   
+    case 1:
+      return "right";
+      break;
+    
+    case 2:
+      return "center";
+      break;
+    
+    default:
+       return "pass";
+       break;
+  }
 }
