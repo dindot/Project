@@ -6,6 +6,7 @@
 int POT =  0;
 int PLAYERSIN = 0;
 typedef enum faciem {LEFT, RIGHT, CENTER, PASS} faces;
+
 uint32_t left(uint32_t pos, uint32_t players) {
   return ((pos + players - 1) % players);
 };
@@ -15,8 +16,8 @@ uint32_t right(uint32_t pos, uint32_t players) {
 };
 
 int rand_num();
-void play_game(int player, int seed, int arr[], const char *arr2[], faces die[], int play_pos);
-void die_rules(int play, int times, int seed, const char *arr2[], faces die[], int player, int money_players[]);
+void play_game(int seed, int arr[], const char *arr2[], faces die[], int play_pos, int player);
+void die_rules(int play, int times, int seed, const char *arr2[], faces die[], int money_players[], int player);
 void  player_in_checker(int playercash, int currentcash);
 const char* die_choice(int die_roll);
 
@@ -43,7 +44,7 @@ int main(void)
   }
 
   
-  play_game(player, seed, money_players, names, die, play_pos);  
+  play_game(seed, money_players, names, die, play_pos, player);  
   
    
 
@@ -57,24 +58,24 @@ int rand_num()
   return rand_val;
 }
 
-void play_game(int player, int seed, int money_players[], const char *names[], faces die[], int play_pos)
+void play_game( int seed, int money_players[], const char *names[], faces die[], int play_pos, int player)
 {
   int counter = 0, record_spot = 0;
-  while (PLAYERSIN != 1)
+  while (1)
 {
   if (money_players[play_pos] >= 3)
   {
-    die_rules(play_pos, 3, seed, names, die, player, money_players);
+    die_rules(play_pos, 3, seed, names, die,  money_players, player);
     play_pos = right(play_pos, player);
   }
   else if (money_players[play_pos] == 2)
   {
-    die_rules(play_pos, 2, seed, names, die, player, money_players);
+    die_rules(play_pos, 2, seed, names, die, money_players, player);
      play_pos = right(play_pos, player);
   }
   else if (money_players[play_pos] == 1)
   {
-    die_rules(play_pos, 1, seed, names, die, player, money_players);
+    die_rules(play_pos, 1, seed, names, die, money_players, player);
     play_pos = right(play_pos, player); 
   }
   else if (money_players[play_pos] == 0)
@@ -83,7 +84,8 @@ void play_game(int player, int seed, int money_players[], const char *names[], f
     play_pos = right(play_pos, player);
   }
   
-   for (int i = 0; i < player; i++)
+  
+   for (int i = 0; i < 7; i++)  // or change to player
   { 
     if (money_players[i] >  0)
     { 
@@ -99,22 +101,22 @@ void play_game(int player, int seed, int money_players[], const char *names[], f
       //printf("%s wins the %d", names[i], POT);
     }
 
-
- /*if (PLAYERSIN == 1 )
+  printf("%d", PLAYERSIN);
+ if (PLAYERSIN == 1 )
   {
       printf("%s wins the $%d", names[record_spot], POT);
   break;
   }  
-  }*/
+  
  
 }
-  printf("%s wins the $%d", names[record_spot], POT);
+ // printf("%s wins the $%d", names[record_spot], POT);
 }
 
-void die_rules(int play, int times, int seed, const char *names[], faces die[], int player, int money_players[])
+void die_rules(int play, int times, int seed, const char *names[], faces die[], int money_players[], int player)
 {
 
-  
+ // printf("%d", PLAYERSIN);
    const char *check_string = "left";
    const char *check_string2 = "right";
    const char *check_string3 = "center";
@@ -193,10 +195,10 @@ void player_in_checker(int playercash, int currentcash)
 {
  if (playercash == 1)
    {
-      PLAYERSIN++;
+     ++PLAYERSIN;
    }
    else if (currentcash == 0)
    {
-      PLAYERSIN--;
+     --PLAYERSIN;
    }
 } 
