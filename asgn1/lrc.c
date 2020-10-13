@@ -75,36 +75,29 @@ void play_game( int seed, int money_players[], const char *names[], faces die[],
   }
   else if (money_players[play_pos] == 1)
   {
+   ++PLAYERSIN;
     die_rules(play_pos, 1, seed, names, die, money_players, player);
     play_pos = right(play_pos, player); 
   }
   else if (money_players[play_pos] == 0)
   {
-    PLAYERSIN--;
+   --PLAYERSIN;
     play_pos = right(play_pos, player);
   }
   
   
-   for (int i = 0; i < 7; i++)  // or change to player
+   for (int i = 0; i < player; i++)  // or change to player
   { 
     if (money_players[i] >  0)
     { 
       record_spot = i;
-
-     // printf("%d", record_spot);
-     // counter++;
     }
    
-    
-      //printf("%d", i);
-     // money_players[0] = money_players[i];
-      //printf("%s wins the %d", names[i], POT);
     }
 
-  printf("%d", PLAYERSIN);
- if (PLAYERSIN == 1 )
+ if (PLAYERSIN == 0 )
   {
-      printf("%s wins the $%d", names[record_spot], POT);
+  printf("%s wins the $%d pot with $%d left in the bank!", names[record_spot], POT, money_players[record_spot]);
   break;
   }  
   
@@ -147,16 +140,16 @@ void die_rules(int play, int times, int seed, const char *names[], faces die[], 
    int right_pos =  right(play, player);
    money_players[right_pos] += 1;
    money_players[play] -= 1;
-  player_in_checker(money_players[right_pos], money_players[play]);
+ player_in_checker(money_players[right_pos], money_players[play]);
    printf("gives $1 to %s " , names[right_pos]);
   }
   else if (die_play == check_string3)
   {
    POT++;
    money_players[play] -= 1;
-   if(money_players[play] == 0)
+ if(money_players[play] == 0)
    { 
-     PLAYERSIN--;
+    --PLAYERSIN;
    }
    printf("puts $1 in the pot ");
   } 
@@ -195,10 +188,10 @@ void player_in_checker(int playercash, int currentcash)
 {
  if (playercash == 1)
    {
-     ++PLAYERSIN;
+    ++PLAYERSIN;
    }
-   else if (currentcash == 0)
-   {
-     --PLAYERSIN;
-   }
+  // else if (currentcash == 0)
+  // {
+    // --PLAYERSIN;
+  // }
 } 
