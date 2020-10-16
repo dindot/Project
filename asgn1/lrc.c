@@ -124,7 +124,7 @@ void play_game(int money_players[], const char *names[], faces die[],
     }
 
     if (PLAYERSIN == 0) { // check if only 1 player left, comparing to 0 because of double counting
-      printf("%s wins the $%d pot with $%d left in the bank!", names[record_spot],
+      printf("%s wins the $%d pot with $%d left in the bank!\n \n", names[record_spot],
               POT, money_players[record_spot]); // displays winner, using index to get correct name
       break;
     }
@@ -140,7 +140,7 @@ void die_rules(int play, int times, const char *names[], faces die[],
   const char *check_string2 = "right";
   const char *check_string3 = "center";
 
-  printf("%s rolls... ", names[play]); // current player rolling the dice
+  printf("%s rolls...", names[play]); // current player rolling the dice
 
   for (int i = 0; i < times; i++) { // number of rolls depends on cash
 
@@ -154,14 +154,14 @@ void die_rules(int play, int times, const char *names[], faces die[],
       money_players[left_pos] += 1; // increment left player money by 1
       money_players[play] -= 1; // decrement current player money by 1
       player_in_checker(money_players[left_pos]); // check if players join back
-      printf("gives $1 to %s ", names[left_pos]); // display the ammount given to left player
+      printf(" gives $1 to %s", names[left_pos]); // display the ammount given to left player
     } else if (die_play == check_string2) { // checking for value of right
 
       int right_pos = right(play, player); // get position of player to right of current player
       money_players[right_pos] += 1; // increment right player money by 1
       money_players[play] -= 1; // decrement current player money by 1
       player_in_checker(money_players[right_pos]);
-      printf("gives $1 to %s ", names[right_pos]); // display amount given to right player
+      printf(" gives $1 to %s", names[right_pos]); // display amount given to right player
     } else if (die_play == check_string3) { // checking for value of center
     
       POT++; // money gets placed into the center pot
@@ -170,12 +170,13 @@ void die_rules(int play, int times, const char *names[], faces die[],
       
         --PLAYERSIN;
       }
-      printf("puts $1 in the pot ");
+      printf(" puts $1 in the pot");
     } else { // if the roll is a pass
    
-      printf("gets a %s ", die_play);
+      printf(" gets a %s", die_play);
     }
   }
+ printf("\n");
 }
 
 // maps int value of random roll to return c strings, to be compared to proper die rule
