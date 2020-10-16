@@ -176,7 +176,6 @@ void die_rules(int play, int times, const char *names[], faces die[],
       printf("gets a %s ", die_play);
     }
   }
-  printf("\n");
 }
 
 // maps int value of random roll to return c strings, to be compared to proper die rule
