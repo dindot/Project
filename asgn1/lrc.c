@@ -56,7 +56,7 @@ const char *die_choice(int die_roll);
 int main(void) {
   faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS }; // array die of enum type faces
   const char *names[] = { "Happy", "Sleepy", "Sneezy", "Dopey", // names of the max 10 players
-                          "Bashful", "Grumpy", "Doc", "Mirror", "Snow White", "Wicked Queen" };
+                          "Bashful", "Grumpy", "Doc", "Mirror Mirror", "Snow White", "Wicked Queen" };
   int player, seed, play_pos = 0;
 
   // take in user input of seed, players to be able to start game
