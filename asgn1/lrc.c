@@ -124,7 +124,7 @@ void play_game(int money_players[], const char *names[], faces die[],
     }
 
     if (PLAYERSIN == 0) { // check if only 1 player left, comparing to 0 because of double counting
-      printf("%s wins the $%d pot with $%d left in the bank!\n", names[record_spot],
+      printf("%s wins the $%d pot with $%d left in the bank!", names[record_spot],
               POT, money_players[record_spot]); // displays winner, using index to get correct name
       break;
     }
