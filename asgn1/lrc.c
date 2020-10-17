@@ -45,9 +45,9 @@ void die_rules(int play, int times, const char *names[], faces die[],
                int money_players[], int player);
 
 // void function to check how many players are still in the game based on add/removed cash
-// playercash: total amount of cash player currently has as int
-//
-void player_in_checker(int playercash);
+// playercash: total amount of cash currently passed onto left or right player
+// current: current cash of the player that was passing the cash
+void player_in_checker(int playercash, int current);
 
 // die_choice returns pointer to constant char which is acutal c string value of value on die
 // die_roll: stores as int  the number 0-5
@@ -107,14 +107,12 @@ void play_game(int money_players[], const char *names[], faces die[],
           player); // allow to roll 2 times
       play_pos = right(play_pos, player);
     } else if (money_players[play_pos] == 1) { // player only has $1 in bank
-   
-      ++PLAYERSIN; // account for players being at $0 then coming back to $1   // change this one check here and then the function last one to account for playersin in then make the check up top where [layersin== 1 instead of 0 bc u arent tracking it correctly.
+    
       die_rules(play_pos, 1, names, die, money_players, player); // allow to roll once
       play_pos = right(play_pos, player);
     } else if (money_players[play_pos] == 0) { // player has no money left
  
-      --PLAYERSIN; // this player is "out"
-      play_pos = right(play_pos, player);
+       play_pos = right(play_pos, player);
     }
 
     for (int i = 0; i < player; i++) { // checks to see what player is the only one w money left
@@ -122,8 +120,8 @@ void play_game(int money_players[], const char *names[], faces die[],
         record_spot = i; // store index of the player
       }
     }
-
-    if (PLAYERSIN == 0) { // check if only 1 player left, comparing to 0 because of double counting
+     
+   if (PLAYERSIN == 1 ) { // check if only 1 player left, comparing to 0 because of double counting
       printf("%s wins the $%d pot with $%d left in the bank!\n", names[record_spot],
               POT, money_players[record_spot]); // displays winner, using index to get correct name
       break;
@@ -153,14 +151,14 @@ void die_rules(int play, int times, const char *names[], faces die[],
       int left_pos = left(play, player); // get position of player to left of current player
       money_players[left_pos] += 1; // increment left player money by 1
       money_players[play] -= 1; // decrement current player money by 1
-      player_in_checker(money_players[left_pos]); // check if players join back
+      player_in_checker(money_players[left_pos], money_players[play]); // check if players join back
       printf(" gives $1 to %s", names[left_pos]); // display the ammount given to left player
     } else if (die_play == check_string2) { // checking for value of right
 
       int right_pos = right(play, player); // get position of player to right of current player
       money_players[right_pos] += 1; // increment right player money by 1
       money_players[play] -= 1; // decrement current player money by 1
-      player_in_checker(money_players[right_pos]);
+      player_in_checker(money_players[right_pos], money_players[play]);
       printf(" gives $1 to %s", names[right_pos]); // display amount given to right player
     } else if (die_play == check_string3) { // checking for value of center
     
@@ -168,7 +166,7 @@ void die_rules(int play, int times, const char *names[], faces die[],
       money_players[play] -= 1;
       if (money_players[play] == 0) { // check if the players goes "out"
       
-        --PLAYERSIN;
+        PLAYERSIN--;
       }
       printf(" puts $1 in the pot");
     } else { // if the roll is a pass
@@ -202,8 +200,11 @@ const char *die_choice(int die_roll) {
 }
 
 // for checking if player who might have been at $0 got an increment, so they are back in
-void player_in_checker(int playercash) {
+void player_in_checker(int playercash, int current) {
   if (playercash == 1) {
-    ++PLAYERSIN;
+   PLAYERSIN++;
+  }
+  if (current == 0) {
+    PLAYERSIN--;
   }
 }
