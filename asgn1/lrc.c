@@ -108,7 +108,7 @@ void play_game(int money_players[], const char *names[], faces die[],
       play_pos = right(play_pos, player);
     } else if (money_players[play_pos] == 1) { // player only has $1 in bank
    
-      ++PLAYERSIN; // account for players being at $0 then coming back to $1
+      ++PLAYERSIN; // account for players being at $0 then coming back to $1   // change this one check here and then the function last one to account for playersin in then make the check up top where [layersin== 1 instead of 0 bc u arent tracking it correctly.
       die_rules(play_pos, 1, names, die, money_players, player); // allow to roll once
       play_pos = right(play_pos, player);
     } else if (money_players[play_pos] == 0) { // player has no money left
@@ -124,7 +124,7 @@ void play_game(int money_players[], const char *names[], faces die[],
     }
 
     if (PLAYERSIN == 0) { // check if only 1 player left, comparing to 0 because of double counting
-      printf("%s wins the $%d pot with $%d left in the bank!", names[record_spot],
+      printf("%s wins the $%d pot with $%d left in the bank!\n", names[record_spot],
               POT, money_players[record_spot]); // displays winner, using index to get correct name
       break;
     }
