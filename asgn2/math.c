@@ -3,7 +3,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 
-#define EPSILON 0.000000001
+#define EPSILON 10e-9
 #define OPTIONS "sctea"
 #define SC_MIN -2 * M_PI
 #define SC_MAX 2 * M_PI
@@ -17,13 +17,13 @@
 void Sin();
 void Cos();
 void Tan();
-void Exp() {}
+void Exp();
 
 int main(int argc, char **argv)
 {
   bool s, c, t, e, a = false;
   int ch = 0;
-  while((ch = getopt(argc, argv, OPTIONS)) != -1)
+  if((ch = getopt(argc, argv, OPTIONS)) != -1)
   { 
     if( ch == 's')
     {
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
        Cos();
      }
    }
-   else if(ch == 't')
+  else  if(ch == 't')
    {
      t = true;
      if(t)
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
        Tan();
      }
    }
-   else if(ch == 'e')
+  else  if (ch == 'e')
    {
     e = true;
     if(e)
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
       Exp();
     }
    }
-   else if(ch == 'a')
+  else  if(ch == 'a')
    {
      a = true;
      if(a)
@@ -68,17 +68,22 @@ int main(int argc, char **argv)
        Exp();
      }
    }
-   else if(ch == '?')
+  else  if(ch == '?')
    {
      printf("Character not defined in the string");
      return -1;  
    }
-  }  
+ }
+  
+  
   if(argc == 1)
   {
     printf("Error: no arguments supplied!");
     return -1;
    }
+ 
+
+
   return 0;
 }
 
@@ -130,7 +135,31 @@ void Tan()
     tan_lib = tan(i);
     printf("% 6.4lf\t% 10.8lf\t% 10.8lf\t% 12.10lf\n", i, Tan_x, tan_lib, (tan_lib - Tan_x));
   }
-
-
-
 }
+
+void Exp()
+{
+  double total_num = 0;
+  double exp_lib = 0.0;
+  
+  printf("x \t Exp  \t\t Library         Difference\n");
+  printf("- \t ---  \t\t -------         ----------\n");
+ 
+  while(total_num < 91)
+  {
+   double term = 1.0;
+  double sum = term;
+  static double input_num = EXP_MIN;
+ 
+   for(double k = 1.0; (fabs(term) > EPSILON); k+= 1.0)
+   {
+    term = (input_num/k) * term;
+    sum += term;
+   }
+   exp_lib = exp(input_num);
+   printf("% 6.4lf\t% 10.8lf\t% 10.8lf\t% 12.10lf\n", input_num, sum, exp_lib, (exp_lib - sum));
+   input_num += EXP_STEP;
+   total_num++;
+  }
+}
+
