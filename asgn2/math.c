@@ -4,9 +4,8 @@
 #include <stdio.h>
 
 #define EPSILON 10e-9 // use for limiting Exp() to produce restricted  decimals
-#define OPTIONS "sctea"
-#define SC_MIN                                                                 \
-  -2 * M_PI // most accurate representation of pi, use to bound the functions
+#define OPTIONS "sctea"                                                     
+#define SC_MIN -2 * M_PI // most accurate rep. of pi, use to bound the functions
 #define SC_MAX 2 * M_PI
 #define SCT_STEP M_PI / 16
 #define TAN_MIN -M_PI / 3
