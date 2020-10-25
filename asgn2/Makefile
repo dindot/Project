@@ -1,11 +1,11 @@
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -Wpedantic -lm
+CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all: math
 	
 math: math.o
 	$(CC) -o math math.o -lm
-math.o: math.o
+math.o: math.c
 	$(CC) $(CFLAGS) -c math.c
 clean:
 	rm -rf math math.o infer-out
