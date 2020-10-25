@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define EPSILON 1e-10  // use for limiting Exp() to produce restricted  decimals
+#define EPSILON 1e-9  // use for limiting Exp() to produce restricted  decimals
 #define OPTIONS "sctea"                                                     
 #define SC_MIN -2 * M_PI // most accurate rep. of pi, use to bound the functions
 #define SC_MAX 2 * M_PI
@@ -172,7 +172,7 @@ void Exp() {
     double term = 1.0; // start off at 1 accounting for 0! in first term
     double sum = term;
     static double input_num = EXP_MIN; // number starting off from 0 to reach 9
-
+  
     for (double k = 1.0; (fabs(term) > EPSILON);
          k += 1.0) // ensure a limited decimals result
     {
