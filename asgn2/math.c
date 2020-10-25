@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define EPSILON 10e-9 // use for limiting Exp() to produce restricted  decimals
+#define EPSILON 1e-10  // use for limiting Exp() to produce restricted  decimals
 #define OPTIONS "sctea"                                                     
 #define SC_MIN -2 * M_PI // most accurate rep. of pi, use to bound the functions
 #define SC_MAX 2 * M_PI
@@ -109,7 +109,7 @@ void Sin() {
     sin_lib
         = sin(i); // the actual sin function from math.h lib, use as comparison
     printf("% 6.4lf\t% 10.8lf\t% 10.8lf\t% 12.10lf\n", i, Sin_x, sin_lib,
-        (sin_lib - Sin_x));
+        (Sin_x - sin_lib));
   }
 }
 
@@ -127,7 +127,7 @@ void Cos() {
     cos_lib
         = cos(i); // the actual cos function from math.h lib, use as comparison
     printf("% 6.4lf\t% 10.8lf\t% 10.8lf\t% 12.10lf\n", i, Cos_x, cos_lib,
-        (cos_lib - Cos_x));
+        (Cos_x - cos_lib));
   }
 }
 
@@ -150,7 +150,7 @@ void Tan() {
     tan_lib
         = tan(i); // the actual tan function from math.h lib, use as comparison
     printf("% 6.4lf\t% 10.8lf\t% 10.8lf\t% 12.10lf\n", i, Tan_x, tan_lib,
-        (tan_lib - Tan_x));
+        (Tan_x - tan_lib));
   }
 }
 
@@ -182,7 +182,7 @@ void Exp() {
     exp_lib = exp(
         input_num); // actual exp function from math.h lib, use as comparision
     printf("% 6.4lf\t% 10.8lf\t% 10.8lf\t% 12.10lf\n", input_num, sum, exp_lib,
-        (exp_lib - sum));
+        (sum - exp_lib));
     input_num += EXP_STEP;
     total_num++; // account for ending at given range of inputs
   }
