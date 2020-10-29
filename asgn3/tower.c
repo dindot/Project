@@ -121,12 +121,15 @@ void stack_manipulator(int moves, int disks)
    Stack *StackC = stack_create(disks, 'C');
 
 
-   for(int i = disks; i >= 1; i--)
+   for(int i = disks; i>= 1; i--)
    {
      stack_push(StackA, i);
      
    }
-
+    
+  // stack_push(StackB, stack_pop(StackA));
+   //stack_push(StackC, stack_pop(StackA));
+   
    int popped_val =0;
    //if (moves % 2 == 0)
    //{
@@ -135,27 +138,91 @@ void stack_manipulator(int moves, int disks)
   // }
    for(int i =1; i<=moves; i++)
     { 
+     printf("val at A %d i is %d", stack_peek(StackA), i);
      if(i%3 == 1) 
      {
-       // popped_val= stack_pop(StackA);
-        stack_push(StackB, stack_pop(StackA));
-       
+           if(stack_empty(StackB))
+            {
+                   stack_push(StackB, stack_pop(StackA));
+
         printf("Move disk %d from %c to %c\n", stack_peek(StackB), StackA->name, StackB->name);
+            }
+         else if(stack_empty(StackA))
+           {
+                 stack_push(StackA, stack_pop(StackC));
+       printf("Move disk %d from %c to %c\n", stack_peek(StackA), StackC->name, StackA->name);
+          }
+           else if (stack_peek(StackA) < stack_peek(StackB))
+	    {
+                 stack_push(StackB, stack_pop(StackA));
+
+        printf("Move disk %d from %c to %c\n", stack_peek(StackB), StackA->name, StackB->name);
+	    }
+            else if (stack_peek(StackB) < stack_peek(StackA))
+            {
+                 stack_push(StackA, stack_pop(StackB));
+
+        printf("Move disk %d from %c to %c\n", stack_peek(StackA), StackB->name, StackA->name);
+            }
+     
       }
      if(i%3 == 2)
       {
+        if(stack_empty(StackC))
+          {
 
-       // popped_val= stack_pop(StackA);
-        stack_push(StackC, stack_pop(StackA));
+
+            
+               stack_push(StackC, stack_pop(StackA));
         printf("Move disk %d from %c to %c\n", stack_peek(StackC), StackA->name, StackC->name);
+          }
+         else  if(stack_empty(StackA))
+     {
+          stack_push(StackA, stack_pop(StackC));
+       printf("Move disk %d from %c to %c\n", stack_peek(StackA), StackC->name, StackA->name);
+
+     }
+      else  if(stack_peek(StackA) < stack_peek(StackC))
+       {
+               stack_push(StackC, stack_pop(StackA));
+        printf("Move disk %d from %c to %c\n", stack_peek(StackC), StackC->name, StackA->name);
+       }
+
+   else if(stack_peek(StackC) < stack_peek(StackA))
+	{
+
+
+         stack_push(StackA, stack_pop(StackC));
+        printf("Move disk %d from %c to %c\n", stack_peek(StackA), StackC->name, StackA->name);
+         }
+
+   // popped_val= stack_pop(StackA);
+       // stack_push(StackC, stack_pop(StackA));
+       // printf("Move disk %d from %c to %c\n", stack_peek(StackC), StackA->name, StackC->name);
 
       }
      if(i%3 == 0)
 
     { 
-      //popped_val= stack_pop(StackC);
+       if( (stack_peek(StackB) !=0) && (stack_peek(StackB) <  stack_peek(StackC)))
+       {
+           stack_push(StackC, stack_pop(StackB));
+        printf("Move disk %d from %c to %c\n", stack_peek(StackC), StackB->name, StackC->name);
+       }
+	else if (stack_empty(StackA))
+      {
+          stack_push(StackA, stack_pop(StackC));
+       printf("Move disk %d from %c to %c\n", stack_peek(StackA), StackC->name, StackA->name);
+        }
+     else 
+      {
         stack_push(StackB, stack_pop(StackC));
-        printf("Move disk %d from %c to %c\n", stack_peek(StackB), StackC->name, StackB->name);    
+          printf("Move disk %d from %c to %c\n", stack_peek(StackB), StackC->name, StackB->name);
+
+    }
+      //popped_val= stack_pop(StackC);
+      //  stack_push(StackC, stack_pop(StackB));
+    //    printf("Move disk %d from %c to %c\n", stack_peek(StackC), StackB->name, StackC->name);    
    }
 }           
 }
