@@ -5,20 +5,20 @@
 #include "stack.h"
 #define OPTIONS "srn:"
 
-
 void recursive(int disk_num, char A, char B, char C);
 int move_counter(int n);
-
 void stack_manipulator(int moves, int disks);
 void stack_caller(Stack* StackA, Stack *StackX, Stack *StackY, int moves, int disks);
+
 int main(int argc, char **argv)
 {
 char A = 'A', B = 'B', C = 'C';
  char *next_input = NULL;
- bool s, r, n, x;
+ bool s, r, n;
  int default_disk = 0;
  s = r = n = false;
  int c = 0;
+
   while ((c = getopt(argc, argv, OPTIONS)) != -1)
 
 {
@@ -33,7 +33,6 @@ char A = 'A', B = 'B', C = 'C';
    case 'n':
       n = true;
       next_input = optarg;
-      puts(next_input);
       default_disk = atoi(next_input);
       break;
    default:
@@ -42,6 +41,13 @@ char A = 'A', B = 'B', C = 'C';
       
 
   }
+}
+
+   if(argc == 1)
+   { 
+     puts("Error: no arguments supplied!");
+     return -1;
+    }
 
   if (s == true)
   {  if(n== false)
@@ -50,11 +56,11 @@ char A = 'A', B = 'B', C = 'C';
       } 
 
    printf("================================\n");
-      printf("--------   STACKS   ---------\n");
-      printf("================================\n");
+   printf("----------   STACKS   ----------\n");
+    printf("================================\n");
    int num_moves = move_counter(default_disk);
    stack_manipulator(num_moves, default_disk); 
-  
+    printf("\nNumber of moves: %d\n", num_moves);
  }
 
     if(r == true)
@@ -68,27 +74,20 @@ char A = 'A', B = 'B', C = 'C';
       printf("================================\n");
       recursive(default_disk, A, B, C);
       int num_moves = move_counter(default_disk);
-      printf("\nNumber of moves: %d", num_moves);
+      printf("\nNumber of moves: %d\n", num_moves);
 
    }
-}
-
-
-
-
-
 
 
 return 0;
 }
 
 
-
 void recursive(int disks, char A, char B, char C)
 {
 if (disks == 0)
 {
-   return;
+   return;  //base case
 }
 else
 {
@@ -123,12 +122,10 @@ void stack_manipulator(int moves, int disks)
    if(disks % 2 == 0)
    {
     stack_caller(StackA, StackC, StackB, moves, disks);  
-    printf("did mod 2");
-   }
+    }
   else if (disks % 2 != 0){
     stack_caller(StackA, StackB, StackC, moves, disks);
-     printf("did mod nothhhh");
-     }
+      }
 }
 
 
@@ -141,14 +138,10 @@ void stack_caller(Stack* StackA, Stack *StackX, Stack *StackY, int moves, int di
      stack_push(StackA, i);
      
    }
-    printf("val at stackx %c", StackX->name);
  
-   int popped_val =0;
-  
-   for(int i =1; i<=moves; i++)
+    for(int i =1; i<=moves; i++)
     { 
-    // printf("val at A %d i is %d", stack_peek(StackA), i);
-     if(i%3 == 1) 
+        if(i%3 == 1) 
      {
            if(stack_empty(StackX))
             {
@@ -158,7 +151,7 @@ void stack_caller(Stack* StackA, Stack *StackX, Stack *StackY, int moves, int di
             }
          else if(stack_empty(StackA))
            {
-                 stack_push(StackA, stack_pop(StackY));
+                 stack_push(StackA, stack_pop(StackX));
        printf("Move disk %d from %c to %c\n", stack_peek(StackA), StackY->name, StackA->name);
           }
            else if (stack_peek(StackA) < stack_peek(StackX))
@@ -206,8 +199,8 @@ void stack_caller(Stack* StackA, Stack *StackX, Stack *StackY, int moves, int di
          }
       }
      if(i%3 == 0)
-
     { 
+
        if( (stack_peek(StackX) !=0) && (stack_peek(StackX) <  stack_peek(StackY)))
        {
            stack_push(StackY, stack_pop(StackX));
@@ -222,10 +215,8 @@ void stack_caller(Stack* StackA, Stack *StackX, Stack *StackY, int moves, int di
       {
         stack_push(StackX, stack_pop(StackY));
           printf("Move disk %d from %c to %c\n", stack_peek(StackX), StackY->name, StackX->name);
-
     }   
    }
- 
 
 }
 }
