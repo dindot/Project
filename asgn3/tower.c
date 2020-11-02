@@ -123,6 +123,9 @@ void stack_manipulator(int moves, int disks) {
   } else if (disks % 2 != 0) {
     stack_caller(StackA, StackB, StackC, moves, disks);  // else keep same
   }
+  stack_delete(StackA);
+  stack_delete(StackB);
+  stack_delete(StackC);
 }
 
 void stack_caller(
