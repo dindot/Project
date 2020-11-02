@@ -5,6 +5,7 @@ To use the program user must first run it by specifying an option flag of either
 Sources cited, used for general ideas (see DESIGN.pdf of location): Recursion Algorithm .Tower of Hanoi in C step by step video: https://www.youtube.com/watch?v=fffbT41IuB4
 Iterative Hanoi Stack Exchange
 https://cs.stackexchange.com/questions/96624/how-to-solve-tower-of-hanoi-iteratively
+The stack.c is based off of implementations shown in class lecture on stacks, shown by professor Dunne.
 
 Built in UNIX timeshare terminal using Vim
 
