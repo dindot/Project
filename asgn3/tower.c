@@ -176,8 +176,8 @@ void stack_caller(
 
       } else if (stack_peek(StackA) < stack_peek(StackY)) {
         stack_push(StackY, stack_pop(StackA));
-        printf("Move disk %d from peg %c to peg %c\n", stack_peek(StackY), StackY->name,
-            StackA->name);
+        printf("Move disk %d from peg %c to peg %c\n", stack_peek(StackY), StackA->name,
+            StackY->name);
       }
 
       else if (stack_peek(StackY) < stack_peek(StackA)) {
