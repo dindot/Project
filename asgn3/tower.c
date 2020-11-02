@@ -164,7 +164,7 @@ void stack_caller(
       } else if (stack_empty(StackA)) {
         stack_push(StackA, stack_pop(StackX));
         printf("Move disk %d from peg %c to peg %c\n", stack_peek(StackA),
-            StackY->name, StackA->name);
+            StackX->name, StackA->name);
       } else if (stack_peek(StackA) < stack_peek(StackX)) {
         stack_push(StackX, stack_pop(StackA));
 
@@ -211,7 +211,7 @@ void stack_caller(
       } else if (stack_empty(StackA)) {
         stack_push(StackA, stack_pop(StackY));
         printf("Move disk %d from peg %c to peg %c\n", stack_peek(StackA),
-            StackA->name, StackY->name);
+            StackY->name, StackA->name);
       } else {
         stack_push(StackX, stack_pop(StackY));
         printf("Move disk %d from peg %c to peg %c\n", stack_peek(StackX),
