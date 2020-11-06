@@ -1,7 +1,7 @@
 #include "bv.h"
 #include <stdlib.h>
 #include <stdint.h>
-#define NULL (void*)0
+#include <stdio.h>
 
 BitVector *bv_create(uint32_t bit_len)
 {
@@ -39,16 +39,16 @@ void bv_set_bit(BitVector *v, uint32_t i)
 {
   int bucket = i /8;
   int thebit = bv_get_bit(v,i);
-  printf("the bit: %d\n", thebit);
+//  printf("the bit: %d\n", thebit);
 
   uint8_t thebyte = v->vector[bucket];
-  printf("the bucket/byte: %d\n", thebyte);
+//  printf("the bucket/byte: %d\n", thebyte);
 
   uint8_t shiftbyte =  (00000001<<thebit);
-  printf("the byte to OR original byte: %d\n", shiftbyte);
+ // printf("the byte to OR original byte: %d\n", shiftbyte);
 
   uint8_t newresult = thebyte | shiftbyte;
-  printf("the new byte with value: %d\n", newresult); 
+ // printf("the new byte with value: %d\n", newresult); 
 
   v->vector[bucket] = newresult;
 }
@@ -57,16 +57,16 @@ void bv_clr_bit(BitVector *v, uint32_t i)
 {
   int bucket = i /8;
   int thebit = bv_get_bit(v,i);
-  printf("the bit: %d\n", thebit);
+ // printf("the bit: %d\n", thebit);
 
   uint8_t thebyte = v->vector[bucket];
-  printf("the bucket/byte: %d\n", thebyte);
+ // printf("the bucket/byte: %d\n", thebyte);
 
   uint8_t shiftbyte =  ~(00000001<<thebit);
-  printf("the byte to OR original byte: %d\n", shiftbyte);
+//  printf("the byte to OR original byte: %d\n", shiftbyte);
  
   uint8_t newresult = (thebyte & shiftbyte);
-  printf("the new byte with value: %d\n", newresult); 
+ // printf("the new byte with value: %d\n", newresult); 
 
   v->vector[bucket] = newresult;
 
