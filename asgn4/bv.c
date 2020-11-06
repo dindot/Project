@@ -70,7 +70,6 @@ void bv_clr_bit(BitVector *v, uint32_t i)
 
   v->vector[bucket] = newresult;
 
-
 }
 
 uint8_t bv_get_bit(BitVector *v, uint32_t i)

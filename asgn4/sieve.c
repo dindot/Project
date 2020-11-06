@@ -1,5 +1,6 @@
 #include "sieve.h"
 #include "bv.h"
+#include <math.h>
 // The Sieve of Erastothenes
 // Sets bits in BitVector representing prime numbers.
 // Composite numbers are sieved out by clearing bits.

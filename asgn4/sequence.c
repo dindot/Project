@@ -11,7 +11,7 @@ int main()
 int x = fib(5);
 printf("%d", x);
 
-  for (int i =0; i
+ 
 
 
   return 0;
@@ -19,14 +19,14 @@ printf("%d", x);
 
 int fib(int num)
 {
-  if (k == 0 || k == 1)
+  if (num == 0 || num == 1)
 {
-  return k;
+  return num;
 }
 else
 {
 
-return fib(num-1) + fib(num-2)
+return fib(num-1) + fib(num-2);
 }
 
 }
