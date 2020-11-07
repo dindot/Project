@@ -38,6 +38,7 @@ uint32_t bv_get_len(BitVector *v)
 void bv_set_bit(BitVector *v, uint32_t i)
 {
   int bucket = i /8;
+  bool bitset = false;
   int thebit = bv_get_bit(v,i);
 //  printf("the bit: %d\n", thebit);
 
@@ -74,7 +75,7 @@ void bv_clr_bit(BitVector *v, uint32_t i)
 
 uint8_t bv_get_bit(BitVector *v, uint32_t i)
 {
-  return i%8;
+ return i%8;
 }
 
 void bv_set_all_bits(BitVector *v)
