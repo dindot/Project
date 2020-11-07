@@ -38,8 +38,7 @@ uint32_t bv_get_len(BitVector *v)
 void bv_set_bit(BitVector *v, uint32_t i)
 {
   int bucket = i /8;
-  bool bitset = false;
-  int thebit = bv_get_bit(v,i);
+  int thebit = i % 8;
 //  printf("the bit: %d\n", thebit);
 
   uint8_t thebyte = v->vector[bucket];
@@ -57,7 +56,7 @@ void bv_set_bit(BitVector *v, uint32_t i)
 void bv_clr_bit(BitVector *v, uint32_t i)
 {
   int bucket = i /8;
-  int thebit = bv_get_bit(v,i);
+  int thebit = i % 8;
  // printf("the bit: %d\n", thebit);
 
   uint8_t thebyte = v->vector[bucket];
@@ -75,7 +74,18 @@ void bv_clr_bit(BitVector *v, uint32_t i)
 
 uint8_t bv_get_bit(BitVector *v, uint32_t i)
 {
- return i%8;
+
+ int bucket = i /8;
+  int thebit = i % 8;
+ uint8_t thebyte = v->vector[bucket];
+
+      uint8_t shiftbyte =  (00000001<<thebit);
+      uint8_t newresult = thebyte &  shiftbyte;
+     uint8_t valueinbit = newresult >> thebit;
+     //printf("valueinbit: %d", valueinbit);
+     //uint8_t extractedval = valueinbit & 00000001;
+ //return extractedval;
+ return valueinbit;
 }
 
 void bv_set_all_bits(BitVector *v)
