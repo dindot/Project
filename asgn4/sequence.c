@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <stdint.h>
+#include <string.h>
 #define OPTIONS "spn:"
 int fib(int num);
 int lucas(int num);
@@ -14,8 +15,9 @@ bool is_mersenne(int current);
 bool is_lucas(int current);
 bool is_fib(int current);
 void prime_printer(BitVector *bv);
-char* decimal_to_basex(uint8_t num);
-
+char* decimal_to_basex(int num, int base);
+bool isPalindrome (char* s);
+void palindrome_primeprint(BitVector *bv);
 
 int main(int argc, char **argv)
 {
@@ -71,9 +73,22 @@ prime_printer(bv);
 
 }
 
+if(p == true)
+{
+if(n == false)
+{
+   default_prime = 1000;
+
+ }
+
+BitVector *bv2 = bv_create(default_prime);
+sieve(bv2);
+ palindrome_primeprint(bv2);
+}
 
 
-char* x = decimal_to_basex(43);
+
+char* x = decimal_to_basex(43, 2);
       printf("%s", x);
 
 
@@ -225,18 +240,18 @@ return found_mersenne;
 
 
 
-char* decimal_to_basex(uint8_t num)
+char* decimal_to_basex(int num, int base)
 {
  char *base_string = NULL;
  char c;
- char string[8] = "00000000";
+ char string[8] ;
  char newstring[8];
 int counter = 0;
   while (num > 0)
   {
       int x = num;
-      num= (num/ 2);
-      int remainder = x % 2;
+      num= (num/ base);
+      int remainder = x % base;
       c = remainder + '0';
       string[counter] = c;
      
@@ -251,3 +266,51 @@ int counter = 0;
   base_string = newstring;           
            return base_string;
  }
+
+
+
+bool isPalindrome (char* s){
+
+bool f = true;
+int length = strlen(s);
+
+for(int i =0; i< length; i++)
+{
+
+    if(s[i] != s[length -(i+1)])
+    {
+      f = false;
+       break;
+         }
+          
+          }
+         return f;
+         }
+
+
+
+void palindrome_primeprint(BitVector *bv)
+{
+int base = 2;
+printf("Base %d\n", base);
+puts("---- --\n");
+for (int i = 2; i < bv->length; i++)
+{
+  
+   if(bv_get_bit(bv,i) == 1)
+   {
+  char *newbase =  decimal_to_basex(3, base);
+  printf("the new base is%s\n", newbase);
+  bool palindrome = isPalindrome(newbase);
+  
+  if (palindrome == 1)
+  {  
+   // printf("%d = %s\n", i, newbase);
+   }
+   }
+
+}
+
+
+
+}
