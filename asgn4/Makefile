@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -Wpedantic -lm
+CFLAGS = -Wall -Wextra -Werror -Wpedantic
 CC = clang $(CFLAGS)
 OBJECTS = sequence.o bv.o sieve.o
 EXECBIN = sequence
@@ -6,7 +6,7 @@ EXECBIN = sequence
 all: sequence
 
 $(EXECBIN): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXECBIN)
+	$(CC) $(OBJECTS) -o $(EXECBIN) -lm
 sequence.o: sequence.c bv.c sieve.c
 	$(CC) -c sequence.c
 	
