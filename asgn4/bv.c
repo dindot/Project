@@ -33,16 +33,12 @@ void bv_set_bit(
     BitVector *v, uint32_t i) { // cited sources used from class lecture on bits
   int bucket = i / 8;
   int thebit = i % 8;
-  //  printf("the bit: %d\n", thebit);
 
   uint8_t thebyte = v->vector[bucket];
-  //  printf("the bucket/byte: %d\n", thebyte);
 
   uint8_t shiftbyte = (00000001 << thebit);
-  // printf("the byte to OR original byte: %d\n", shiftbyte);
 
   uint8_t newresult = thebyte | shiftbyte;
-  // printf("the new byte with value: %d\n", newresult);
 
   v->vector[bucket] = newresult;
 }
@@ -51,16 +47,12 @@ void bv_clr_bit(BitVector *v,
     uint32_t i) { // cited sources, used from class lecture on bits
   int bucket = i / 8;
   int thebit = i % 8;
-  // printf("the bit: %d\n", thebit);
 
   uint8_t thebyte = v->vector[bucket];
-  // printf("the bucket/byte: %d\n", thebyte);
 
   uint8_t shiftbyte = ~(00000001 << thebit);
-  //  printf("the byte to OR original byte: %d\n", shiftbyte);
 
   uint8_t newresult = (thebyte & shiftbyte);
-  // printf("the new byte with value: %d\n", newresult);
 
   v->vector[bucket] = newresult;
 }
@@ -74,9 +66,7 @@ uint8_t bv_get_bit(BitVector *v, uint32_t i) {
   uint8_t shiftbyte = (00000001 << thebit);
   uint8_t newresult = thebyte & shiftbyte;
   uint8_t valueinbit = newresult >> thebit;
-  //printf("valueinbit: %d", valueinbit);
-  //uint8_t extractedval = valueinbit & 00000001;
-  //return extractedval;
+
   return valueinbit;
 }
 
