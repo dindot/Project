@@ -240,6 +240,10 @@ char *decimal_to_basex(int num, int base) {
   char newstring[10];
   int counter = 0;
 
+  if (num == 2 && base == 2) {
+    return "100";
+  }
+
   while (num > 0) {
     int x = num; // temp storing num
     num = (num / base); // find the quotient of num and keep going until its 0
@@ -338,7 +342,7 @@ void palindrome_primeprint(BitVector *bv, int b) {
       bool palindrome = isPalindrome(newbase);
 
       if (palindrome
-          == true) { // display if the base converted string is palindrome
+          == 1) { // display if the base converted string is palindrome
         printf("%d = %s\n", i, newbase);
       }
     }
