@@ -8,7 +8,8 @@
 // v: The BitVector to sieve
 //
 
-void sieve(BitVector *v) {
+void sieve(
+    BitVector *v) { // cited sources, used from lab manual provided in asgn4
   bv_set_all_bits(v);
   bv_clr_bit(v, 0);
   bv_clr_bit(v, 1);

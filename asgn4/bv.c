@@ -29,7 +29,8 @@ uint32_t bv_get_len(BitVector *v) {
   return v->length;
 }
 
-void bv_set_bit(BitVector *v, uint32_t i) {
+void bv_set_bit(
+    BitVector *v, uint32_t i) { // cited sources used from class lecture on bits
   int bucket = i / 8;
   int thebit = i % 8;
   //  printf("the bit: %d\n", thebit);
@@ -46,7 +47,8 @@ void bv_set_bit(BitVector *v, uint32_t i) {
   v->vector[bucket] = newresult;
 }
 
-void bv_clr_bit(BitVector *v, uint32_t i) {
+void bv_clr_bit(BitVector *v,
+    uint32_t i) { // cited sources, used from class lecture on bits
   int bucket = i / 8;
   int thebit = i % 8;
   // printf("the bit: %d\n", thebit);
