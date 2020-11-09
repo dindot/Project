@@ -236,10 +236,10 @@ char *decimal_to_basex(int num, int base) {
   char *thestring
       = NULL; // stores the remainders of num/base. must be reversed then
   char string
-      [8]; // initially used for storing the remainders as they are converted into string
-  char newstring[8];
+      [10]; // initially used for storing the remainders as they are converted into string
+  char newstring[10];
   int counter = 0;
- 
+
   while (num > 0) {
     int x = num; // temp storing num
     num = (num / base); // find the quotient of num and keep going until its 0
