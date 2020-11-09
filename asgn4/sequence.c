@@ -242,25 +242,25 @@ char *decimal_to_basex(int num, int base) {
       == 0) { // check initially since for base > 10 must use more digits than 0-9
     if (num % base
         == 10) { // so if the quotient is 0, display the remainder as hex
-      return "A";
+      return "a";
     } else if (num % base == 11) {
-      return "B";
+      return "b";
     } else if (num % base == 12) {
-      return "C";
+      return "c";
     } else if (num % base == 13) {
-      return "D";
+      return "d";
     } else if (num % base == 14) {
-      return "E";
+      return "e";
     } else if (num % base == 15) {
-      return "F";
+      return "f";
     }
   }
-  if (num == 2
-      && base == 2) { // there will be 0 as remainder in string, so this case
-    return "1"; // allows for correcting palindrome output of num as 2
-  } else if (num == 2 && base != 2) {
-    return "2";
-  }
+ // if (num == 2
+   //   && base == 2) { // there will be 0 as remainder in string, so this case
+   // return "1"; // allows for correcting palindrome output of num as 2
+ // } else if (num == 2 && base != 2) {
+   // return "2";
+  //}
   while (num > 0) {
     int x = num; // temp storing num
     num = (num / base); // find the quotient of num and keep going until its 0
