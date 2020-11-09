@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 BitVector *bv_create(uint32_t bit_len) {
-  BitVector *v = (struct BitVector *)malloc(sizeof(BitVector));
+  BitVector *v = (BitVector *)malloc(sizeof(BitVector));
   if (v == NULL) {
     return 0;
   }
