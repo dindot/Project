@@ -239,29 +239,7 @@ char *decimal_to_basex(int num, int base) {
       [8]; // initially used for storing the remainders as they are converted into string
   char newstring[8];
   int counter = 0;
-  if (num / base
-      == 0) { // check initially since for base > 10 must use more digits than 0-9
-    if (num % base
-        == 10) { // so if the quotient is 0, display the remainder as hex
-      return "a";
-    } else if (num % base == 11) {
-      return "b";
-    } else if (num % base == 12) {
-      return "c";
-    } else if (num % base == 13) {
-      return "d";
-    } else if (num % base == 14) {
-      return "e";
-    } else if (num % base == 15) {
-      return "f";
-    }
-  }
-  // if (num == 2
-  //   && base == 2) { // there will be 0 as remainder in string, so this case
-  // return "1"; // allows for correcting palindrome output of num as 2
-  // } else if (num == 2 && base != 2) {
-  // return "2";
-  //}
+ 
   while (num > 0) {
     int x = num; // temp storing num
     num = (num / base); // find the quotient of num and keep going until its 0
@@ -350,17 +328,17 @@ bool isPalindrome(
 
 void palindrome_primeprint(BitVector *bv, int b) {
   int base = b; // given the desired base print out tabular form headers of each
-  printf("Base  %d\n",
+  printf("Base%3d\n",
       base); // with the bit prime and its equivalent form in the base
   puts("---- --");
-  for (uint32_t i = 2; i < bv->length; i++) {
+  for (uint32_t i = 2; i <= bv->length; i++) {
 
     if (bv_get_bit(bv, i) == 1) {
       char *newbase = decimal_to_basex(i, base);
       bool palindrome = isPalindrome(newbase);
 
       if (palindrome
-          == 1) { // display if the base converted string is palindrome
+          == true) { // display if the base converted string is palindrome
         printf("%d = %s\n", i, newbase);
       }
     }
