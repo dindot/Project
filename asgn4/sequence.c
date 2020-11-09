@@ -229,6 +229,7 @@ bool is_mersenne(int current) {
 }
 
 char *decimal_to_basex(int num, int base) {
+  char hex;
   char *base_string
       = NULL; // will store final converted num into base: base as string
   char c;
@@ -255,20 +256,60 @@ char *decimal_to_basex(int num, int base) {
       return "f";
     }
   }
- // if (num == 2
-   //   && base == 2) { // there will be 0 as remainder in string, so this case
-   // return "1"; // allows for correcting palindrome output of num as 2
- // } else if (num == 2 && base != 2) {
-   // return "2";
+  // if (num == 2
+  //   && base == 2) { // there will be 0 as remainder in string, so this case
+  // return "1"; // allows for correcting palindrome output of num as 2
+  // } else if (num == 2 && base != 2) {
+  // return "2";
   //}
   while (num > 0) {
     int x = num; // temp storing num
     num = (num / base); // find the quotient of num and keep going until its 0
     int remainder = x % base; // find the remainder of num and store it,
-    c = remainder
-        + '0'; // converts the int remainder into a char to store in the array
-    string[counter] = c;
-    counter++;
+    if (base > 10) {
+      if (remainder
+          == 10) { // so if the quotient is 0, display the remainder as hex
+        hex = 'a';
+        c = hex;
+        string[counter] = c;
+        counter++;
+      } else if (remainder == 11) {
+        hex = 'b';
+        c = hex;
+        string[counter] = c;
+        counter++;
+      } else if (remainder == 12) {
+        hex = 'c';
+        c = hex;
+        string[counter] = c;
+        counter++;
+      } else if (remainder == 13) {
+        hex = 'd';
+        c = hex;
+        string[counter] = c;
+        counter++;
+      } else if (remainder == 14) {
+        hex = 'e';
+        c = hex;
+        string[counter] = c;
+        counter++;
+      } else if (remainder == 15) {
+        hex = 'f';
+        c = hex;
+        string[counter] = c;
+        counter++;
+      } else {
+        c = remainder + '0';
+        string[counter] = c;
+        counter++;
+      }
+
+    } else {
+      c = remainder
+          + '0'; // converts the int remainder into a char to store in the array
+      string[counter] = c;
+      counter++;
+    }
   }
   string[counter]
       = '\0'; // ends the char array to form string of accurate length
