@@ -1,38 +1,28 @@
 #include "binary.h"
 
-void binary_insertion_sort(int arr[], int length)
-{
-  for(int i = 1; i < length; i++)
-   {
-       int value = arr[i];
-       int left = 0;
-        int right = i;
-       
-       while(left<right)
-       {
-         int mid = left + ((right-left)/2);  // find index of element in mid of array
-         if(value>= arr[mid])
-         {
+void binary_insertion_sort(uint32_t arr[], int length) {
+  for (int i = 1; i < length; i++) {
+   uint32_t value = arr[i];
+    int left = 0;
+    int right = i;
 
-             left = mid +1;  // start the left next one over, since value is right half
-         }
-         else
-         {
-            right = mid;  // make right the mid index because will be looking in left half
-         } 
+    while (left < right) {
+      int mid = left
+                + ((right - left) / 2); // find index of element in mid of array
+      if (value >= arr[mid]) {
 
-       } 
-    
-    for(int j = i; j>left; j--)
-    {
-       int temp = arr[j-1];
-       arr[j-1] = arr[j];
-       arr[j] = temp;
-     }
-     }  
+        left = mid
+               + 1; // start the left next one over, since value is right half
+      } else {
+        right
+            = mid; // make right the mid index because will be looking in left half
+      }
+    }
 
-
-
-
-
+    for (int j = i; j > left; j--) {
+      int temp = arr[j - 1];
+      arr[j - 1] = arr[j];
+      arr[j] = temp;
+    }
+  }
 }
