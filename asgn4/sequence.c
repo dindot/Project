@@ -318,7 +318,7 @@ bool isPalindrome(
   bool f = true;
   int length = strlen(
       s); // take the length of string passed and go through each character
-
+  
   for (int i = 0; i < length; i++) {
 
     if (s[i]
@@ -340,7 +340,7 @@ void palindrome_primeprint(BitVector *bv, int b) {
     if (bv_get_bit(bv, i) == 1) {
       char *newbase = decimal_to_basex(i, base);
       bool palindrome = isPalindrome(newbase);
-
+      
       if (palindrome
           == 1) { // display if the base converted string is palindrome
         printf("%d = %s\n", i, newbase);
