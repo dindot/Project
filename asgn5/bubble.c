@@ -1,6 +1,7 @@
 #include "bubble.h"
-
+#include <stdio.h>
 void bubble_sort(uint32_t arr[], int length) {
+   printf("%s"," in bubble");
   for (int i = 0; i < length - 1; i++) {
     int j = length - 1;
     while (j > i) {
