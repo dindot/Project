@@ -1,7 +1,7 @@
 #ifndef __SHELL_H__
 #define __SHELL_H__
-#include <stdint.h>
 #include "counters.h"
+#include <stdint.h>
 
 // the gap between the elements, that gets reduced and is used for shell sort
 // to help move far elements into correct positions. Takes in n as integer,
