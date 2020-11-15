@@ -7,17 +7,19 @@ int partition(uint32_t arr[], int left, int right) {
   int hi = right;
 
   while (1) {
-    ++compares; 
+   ++compares;   
    while (
         lo <= hi
         && arr[hi]
                >= pivot) // compare based on indices to find the values out of place
     {
+     
        hi -= 1;
     }
-      ++compares;
+     ++compares;
     while (lo <= hi && arr[lo] <= pivot) {
-      lo += 1;
+     
+ lo += 1;
     }
     if (lo <= hi) // the low index will now be the low element to be swapped out
     {
@@ -33,11 +35,11 @@ int partition(uint32_t arr[], int left, int right) {
   }
   // since arr[hi] contains the lowest element swap it out with the one higher than it in arr[left]
   int temp = arr[left];
-  ++swaps;
+ // ++swaps;
   arr[left] = arr[hi];
-  ++swaps;
+ // ++swaps;
   arr[hi] = temp;
-  ++swaps;
+ // ++swaps;
   return hi;
 }
 
