@@ -1,4 +1,5 @@
 #include "binary.h"
+#include "counters.h"
 
 void binary_insertion_sort(uint32_t arr[], int length) {
   for (int i = 1; i < length; i++) {
@@ -9,7 +10,8 @@ void binary_insertion_sort(uint32_t arr[], int length) {
     while (left < right) {
       int mid = left
                 + ((right - left) / 2); // find index of element in mid of array
-      if (value >= arr[mid]) {
+          ++compares;
+	 if (value >= arr[mid]) {
 
         left = mid
                + 1; // start the left next one over, since value is right half
@@ -21,8 +23,11 @@ void binary_insertion_sort(uint32_t arr[], int length) {
 
     for (int j = i; j > left; j--) {
       int temp = arr[j - 1];
+      ++swaps;
       arr[j - 1] = arr[j];
+      ++swaps;
       arr[j] = temp;
+      ++swaps;
     }
   }
 }

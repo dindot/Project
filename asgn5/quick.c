@@ -1,4 +1,5 @@
 #include "quick.h"
+#include "counters.h"
 
 int partition(uint32_t arr[], int left, int right) {
   uint32_t pivot = arr[left]; // let the pivot value be first in array
@@ -6,29 +7,37 @@ int partition(uint32_t arr[], int left, int right) {
   int hi = right;
 
   while (1) {
-    while (
+    ++compares; 
+   while (
         lo <= hi
         && arr[hi]
                >= pivot) // compare based on indices to find the values out of place
     {
-      hi -= 1;
+       hi -= 1;
     }
+      ++compares;
     while (lo <= hi && arr[lo] <= pivot) {
       lo += 1;
     }
     if (lo <= hi) // the low index will now be the low element to be swapped out
     {
       int temp = arr[lo];
+      ++swaps;
       arr[lo] = arr[hi];
+     ++swaps;
       arr[hi] = temp;
+      ++swaps;
     } else {
       break;
     }
   }
   // since arr[hi] contains the lowest element swap it out with the one higher than it in arr[left]
   int temp = arr[left];
+  ++swaps;
   arr[left] = arr[hi];
+  ++swaps;
   arr[hi] = temp;
+  ++swaps;
   return hi;
 }
 

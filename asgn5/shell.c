@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "counters.h"
 
 int *gap(int n) {
   static int arr[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -25,12 +26,16 @@ void shell_sort(uint32_t arr[], int length, int arr2[]) {
   for (; (step = arr2[i]); i++) {
     for (int i = step; i < length; i++) {
       for (int j = i; j >= step; j -= step) {
+        ++compares;
         if (arr[j]
             < arr[j - step]) // after stepping through gaps swap if not sorted
         {
           int temp = arr[j];
+          ++swaps;
           arr[j] = arr[j - step];
+          ++swaps;
           arr[j - step] = temp;
+          ++swaps;
         }
       }
     }
