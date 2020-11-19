@@ -20,3 +20,15 @@ BloomFilter *bf_create(uint32_t size){
 }
  return (BloomFilter*)NIL;
 }
+
+void bf_delete(BloomFilter *bf)
+{
+  free(bf);
+}
+
+void bf_insert(BloomFilter *bf, char *key)
+{
+  hash();
+
+
+}
