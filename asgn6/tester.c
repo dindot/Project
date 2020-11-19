@@ -9,5 +9,7 @@ int main(void)
  bf_insert(bf, "reddy");
  inbf = bf_probe(bf, "potato");
  printf("%d", inbf);
+ inbf= bf_probe(bf, "adam");
+printf("%d", inbf);
 return 0;
 }
