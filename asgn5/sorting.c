@@ -148,6 +148,8 @@ void choices(int default_arraysize, int default_seed, enum opts *option,
         swaps = 0;
         compares = 0;
         b_sort_operate(default_arraysize, default_seed, default_print);
+	swaps = 0;
+        compares = 0;
         break;
       case b:
         b_sort_operate(default_arraysize, default_seed, default_print);
