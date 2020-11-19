@@ -6,6 +6,7 @@
 #endif
 
 #include <stdbool.h>
+#include "hs.h"
 
 // If flag is set, ListNodes that are queried are moved to the front.
 extern bool move_to_front;
