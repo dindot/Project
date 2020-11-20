@@ -1,7 +1,8 @@
 #include "ll.h"
 #include <stdlib.h>
 #include <stdio.h>
-static int seek = 0;
+
+static int seek = 0;  // make these extern later
 static int numlinks = 0;
 bool move_to_front;
 
@@ -48,11 +49,7 @@ ListNode *ll_insert(ListNode **head, HatterSpeak *gs)
 
 ListNode *node = ll_node_create(gs);
 
-//ListNode **prev = head;
-//
 node->next = *head;
-
-//LinkedNode **current = &head;
 
 *head = node;
 
@@ -63,7 +60,6 @@ return *head;  // move the head to point to the new node made, return it
 
 ListNode* ll_lookup(ListNode **head, char *key)
 {
-//printf("%d", move_to_front);
   ++seek;
   printf("     %s   ", (*head)->gs->oldspeak);
  ListNode * storehead = *head; 
@@ -81,8 +77,6 @@ ListNode* ll_lookup(ListNode **head, char *key)
   else if ((*head)->gs->oldspeak == key && move_to_front == 1)
     {
       HatterSpeak *keydataswap = (*head)->gs;
-     //char* key = (*head)->gs->oldspeak;
-     //char* data = (*head)->gs->hatterspeak;
     
      while((*head)->next != NIL)
      {
@@ -95,71 +89,13 @@ ListNode* ll_lookup(ListNode **head, char *key)
 
        if((*head)->next == NIL){
       HatterSpeak *tempkeydata = (*head)->gs;
-      //char* tempkey =(*head)->gs->oldspeak;
-      //char* tempdata = (*head)->gs->hatterspeak;
-      // (*head)->gs->oldspeak = key;
-     // (*head)->gs->hatterspeak = data;
-     // tempkey = key;
-    //  data = tempdata;
        (*head)->gs = keydataswap;
        keydataswap = tempkeydata;
-      //return *head; // this is the swapped node (moved it to front)
+      //return *head; 	// this is the swapped node (moved it to front)
       return storehead;  // returning to be able to go thru entire list to check
       }
      }
 
     }
-   return NIL;
-   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ++seek;
- while( (*head)->next != NULL)
-  {
-   head = &((*head)->next);
-   ++numlinks;
-
-   if( (*head)->gs->oldspeak == key)
-   {
-     HatterSpeak *swapdatakey = (*head)->gs;
-     while(move_to_front == 1)
-     {
-      if((*head)->next != NULL) // check if its alreaedy the item at start of list, no need to swap
-	{
-       head = &((*head)->next);
-         if((*head)->next == NULL)
-          {
-		HatterSpeak *temp = (*head)->gs;
-		(*head)->gs = swapdatakey;
-		swapdatakey = temp;
-          }
-    
-         }
-     
-      else
-     {
-       
-       return *head;
-    }
- move_to_front = 0;  
+   return NIL;  
 }
-
- return *head;
-   }
-
-  }
-return NIL;
-*/
-

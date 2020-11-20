@@ -22,7 +22,7 @@ ListNode* node = ll_node_create(ds);
 //printf("node %s", node->gs->oldspeak);
 
 //ListNode *initial = ll_insert(&node, ds);     /// need these 2 lines to can print up to hrmy
-//printf("head is %s\n", initial->gs->oldspeak);
+printf("head is %s\n", initial->gs->oldspeak);
 
 HatterSpeak *ss = (HatterSpeak*)malloc(sizeof(HatterSpeak));
 ss->oldspeak = "redd";
@@ -42,13 +42,14 @@ ed->hatterspeak = "aser";
 ListNode *hety = ll_insert(&node, ed);
 printf("head is %s\n", hety->gs->oldspeak);
 
- move_to_front =1 ;
+ move_to_front =0 ;
 
-
+// works for case 0, but need to change move to front whrn its activated at 1, to display proper node !!!!!!!!!
+char* john = "john";
 printf("\n passsing nodes %s\n", node->gs->oldspeak);
-ListNode* foundnode =  ll_lookup(&node,"john");
+ListNode* foundnode =  ll_lookup(&node,john);
 
-if (foundnode != NIL)
+if (foundnode->gs->oldspeak == john)
 {
 printf("\nfound %s", foundnode->gs->oldspeak);
 }
