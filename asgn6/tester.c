@@ -5,6 +5,10 @@
 #include "hs.h"
 #include "hash.h"
 
+void linked_helper(ListNode **nodes, HashTable *ht);
+
+
+
 int main(void)
 {
  bool inbf = 0;
@@ -107,6 +111,8 @@ printf("hashed %s", ht->heads[1]->gs->oldspeak);
 ht_insert(ht,ss);
 printf("hashed %s", ht->heads[0]->gs->oldspeak);
 
+linked_helper(ht->heads, ht);
+//printf("hashed %s", ht->heads[1]->gs->oldspeak);
 
 //}
 //if(move_to_front == 1)
@@ -127,3 +133,31 @@ printf("hashed %s", ht->heads[0]->gs->oldspeak);
 //}*/
 return 0;
 }
+
+
+
+
+
+void linked_helper(ListNode **nodes, HashTable *ht)
+{
+
+for(uint32_t i = 0; i< ht->length; i++)
+{
+
+if(nodes[i] != NULL)
+{
+
+if(nodes[i]->next == NULL)
+{
+return;
+}
+if(nodes[i]->gs->oldspeak == nodes[i]->next->gs->oldspeak)
+{
+ListNode* repairlink = nodes[i]->next->next;
+ll_node_delete(nodes[i]->next);
+nodes[i]->next = repairlink;
+}
+}
+}
+}
+

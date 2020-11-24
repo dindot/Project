@@ -48,28 +48,13 @@ void ll_delete(ListNode *head)
 
 ListNode *ll_insert(ListNode **head, HatterSpeak *gs)
 {
-//printf("oldhead %s", (*head)->gs->oldspeak);
-//printf("newheaddd %s", gs->oldspeak);
-
-//int asdf =  strcmp( (*head)->gs->oldspeak,gs->oldspeak );
-
-///ListNode *comparenode = ll_lookup(head, gs->oldspeak);
-
-//if(  strcmp( comparenode->gs->oldspeak,gs->oldspeak ) !=0)
-//{
-
-//ListNode *comparenode = ll_lookup(head, gs->oldspeak);
-//if(firstnode == 0)
-//printf("hettttt %s",comparenode->gs->oldspeak);
-//firstnode = 0;
-
 ListNode *node = ll_node_create(gs);
 
 
 node->next = *head;
 
 *head = node;
-//}
+
 return *head;  // move the head to point to the new node made, return it
 
 }
@@ -81,6 +66,10 @@ ListNode* ll_lookup(ListNode **head, char *key)
   ++seek;
   printf("     %s   ", (*head)->gs->oldspeak);
  ListNode * storehead = *head; 
+  if((*head)->next == NIL && key == (*head)->gs->oldspeak)
+  {
+   return *head;
+  }
   while((*head)->next != NIL)
   {
     ++numlinks;

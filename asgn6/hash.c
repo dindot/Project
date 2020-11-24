@@ -76,12 +76,16 @@ else
 //printf("node vale: %s",  node->gs->oldspeak);
 //if(savehead->gs->oldspeak != node->gs->oldspeak)
 //{
+
+
+//if(ll_insert(&ht->heads[index], gs) != NIL)
+//{
 ListNode* chainednode = ll_insert(&ht->heads[index], gs);
 if(chainednode == NIL)
 {
-puts("node not inserted");
+puts("nodenot in");
 }
-
+//}
 
 
 }
