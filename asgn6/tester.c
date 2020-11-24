@@ -22,7 +22,7 @@ ListNode* node = ll_node_create(ds);
 //printf("node %s", node->gs->oldspeak);
 
 //ListNode *initial = ll_insert(&node, ds);     /// need these 2 lines to can print up to hrmy
-printf("head is %s\n", initial->gs->oldspeak);
+//printf("head is %s\n", initial->gs->oldspeak);
 
 HatterSpeak *ss = (HatterSpeak*)malloc(sizeof(HatterSpeak));
 ss->oldspeak = "redd";
@@ -42,7 +42,16 @@ ed->hatterspeak = "aser";
 ListNode *hety = ll_insert(&node, ed);
 printf("head is %s\n", hety->gs->oldspeak);
 
- move_to_front =0 ;
+
+
+/*while(node != NIL)
+{
+printf("\n nodes %s\n", node->gs->oldspeak);  //show list with searched found value moved to front of list
+node = node->next;
+}*/  // print out nodes works
+
+
+ move_to_front = 1;
 
 // works for case 0, but need to change move to front whrn its activated at 1, to display proper node !!!!!!!!!
 char* john = "john";
@@ -58,13 +67,13 @@ else
 printf("\nNot in list");
 }
 
-
+if(move_to_front == 1) {
 while(foundnode != NIL)
 {
 printf("\n nodes %s\n", foundnode->gs->oldspeak);  //show list with searched found value moved to front of list
 foundnode = foundnode->next;
 }
-
+}
 
 //}
 //if(move_to_front == 1)
@@ -75,8 +84,8 @@ foundnode = foundnode->next;
 
 
 //printf("\n did i delete%s", head->gs->oldspeak);
-//printf("\n did i delete%s", node->gs->oldspeak);
-//*free(node->gs);
+///printf("\n did i delete%s", node->gs->oldspeak);
+//free(node->gs);
 //ll_delete(node);
 ///if(node->gs->oldspeak == NIL)
 //{

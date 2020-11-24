@@ -1,10 +1,12 @@
 #include "ll.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 static int seek = 0;  // make these extern later
 static int numlinks = 0;
 bool move_to_front;
+static bool firstnode = 1;
 
 ListNode *ll_node_create(HatterSpeak *gs)
 {
@@ -47,15 +49,25 @@ void ll_delete(ListNode *head)
 ListNode *ll_insert(ListNode **head, HatterSpeak *gs)
 {
 
+//if(ll_lookup(head, gs->oldspeak) == NIL)
+//{
+
+//firstnode = 0;
+//printf("checking nodde %s", checknode->gs->oldspeak);}
+//if(strcmp(checknode->gs->oldspeak, gs->oldspeak) != 0)
+//{
 ListNode *node = ll_node_create(gs);
 
 node->next = *head;
 
 *head = node;
+printf("bool val %d", firstnode);
 
+//}
 return *head;  // move the head to point to the new node made, return it
-}
 
+
+}
 
 
 ListNode* ll_lookup(ListNode **head, char *key)
@@ -67,35 +79,22 @@ ListNode* ll_lookup(ListNode **head, char *key)
   {
     ++numlinks;
     *head = (*head)->next;
-      printf("dfd     %s   ", (*head)->gs->oldspeak);
-      printf("%s",key);
+      printf("the next val     %s   ", (*head)->gs->oldspeak);
+      printf(" the key %s",key);
     if ((*head)->gs->oldspeak == key && move_to_front == 0)
     {
        return *head;
     }
-    
+   
   else if ((*head)->gs->oldspeak == key && move_to_front == 1)
     {
       HatterSpeak *keydataswap = (*head)->gs;
-    
-     while((*head)->next != NIL)
-     {
-      ++numlinks;
-         *head = (*head)->next;
-    printf("   checking move to  %s   ", (*head)->gs->oldspeak);
-	 }
-        printf("   asdf  %s   ", (*head)->gs->oldspeak);
-    
+      (*head)->gs =  storehead->gs;
+      (storehead)->gs = keydataswap;
+     return storehead;
+}
 
-       if((*head)->next == NIL){
-      HatterSpeak *tempkeydata = (*head)->gs;
-       (*head)->gs = keydataswap;
-       keydataswap = tempkeydata;
-      //return *head; 	// this is the swapped node (moved it to front)
-      return storehead;  // returning to be able to go thru entire list to check
-      }
-     }
+}
 
-    }
-   return NIL;  
+return NIL;
 }
