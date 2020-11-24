@@ -58,21 +58,41 @@ return NIL;
 
 void ht_insert(HashTable *ht, HatterSpeak *gs)
 {
+
+//ListNode *savehead = (ListNode*)NULL;
 ListNode* node = ll_node_create(gs);
 uint32_t index = hash(ht->salt, gs->oldspeak) % ht->length;
 printf("index: %d", index);
 if(ht->heads[index] == NIL)
 {
 ht->heads[index] = node;
+//savehead = node;
 }
 else
 {
+//printf("\nsaved head: %s\n", node->gs->oldspeak);
+//printf("other one %s", gs->oldspeak);
+
+//printf("node vale: %s",  node->gs->oldspeak);
+//if(savehead->gs->oldspeak != node->gs->oldspeak)
+//{
 ListNode* chainednode = ll_insert(&ht->heads[index], gs);
 if(chainednode == NIL)
 {
 puts("node not inserted");
 }
 
+
+
 }
 
 }
+
+//if(chainednode == NIL)
+//{
+//puts("node not inserted");
+//}
+
+
+
+

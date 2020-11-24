@@ -78,12 +78,31 @@ foundnode = foundnode->next;
 
 
 * toooohereree */
-uint32_t length = 10;
+
+
+HatterSpeak *fs = (HatterSpeak*)malloc(sizeof(HatterSpeak));
+fs->oldspeak = "qwe";
+fs->hatterspeak = "defef";
+
+
+uint32_t length = 3;
 HashTable *ht = ht_create(length);
+for(uint32_t i = 0; i<ht->length;i++)
+{
+ht->heads[i] = NIL;
+}
+
+
+//if(ht_insert(ht,ds) != NULL){
 
 ht_insert(ht,ds);
-printf("hashed %s", ht->heads[3]->gs->oldspeak);
+printf("hashed %s", ht->heads[1]->gs->oldspeak);
+ht_insert(ht,ds);
+printf("hashed %s", ht->heads[1]->gs->oldspeak);
 
+
+ht_insert(ht,fs);
+printf("hashed %s", ht->heads[1]->gs->oldspeak);
 
 ht_insert(ht,ss);
 printf("hashed %s", ht->heads[0]->gs->oldspeak);
