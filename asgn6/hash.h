@@ -6,7 +6,10 @@
 #endif
 
 #include "ll.h"
+#include <stdlib.h>
 #include <inttypes.h>
+#include <stdio.h>
+#include "speck.h"
 
 //
 // Struct definition for a HashTable.
@@ -41,7 +44,7 @@ void ht_delete(HashTable *ht);
 //
 // h: the hashtable
 //
-uint32_t ht_count(Hashtable *h);
+uint32_t ht_count(HashTable *h);
 
 //
 // Searches a HashTable for a key.

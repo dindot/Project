@@ -6,7 +6,7 @@
 static int seek = 0;  // make these extern later
 static int numlinks = 0;
 bool move_to_front;
-static bool firstnode = 1;
+//static bool firstnode = 1;
 
 ListNode *ll_node_create(HatterSpeak *gs)
 {
@@ -61,7 +61,7 @@ ListNode *node = ll_node_create(gs);
 node->next = *head;
 
 *head = node;
-printf("bool val %d", firstnode);
+//printf("bool val %d", firstnode);
 
 //}
 return *head;  // move the head to point to the new node made, return it

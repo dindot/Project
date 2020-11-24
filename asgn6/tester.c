@@ -3,6 +3,7 @@
 #include "bf.h"
 #include "ll.h"
 #include "hs.h"
+#include "hash.h"
 
 int main(void)
 {
@@ -18,7 +19,7 @@ printf("%d", inbf);
 HatterSpeak *ds = (HatterSpeak*)malloc(sizeof(HatterSpeak));
 ds->oldspeak = "hrmy";
 ds->hatterspeak = "benny";
-ListNode* node = ll_node_create(ds);
+//ListNode* node = ll_node_create(ds);
 //printf("node %s", node->gs->oldspeak);
 
 //ListNode *initial = ll_insert(&node, ds);     /// need these 2 lines to can print up to hrmy
@@ -27,7 +28,7 @@ ListNode* node = ll_node_create(ds);
 HatterSpeak *ss = (HatterSpeak*)malloc(sizeof(HatterSpeak));
 ss->oldspeak = "redd";
 ss->hatterspeak = "defef";
-ListNode *head = ll_insert(&node, ss);
+/*HHHHEEEERRRRListNode *head = ll_insert(&node, ss);
 printf("head is %s\n", head->gs->oldspeak);
 
 HatterSpeak *bb = (HatterSpeak*)malloc(sizeof(HatterSpeak));
@@ -44,14 +45,14 @@ printf("head is %s\n", hety->gs->oldspeak);
 
 
 
-/*while(node != NIL)
+while(node != NIL)
 {
 printf("\n nodes %s\n", node->gs->oldspeak);  //show list with searched found value moved to front of list
 node = node->next;
-}*/  // print out nodes works
+} // print out nodes works
 
 
- move_to_front = 1;
+ move_to_front = 0;
 
 // works for case 0, but need to change move to front whrn its activated at 1, to display proper node !!!!!!!!!
 char* john = "john";
@@ -74,6 +75,19 @@ printf("\n nodes %s\n", foundnode->gs->oldspeak);  //show list with searched fou
 foundnode = foundnode->next;
 }
 }
+
+
+* toooohereree */
+uint32_t length = 10;
+HashTable *ht = ht_create(length);
+
+ht_insert(ht,ds);
+printf("hashed %s", ht->heads[3]->gs->oldspeak);
+
+
+ht_insert(ht,ss);
+printf("hashed %s", ht->heads[0]->gs->oldspeak);
+
 
 //}
 //if(move_to_front == 1)
