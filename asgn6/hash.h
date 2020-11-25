@@ -6,10 +6,10 @@
 #endif
 
 #include "ll.h"
-#include <stdlib.h>
+#include "speck.h"
 #include <inttypes.h>
 #include <stdio.h>
-#include "speck.h"
+#include <stdlib.h>
 
 //
 // Struct definition for a HashTable.
@@ -18,7 +18,7 @@
 // length: The maximum number of entries in the HashTable
 // heads: An array of linked list heads.
 //
-typedef struct HashTable{
+typedef struct HashTable {
   uint64_t salt[2];
   uint32_t length;
   ListNode **heads;

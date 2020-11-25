@@ -1,43 +1,39 @@
-#include <stdlib.h>
+#include "bf.h"
+#include "hash.h"
+#include "hs.h"
+#include "ll.h"
+#include "parser.h"
 #include <ctype.h>
 #include <stdio.h>
-#include "bf.h"
-#include "ll.h"
-#include "hs.h"
-#include "hash.h"
-#include "parser.h"
+#include <stdlib.h>
 
 #define CONTRACTIONS "[a-zA-Z0-9]*[-_']*[a-zA-Z0-9]"
 
-
 void linked_helper(ListNode **nodes, HashTable *ht);
 
+int main(void) {
+  bool inbf = 0;
+  BloomFilter *bf = bf_create(1048576); // max size of 20^2
+  bf_insert(bf, "potato");
+  bf_insert(bf, "reddy");
+  inbf = bf_probe(bf, "potato");
+  printf("%d", inbf);
+  inbf = bf_probe(bf, "adam");
+  printf("%d", inbf);
+  //bf_delete(bf);
+  HatterSpeak *ds = (HatterSpeak *)malloc(sizeof(HatterSpeak));
+  ds->oldspeak = "hrmy";
+  ds->hatterspeak = "benny";
+  //ListNode* node = ll_node_create(ds);
+  //printf("node %s", node->gs->oldspeak);
 
+  //ListNode *initial = ll_insert(&node, ds);     /// need these 2 lines to can print up to hrmy
+  //printf("head is %s\n", initial->gs->oldspeak);
 
-int main(void)
-{
- bool inbf = 0;
- BloomFilter *bf = bf_create(1048576);  // max size of 20^2
- bf_insert(bf, "potato");
- bf_insert(bf, "reddy");
- inbf = bf_probe(bf, "potato");
- printf("%d", inbf);
- inbf= bf_probe(bf, "adam");
-printf("%d", inbf);
-//bf_delete(bf);
-HatterSpeak *ds = (HatterSpeak*)malloc(sizeof(HatterSpeak));
-ds->oldspeak = "hrmy";
-ds->hatterspeak = "benny";
-//ListNode* node = ll_node_create(ds);
-//printf("node %s", node->gs->oldspeak);
-
-//ListNode *initial = ll_insert(&node, ds);     /// need these 2 lines to can print up to hrmy
-//printf("head is %s\n", initial->gs->oldspeak);
-
-HatterSpeak *ss = (HatterSpeak*)malloc(sizeof(HatterSpeak));
-ss->oldspeak = "redd";
-ss->hatterspeak = "defef";
-/*HHHHEEEERRRRListNode *head = ll_insert(&node, ss);
+  HatterSpeak *ss = (HatterSpeak *)malloc(sizeof(HatterSpeak));
+  ss->oldspeak = "redd";
+  ss->hatterspeak = "defef";
+  /*HHHHEEEERRRRListNode *head = ll_insert(&node, ss);
 printf("head is %s\n", head->gs->oldspeak);
 
 HatterSpeak *bb = (HatterSpeak*)malloc(sizeof(HatterSpeak));
@@ -88,25 +84,21 @@ foundnode = foundnode->next;
 
 * toooohereree */
 
+  HatterSpeak *fs = (HatterSpeak *)malloc(sizeof(HatterSpeak));
+  fs->oldspeak = "qwe";
+  fs->hatterspeak = "defef";
 
-HatterSpeak *fs = (HatterSpeak*)malloc(sizeof(HatterSpeak));
-fs->oldspeak = "qwe";
-fs->hatterspeak = "defef";
+  uint32_t length = 3;
+  HashTable *ht = ht_create(length);
+  for (uint32_t i = 0; i < ht->length; i++) {
+    ht->heads[i] = NIL;
+  }
 
+  // insert and printing from hashtable
 
-uint32_t length = 3;
-HashTable *ht = ht_create(length);
-for(uint32_t i = 0; i<ht->length;i++)
-{
-ht->heads[i] = NIL;
-}
+  //if(ht_insert(ht,ds) != NULL){
 
-
-// insert and printing from hashtable
-
-//if(ht_insert(ht,ds) != NULL){
-
-/*ht_insert(ht,ds);
+  /*ht_insert(ht,ds);
 printf("hashed %s", ht->heads[1]->gs->oldspeak);
 ht_insert(ht,ds);
 printf("hashed %s", ht->heads[1]->gs->oldspeak);
@@ -123,48 +115,43 @@ linked_helper(ht->heads, ht);
 
 */
 
+  //}
+  //if(move_to_front == 1)
+  //{
+  //  printf("moved to front of list: %s", foundnode->gs->oldspeak);
+  //}
+  //}
 
+  //printf("\n did i delete%s", head->gs->oldspeak);
+  ///printf("\n did i delete%s", node->gs->oldspeak);
+  //free(node->gs);
+  //ll_delete(node);
+  ///if(node->gs->oldspeak == NIL)
+  //{
+  //node = NIL;
+  ///printf("\nthe entire list has been deleted");
+  //}*/
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  FILE *file = fopen("oldspeak.txt", "r");
+  if (file == NULL) {
+    puts("could not open file!\n");
+    return -1;
+  }
 
-//}
-//if(move_to_front == 1)
-//{
- //  printf("moved to front of list: %s", foundnode->gs->oldspeak);
-//}
-//}
-
-
-//printf("\n did i delete%s", head->gs->oldspeak);
-///printf("\n did i delete%s", node->gs->oldspeak);
-//free(node->gs);
-//ll_delete(node);
-///if(node->gs->oldspeak == NIL)
-//{
-//node = NIL;
-///printf("\nthe entire list has been deleted"); 
-//}*/
-//
-//
-//
-//
-//
-//
-//
-//
-//
-FILE* file = fopen("oldspeak.txt", "r");
-if (file == NULL)
-{
-puts("could not open file!\n");
-return -1;
-}
-
-
-size_t size = 1024;
-char *buffer = (char*)malloc(sizeof(char) * size);
-// put each of the lines from file into buffer and print them, use this to put into
-// hatter struct
-//
-/*while(!feof(file))
+  size_t size = 1024;
+  char *buffer = (char *)malloc(sizeof(char) * size);
+  // put each of the lines from file into buffer and print them, use this to put into
+  // hatter struct
+  //
+  /*while(!feof(file))
 {
 
 fscanf(file, "%s", buffer);
@@ -172,89 +159,66 @@ printf("%s\n", buffer);
 printf("%zu\n", sizeof(buffer));
 }*/
 
+  int returncode;
+  regex_t regex;
+  returncode = regcomp(&regex, CONTRACTIONS, REG_EXTENDED);
+  if (returncode) {
+    puts("compilation unsuccessful\n");
+    return -1;
+  }
 
-int returncode;
-regex_t regex;
-returncode = regcomp(&regex, CONTRACTIONS, REG_EXTENDED);
-if(returncode)
-{
-puts("compilation unsuccessful\n");
-return -1;
+  // allows for i/o redirection by first letting user type in desired words,
+  // prints them to stdout, so that when program ./hatter > checker.txt, will
+  // enter those words into the file for use in the parser using regex
+
+  //while(!feof(stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
+  {
+    //int c = getchar();
+    //putchar(c);
+    // keep getting user input until they press ctrl+d to finish, then pass to parser
+  }
+  FILE *input_stream = fopen("checker.txt", "w");
+
+  if (input_stream == NULL) {
+    puts("file was not created");
+    return -1;
+  }
+
+  while (fgets(buffer, 50, stdin) != NULL) {
+    fputs(buffer, input_stream);
+  }
+  fclose(input_stream);
+
+  FILE *input_read = fopen("checker.txt", "r");
+
+  while (!feof(input_read)) {
+    char *matchedword = next_word(input_read, &regex);
+    printf("matched word is: %s\n", matchedword);
+  }
+
+  //fscanf(input_stream, "%s", buffer);
+  //printf("%s\n", buffer);
+
+  //char* matchedword = next_word(input_stream, &regex);
+  //printf("%s",matchedword);
+
+  return 0;
 }
 
+void linked_helper(ListNode **nodes, HashTable *ht) {
 
+  for (uint32_t i = 0; i < ht->length; i++) {
 
+    if (nodes[i] != NULL) {
 
-// allows for i/o redirection by first letting user type in desired words,
-// prints them to stdout, so that when program ./hatter > checker.txt, will
-// enter those words into the file for use in the parser using regex
-
-//while(!feof(stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
-{
-//int c = getchar();
-//putchar(c);
-  // keep getting user input until they press ctrl+d to finish, then pass to parser
+      if (nodes[i]->next == NULL) {
+        return;
+      }
+      if (nodes[i]->gs->oldspeak == nodes[i]->next->gs->oldspeak) {
+        ListNode *repairlink = nodes[i]->next->next;
+        ll_node_delete(nodes[i]->next);
+        nodes[i]->next = repairlink;
+      }
+    }
+  }
 }
-FILE *input_stream = fopen("checker.txt", "w");
-
-if(input_stream == NULL)
-{
-puts("file was not created");
-return -1;
-}
-
-while (fgets(buffer, 50, stdin) != NULL)
-{
-fputs(buffer,input_stream);
-
-}
-fclose(input_stream);
-
-FILE *input_read = fopen("checker.txt", "r");
-
-
-
-while(!feof(input_read))
-{
-char* matchedword = next_word(input_read, &regex);
-printf("matched word is: %s\n",matchedword);
-}
-
-//fscanf(input_stream, "%s", buffer);
-//printf("%s\n", buffer); 
-
-
-//char* matchedword = next_word(input_stream, &regex);
-//printf("%s",matchedword);
-
-
-return 0;
-}
-
-
-
-
-
-void linked_helper(ListNode **nodes, HashTable *ht)
-{
-
-for(uint32_t i = 0; i< ht->length; i++)
-{
-
-if(nodes[i] != NULL)
-{
-
-if(nodes[i]->next == NULL)
-{
-return;
-}
-if(nodes[i]->gs->oldspeak == nodes[i]->next->gs->oldspeak)
-{
-ListNode* repairlink = nodes[i]->next->next;
-ll_node_delete(nodes[i]->next);
-nodes[i]->next = repairlink;
-}
-}
-}
-}
-

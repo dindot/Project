@@ -5,8 +5,8 @@
 #define NIL (void *)0
 #endif
 
-#include <stdbool.h>
 #include "hs.h"
+#include <stdbool.h>
 
 // If flag is set, ListNodes that are queried are moved to the front.
 extern bool move_to_front;
@@ -18,7 +18,7 @@ typedef struct ListNode ListNode;
 //
 // gs: HatterSpeak struct containing oldspeak and its hatterspeak translation.
 //
-struct ListNode{
+struct ListNode {
   HatterSpeak *gs;
   ListNode *next;
 };
