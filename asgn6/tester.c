@@ -159,8 +159,8 @@ return -1;
 }
 
 
-//size_t size = 1024;
-//char *buffer = (char*)malloc(sizeof(char) * size);
+size_t size = 1024;
+char *buffer = (char*)malloc(sizeof(char) * size);
 // put each of the lines from file into buffer and print them, use this to put into
 // hatter struct
 //
@@ -175,7 +175,7 @@ printf("%zu\n", sizeof(buffer));
 
 int returncode;
 regex_t regex;
-returncode = regcomp(&regex, CONTRACTIONS, 0);
+returncode = regcomp(&regex, CONTRACTIONS, REG_EXTENDED);
 if(returncode)
 {
 puts("compilation unsuccessful\n");
@@ -189,19 +189,40 @@ return -1;
 // prints them to stdout, so that when program ./hatter > checker.txt, will
 // enter those words into the file for use in the parser using regex
 
-while(!feof(stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
+//while(!feof(stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
 {
-int c = getchar();
-putchar(c);
+//int c = getchar();
+//putchar(c);
   // keep getting user input until they press ctrl+d to finish, then pass to parser
 }
-FILE *input_stream = fopen("checker.txt", "r");
+FILE *input_stream = fopen("checker.txt", "w");
 
 if(input_stream == NULL)
 {
 puts("file was not created");
 return -1;
 }
+
+while (fgets(buffer, 50, stdin) != NULL)
+{
+fputs(buffer,input_stream);
+
+}
+fclose(input_stream);
+
+FILE *input_read = fopen("checker.txt", "r");
+
+
+
+while(!feof(input_read))
+{
+char* matchedword = next_word(input_read, &regex);
+printf("matched word is: %s\n",matchedword);
+}
+
+//fscanf(input_stream, "%s", buffer);
+//printf("%s\n", buffer); 
+
 
 //char* matchedword = next_word(input_stream, &regex);
 //printf("%s",matchedword);
