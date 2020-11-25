@@ -1,6 +1,5 @@
 #include "ll.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 static int seek = 0;  // make these extern later
@@ -64,7 +63,7 @@ return *head;  // move the head to point to the new node made, return it
 ListNode* ll_lookup(ListNode **head, char *key)
 {
   ++seek;
-  printf("     %s   ", (*head)->gs->oldspeak);
+  
  ListNode * storehead = *head; 
   if((*head)->next == NIL && key == (*head)->gs->oldspeak)
   {
@@ -74,8 +73,7 @@ ListNode* ll_lookup(ListNode **head, char *key)
   {
     ++numlinks;
     *head = (*head)->next;
-      printf("the next val     %s   ", (*head)->gs->oldspeak);
-      printf(" the key %s",key);
+  
     if ((*head)->gs->oldspeak == key && move_to_front == 0)
     {
        return *head;

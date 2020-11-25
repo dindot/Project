@@ -1,9 +1,14 @@
 #include <stdlib.h>
+#include <ctype.h>
 #include <stdio.h>
 #include "bf.h"
 #include "ll.h"
 #include "hs.h"
 #include "hash.h"
+#include "parser.h"
+
+#define CONTRACTIONS "[a-zA-Z0-9]*[-_']*[a-zA-Z0-9]"
+
 
 void linked_helper(ListNode **nodes, HashTable *ht);
 
@@ -97,9 +102,11 @@ ht->heads[i] = NIL;
 }
 
 
+// insert and printing from hashtable
+
 //if(ht_insert(ht,ds) != NULL){
 
-ht_insert(ht,ds);
+/*ht_insert(ht,ds);
 printf("hashed %s", ht->heads[1]->gs->oldspeak);
 ht_insert(ht,ds);
 printf("hashed %s", ht->heads[1]->gs->oldspeak);
@@ -109,10 +116,14 @@ ht_insert(ht,fs);
 printf("hashed %s", ht->heads[1]->gs->oldspeak);
 
 ht_insert(ht,ss);
-printf("hashed %s", ht->heads[0]->gs->oldspeak);
+printf("hashed %s\n", ht->heads[0]->gs->oldspeak);
 
 linked_helper(ht->heads, ht);
 //printf("hashed %s", ht->heads[1]->gs->oldspeak);
+
+*/
+
+
 
 //}
 //if(move_to_front == 1)
@@ -131,6 +142,71 @@ linked_helper(ht->heads, ht);
 //node = NIL;
 ///printf("\nthe entire list has been deleted"); 
 //}*/
+//
+//
+//
+//
+//
+//
+//
+//
+//
+FILE* file = fopen("oldspeak.txt", "r");
+if (file == NULL)
+{
+puts("could not open file!\n");
+return -1;
+}
+
+
+//size_t size = 1024;
+//char *buffer = (char*)malloc(sizeof(char) * size);
+// put each of the lines from file into buffer and print them, use this to put into
+// hatter struct
+//
+/*while(!feof(file))
+{
+
+fscanf(file, "%s", buffer);
+printf("%s\n", buffer);
+printf("%zu\n", sizeof(buffer));
+}*/
+
+
+int returncode;
+regex_t regex;
+returncode = regcomp(&regex, CONTRACTIONS, 0);
+if(returncode)
+{
+puts("compilation unsuccessful\n");
+return -1;
+}
+
+
+
+
+// allows for i/o redirection by first letting user type in desired words,
+// prints them to stdout, so that when program ./hatter > checker.txt, will
+// enter those words into the file for use in the parser using regex
+
+while(!feof(stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
+{
+int c = getchar();
+putchar(c);
+  // keep getting user input until they press ctrl+d to finish, then pass to parser
+}
+FILE *input_stream = fopen("checker.txt", "r");
+
+if(input_stream == NULL)
+{
+puts("file was not created");
+return -1;
+}
+
+//char* matchedword = next_word(input_stream, &regex);
+//printf("%s",matchedword);
+
+
 return 0;
 }
 
