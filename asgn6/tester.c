@@ -140,24 +140,7 @@ linked_helper(ht->heads, ht);
   //
   //
   //
-  FILE *file = fopen("oldspeak.txt", "r");
-  if (file == NULL) {
-    puts("could not open file!\n");
-    return -1;
-  }
-
-  size_t size = 1024;
-  char *buffer = (char *)malloc(sizeof(char) * size);
-  // put each of the lines from file into buffer and print them, use this to put into
-  // hatter struct
-  //
-  /*while(!feof(file))
-{
-
-fscanf(file, "%s", buffer);
-printf("%s\n", buffer);
-printf("%zu\n", sizeof(buffer));
-}*/
+ 
 
   int returncode;
   regex_t regex;

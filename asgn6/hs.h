@@ -6,6 +6,7 @@ typedef struct HatterSpeak {
   char *hatterspeak;
 } HatterSpeak;
 
-HatterSpeak *hs_create();
+HatterSpeak *hs_create(char* oldspeak, char* hatterspeak);
+void hs_delete(HatterSpeak *gs);
 
 #endif
