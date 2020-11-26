@@ -87,7 +87,6 @@ int main(int argc, char **argv) {
 void file_readin(BloomFilter *bf, HashTable *ht)
 {
 
- // ht_count(ht);
   FILE *file = fopen("oldspeak.txt", "r");
   if (file == NULL) {
     puts("could not open file!\n");
@@ -96,34 +95,32 @@ void file_readin(BloomFilter *bf, HashTable *ht)
 
   size_t size = 1024;
   char *buffer = (char *)malloc(sizeof(char) * size);
-//  char *buffer2 = (char *)malloc(sizeof(char) * size);
+ char *buffer2 = (char *)malloc(sizeof(char) * size);
   // put each of the lines from file into buffer and print them, use this to put into
   // hatter struct
  
-  while(!feof(file))
-       {
-        // HatterSpeak* gs = hs_create();
+ while(!feof(file))
+    {
+        
         fscanf(file, "%s", buffer);
-        // printf("%s\n", buffer);
-          bf_insert(bf, buffer);
+         bf_insert(bf, buffer);
+        // printf("%s", buffer);
           HatterSpeak* gs = hs_create(buffer, NULL);
-        //printf("%s\n", gs->oldspeak);
-          // gs->oldspeak = buffer;
-        // gs->hatterspeak = NULL;
+        
         ht_insert(ht, gs);
-        printf("%s", ht->heads[193]->gs->oldspeak);
-       hs_delete(gs);
-      gs = NULL;
-       }
+       
+   
+ // printf("%s\n", ht->heads[3275]->gs->oldspeak);
+
+   
+ //      hs_delete(gs);           // works to insert first one aronitas from index 3275, might need to delete to put in rest
+   //  gs = NULL;
+     } 
  
-//bool s = bf_probe(bf, "acceptest");
-//printf("%d" , s);
-//
-//
 
 fclose(file);
 
-/*  FILE *hatter = fopen("hatterspeak.txt", "r");
+  FILE *hatter = fopen("hatterspeak.txt", "r");
   if (file == NULL) {
     puts("could not open file!\n");
     return;
@@ -131,18 +128,19 @@ fclose(file);
 
 while(!feof(hatter))
        {
-        HatterSpeak* gs = hs_create();
+       
 
         fscanf(hatter, "%s\n%s", buffer, buffer2);
- //     if(!bf_probe(bf,buffer))
-//{
-  //   bf_insert(bf, buffer);
+       HatterSpeak* gs = hs_create(buffer, buffer2);
+      if(!bf_probe(bf,buffer))
+{
+     bf_insert(bf, buffer);
 
-//}
-    gs->oldspeak = buffer;
-   gs->hatterspeak = buffer2;
-//ht_insert(ht,gs);
-// printf("old: %s new: %s\n", gs->oldspeak,  gs->hatterspeak); 
+}
+   
+ht_insert(ht,gs);
+// printf("%s", ht->heads[3275]->gs->oldspeak);
+// // printf("old: %s new: %s\n", gs->oldspeak,  gs->hatterspeak); 
 
   //  printf("%s\n", buffer); 
       // if(bf_probe(bf, buffer))
@@ -152,5 +150,5 @@ while(!feof(hatter))
       // }//
 
       }
-fclose(hatter);*/
+fclose(hatter);
 }

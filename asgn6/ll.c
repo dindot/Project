@@ -1,7 +1,7 @@
 #include "ll.h"
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdio.h>
 static int seek = 0; // make these extern later
 static int numlinks = 0;
 bool move_to_front;
@@ -14,8 +14,17 @@ ListNode *ll_node_create(HatterSpeak *gs) {
   if (node == NIL) {
     return (ListNode *)NIL;
   }
-  node->gs->oldspeak = gs->oldspeak;
-  node->gs->hatterspeak = gs->hatterspeak;
+  node->gs->oldspeak = malloc(100);
+ strcpy( node->gs->oldspeak,gs->oldspeak);
+
+ node->gs->hatterspeak = malloc(100);
+ if(gs->hatterspeak != NULL){
+  strcpy( node->gs->hatterspeak, gs->hatterspeak);
+
+} 
+else
+   gs->hatterspeak =NULL;
+
   node->next = NIL;
 
   return node;
