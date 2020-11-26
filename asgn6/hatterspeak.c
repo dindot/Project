@@ -11,13 +11,9 @@
 
 #define OPTIONS "mbh:f:s"
 
-//void choices(int default_hash, int default_bloom);
-
-
 void file_readin(BloomFilter *bf, HashTable *ht);
 
 bool tofront = 0, nofront = 0, stats = 0;
-
 
 int main(int argc, char **argv) {
 
@@ -37,13 +33,11 @@ int main(int argc, char **argv) {
       move_to_front = 0;
       break;
     case 'h':
-     // hashval = 1;
       input_num = optarg;
       default_hashtable
           = atoi(input_num); // when user specified, convert to a int to be used
       break;
     case 'f':
-     // hashval = 1;
       input_num = optarg;
       default_bloom = atoi(input_num);
       break;
@@ -70,22 +64,19 @@ int main(int argc, char **argv) {
     puts("this combination is not supported!\n");
     return -1;
   }
- 
+
   BloomFilter *bf = bf_create(default_bloom);
   HashTable *ht = ht_create(default_hashtable);
-  
+
   for (uint32_t i = 0; i < ht->length; i++) {
     ht->heads[i] = NIL;
-  }  
+  }
 
   file_readin(bf, ht);
-  //printf("%s", ht->heads[0]->gs->oldspeak);
   return 0;
 }
 
-
-void file_readin(BloomFilter *bf, HashTable *ht)
-{
+void file_readin(BloomFilter *bf, HashTable *ht) {
 
   FILE *file = fopen("oldspeak.txt", "r");
   if (file == NULL) {
@@ -93,64 +84,48 @@ void file_readin(BloomFilter *bf, HashTable *ht)
     return;
   }
 
-  size_t size = 1024;
-  char *buffer = (char *)malloc(sizeof(char) * size);
- char *buffer2 = (char *)malloc(sizeof(char) * size);
-  // put each of the lines from file into buffer and print them, use this to put into
-  // hatter struct
- 
- while(!feof(file))
-    {
-        
-        fscanf(file, "%s", buffer);
-         bf_insert(bf, buffer);
-        // printf("%s", buffer);
-          HatterSpeak* gs = hs_create(buffer, NULL);
-        
-        ht_insert(ht, gs);
-       
-   
- // printf("%s\n", ht->heads[3275]->gs->oldspeak);
-
-   
- //      hs_delete(gs);           // works to insert first one aronitas from index 3275, might need to delete to put in rest
-   //  gs = NULL;
-     } 
- 
-
-fclose(file);
-
   FILE *hatter = fopen("hatterspeak.txt", "r");
   if (file == NULL) {
     puts("could not open file!\n");
     return;
   }
 
-while(!feof(hatter))
-       {
-       
-printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        fscanf(hatter, "%s\n%s", buffer, buffer2);
-       HatterSpeak* gs = hs_create(buffer, buffer2);
-      if(!bf_probe(bf,buffer))
-{
-     bf_insert(bf, buffer);
+  size_t size = 1024;
+  char *buffer = (char *)malloc(sizeof(char) * size);
+  char *buffer2 = (char *)malloc(sizeof(char) * size);
+  // put each of the lines from file into buffer and print them, use this to put into
+  // hatter struct
 
-}
-   
-ht_insert(ht,gs);
-// printf("%s", ht->heads[3275]->gs->oldspeak);
-// // printf("old: %s new: %s\n", gs->oldspeak,  gs->hatterspeak); 
+  while (!feof(file)) {
 
-  //  printf("%s\n", buffer); 
-      // if(bf_probe(bf, buffer))
-      // {
-        //gs->oldspeak = buffer;
+    fscanf(file, "%s", buffer);
+    bf_insert(bf, buffer);
 
-      // }//
+    //  hs_delete(gs);           // later  might need to delete to put in rest
+    //  gs = NULL;
+  }
 
-      }
-fclose(hatter);
+  fclose(file);
 
-printf("\n%s\n", ht->heads[551]->gs->oldspeak);
+  while (!feof(hatter)) {
+    fscanf(hatter, "%s\n%s", buffer, buffer2);
+
+    if (bf_probe(bf, buffer) == 0) {
+      HatterSpeak *gs = hs_create(buffer, NULL);
+      ht_insert(ht, gs);
+    }
+  }
+
+  rewind(hatter);
+  while (!feof(hatter)) {
+    fscanf(hatter, "%s\n%s", buffer, buffer2);
+    bf_insert(bf, buffer);
+    HatterSpeak *gs = hs_create(buffer, buffer2);
+    ht_insert(ht, gs);
+
+    //if(ht->heads[688] != NULL)
+    //printf("%s", ht->heads[688]->gs->oldspeak);  // to test the values they appear to be printing!
+  }
+
+  fclose(hatter);
 }

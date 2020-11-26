@@ -140,7 +140,6 @@ linked_helper(ht->heads, ht);
   //
   //
   //
- 
 
   int returncode;
   regex_t regex;
