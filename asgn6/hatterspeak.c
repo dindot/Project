@@ -129,7 +129,7 @@ fclose(file);
 while(!feof(hatter))
        {
        
-
+printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         fscanf(hatter, "%s\n%s", buffer, buffer2);
        HatterSpeak* gs = hs_create(buffer, buffer2);
       if(!bf_probe(bf,buffer))
@@ -151,4 +151,6 @@ ht_insert(ht,gs);
 
       }
 fclose(hatter);
+
+printf("\n%s\n", ht->heads[551]->gs->oldspeak);
 }

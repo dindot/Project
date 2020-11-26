@@ -49,7 +49,7 @@ void ht_insert(HashTable *ht, HatterSpeak *gs) {
   ListNode *node = ll_node_create(gs);
   //printf("%s" , node->gs->oldspeak);   
   uint32_t index = hash(ht->salt, gs->oldspeak) % ht->length;
-  //printf("index %d:", index);
+  printf("index %d:", index);
   //printf("%s", ht->heads[index]->gs->oldspeak);
   if (ht->heads[index] == NIL) {
     ht->heads[index] = node;
