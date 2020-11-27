@@ -18,7 +18,7 @@ void file_readin(BloomFilter *bf, HashTable *ht);
 void redir_input(BloomFilter *bf, HashTable *ht);
 void printer(HashTable *ht, ListNode *node);
 
-bool tofront = 0, nofront = 0, stats = 0;
+bool tofront = 0, nofront = 0, stats = 0, transwords = 0;
 
 int main(int argc, char **argv) {
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
   BloomFilter *bf = bf_create(default_bloom);
   HashTable *ht = ht_create(default_hashtable);
 
- HatterSpeak *hs = hs_create(NULL,NULL);
+ HatterSpeak *hs = hs_create((char*)NULL,(char*)NULL);
  ListNode *node = ll_node_create(hs);
   for (uint32_t i = 0; i < ht->length; i++) {
     ht->heads[i] = node;
@@ -109,9 +109,10 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
 
     fscanf(file, "%s", buffer);
     bf_insert(bf, buffer);
-   HatterSpeak *gs = hs_create(buffer, NULL);
+   HatterSpeak *gs = hs_create(buffer, (char*)NULL);
    ListNode* hey =  ht_insert(ht, gs);
- printf("%s", hey->gs->oldspeak);
+if( hey->gs->hatterspeak == (char*)(NULL)) 
+printf("%s", hey->gs->oldspeak);
     //  hs_delete(gs);           // later  might need to delete to put in rest
     //  gs = NULL;
   }
@@ -151,7 +152,8 @@ puts("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
 void redir_input(BloomFilter *bf, HashTable *ht) {
-
+   HatterSpeak *hs = hs_create((char*)NULL,(char*)NULL);
+ ListNode *stored_transwords = ll_node_create(hs);
  // char *buffer = (char *)malloc(sizeof(char) * 1024);
 
   int returncode;
@@ -176,9 +178,14 @@ void redir_input(BloomFilter *bf, HashTable *ht) {
     if(passbf == 1)
     {
     ListNode *node =  ht_lookup(ht, matchedword);
-   if(node != NULL)
-   printf("%s", node->gs->oldspeak);
-  // printer(ht, node);
+    printf("dfsdfsdfsfsdfsdf %s", node->gs->hatterspeak);
+   if(node != NULL && isalpha(node->gs->hatterspeak[0]) != 0)
+     {
+        transwords = 1;
+        ll_insert(&stored_transwords, node->gs);
+     }
+//   printf("%s", node->gs->oldspeak);
+  
      }    
 
     printf("\n%d" , passbf); 
@@ -188,6 +195,9 @@ void redir_input(BloomFilter *bf, HashTable *ht) {
    
 }
 clear_words();
+
+printer(ht,stored_transwords);
+
 
 /// FILE *input_stream = fopen("input.txt", "w");
 
@@ -216,9 +226,29 @@ clear_words();
  // }
  // fclose(input_stream);
 }
+
 void printer(HashTable *ht, ListNode *node)
 {
+if(transwords == 1)
+{
+printf("Dear Wonderlander,\n");
+printf("\nThe decree for hatterspeak finds your message lacking. Some of the\n");
+printf("   words that you used are not hatterspeak.\n");
+printf("The list shows how to turn the oldspeak words into hatterspeak.\n");
+
+while(node->next != NULL)// && node->gs->hatterspeak != NULL)
+{
+ // if(node->gs->hatterspeak != NIL && node->next != NULL)
+ // {
+//printf(" %s\n", node->gs->hatterspeak);
+  printf("%s -> %s\n", node->gs->oldspeak, node->gs->hatterspeak);
+  node = node->next;
+ // }
+}
+}
 uint32_t gf = ht->length;
 printf("%d", gf);
-printf("%s", node->gs->hatterspeak);
+//printf("%s", node->gs->hatterspeak);
 }
+
+

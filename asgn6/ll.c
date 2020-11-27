@@ -15,17 +15,17 @@ ListNode *ll_node_create(HatterSpeak *gs) {
     return (ListNode *)NIL;
   }
   node->gs->oldspeak = malloc(100);
-if (gs->oldspeak != NULL)
+if (gs->oldspeak !=(char*) (NULL))
   strcpy(node->gs->oldspeak, gs->oldspeak);
 else
-   gs->oldspeak = NULL;
+   gs->oldspeak = (char*)NULL;
 
   node->gs->hatterspeak = malloc(100);
-  if (gs->hatterspeak != NULL) {
+  if (gs->hatterspeak != (char*)(NULL)) {
     strcpy(node->gs->hatterspeak, gs->hatterspeak);
 
   } else
-    gs->hatterspeak = NULL;
+    gs->hatterspeak = (char*)NULL;
 
   node->next = NIL;
 
@@ -59,39 +59,30 @@ ListNode *ll_insert(ListNode **head, HatterSpeak *gs) {
 ListNode *ll_lookup(ListNode **head, char *key) {
   ++seek;
 
+  ListNode *headswap = *head;
   ListNode *storehead = *head;
 
   if(strcmp(storehead->gs->oldspeak, key) == 0)
   {
     return storehead;
    }
- // printf( "grgr %s", storehead->next->next->gs->oldspeak);
-   //printf( "%s", storehead->next->gs->oldspeak);
-
-//   if ((*head)->next != NIL && strcmp(key, (*head)->gs->oldspeak) == 0) {
-   //  puts("faalo");
-  //  return *head;
-  //}
 
 storehead = storehead->next;
   while (storehead != NIL) {
-    if(strcmp(key, storehead->gs->oldspeak) == 0)
+    if(strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 0)
     {
     return storehead;
    }
+   else if (strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 1)
+   {
+      HatterSpeak *keydataswap = storehead->gs;
+      storehead->gs = headswap->gs;
+      headswap->gs = keydataswap;
+      return headswap;
+    }
     ++numlinks;
     storehead = storehead->next;
-    // printf( "%s", (*head)->next->next->gs->oldspeak);
-    if (strcmp((*head)->gs->oldspeak, key) ==0 && move_to_front == 0) {
-      return *head;
-    }
-
-    else if (strcmp((*head)->gs->oldspeak, key)==0 && move_to_front == 1) {
-      HatterSpeak *keydataswap = (*head)->gs;
-      (*head)->gs = storehead->gs;
-      (storehead)->gs = keydataswap;
-      return storehead;
-    }
+    
   }
 
   return NIL;

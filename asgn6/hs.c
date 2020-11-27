@@ -7,14 +7,14 @@ HatterSpeak *hs_create(char *oldspeak, char *hatterspeak) {
   HatterSpeak *gs = (HatterSpeak *)malloc(sizeof(HatterSpeak));
   gs->oldspeak = malloc(100);
   gs->hatterspeak = malloc(100);
-   if(oldspeak != NULL)
+   if(oldspeak != (char*)(NULL))
   strcpy(gs->oldspeak, oldspeak);
    else
-   gs->oldspeak = NULL;
-  if (hatterspeak != NULL)
+   gs->oldspeak = (char*)NULL;
+  if (hatterspeak != (char*)(NULL))
     strcpy(gs->hatterspeak, hatterspeak);
   else
-    gs->hatterspeak = NULL;
+    gs->hatterspeak = (char*)NULL;
   return gs;
 
 }
