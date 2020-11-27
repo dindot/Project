@@ -1,5 +1,7 @@
 #include "hash.h"
 
+  ListNode **head = NULL;
+
 //
 // Constructor for a HashTable
 //
@@ -35,31 +37,53 @@ uint32_t ht_count(HashTable *ht) {
 }
 
 ListNode *ht_lookup(HashTable *ht, char *key) {
-  for (uint32_t i = 0; i < ht->length; i++) {
-    ListNode *checknode = ll_lookup(&ht->heads[i], key);
+ uint32_t index = hash(ht->salt, key) % ht->length; 
+ 
+  ListNode *checknode = ll_lookup(&ht->heads[index], key);
+  
     if (checknode != NIL) {
       return checknode;
     }
-  }
+  
 
   return NIL;
 }
 
-void ht_insert(HashTable *ht, HatterSpeak *gs) {
-  ListNode *node = ll_node_create(gs);
+ListNode *ht_insert(HashTable *ht, HatterSpeak *gs) {
+ // open this up later ListNode *node = ll_node_create(gs);
+ 
+
   //printf("%s" , node->gs->oldspeak);
   uint32_t index = hash(ht->salt, gs->oldspeak) % ht->length;
- // printf("index %d:", index);
-  //printf("%s", ht->heads[index]->gs->oldspeak);
-  if (ht->heads[index] == NIL) {
-    ht->heads[index] = node;
-    //printf("%s",  ht->heads[index]->gs->oldspeak);
-  } else {
-    ListNode *chainednode = ll_insert(&ht->heads[index], gs);
-    if (chainednode == NIL) {
+ //printf("%s", ht->heads[index]->gs->hatterspeak);  
+ //  if( ht->heads[index] ==NULL)
+   // {
+     // ht->heads[index]=node;
+    ListNode *node = ll_insert(&ht->heads[index], gs);
+   // printf("%s" , node->gs->oldspeak);       
+
+    //head = &node;
+     //}
+    // if(ht->heads[index] != NULL)
+    // {
+      //  ListNode *node = ll_insert(head, gs);
+       
+     
+   if (node == NIL) {
       puts("nodenot in");
     }
-  }
+ // printf("index %d:", index);
+  //printf("%s", ht->heads[index]->gs->oldspeak);
+ // if (ht->heads[index] == NIL) {
+   // ht->heads[index] = node;
+    //printf("%s",  ht->heads[index]->gs->oldspeak);
+ // } else {
+  //  ListNode *chainednode = ll_insert(&ht->heads[index], gs);
+   // if (chainednode == NIL) {
+     // puts("nodenot in");
+   // }
+//  }
   //free(node->gs->oldspeak);
   //free(node->gs->hatterspeak);
+return ht->heads[index];
 }

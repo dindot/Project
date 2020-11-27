@@ -64,6 +64,6 @@ ListNode *ht_lookup(HashTable *ht, char *key);
 // ht: the hashtable
 // gs: the hatterspeak to add to the hashtable
 //
-void ht_insert(HashTable *ht, HatterSpeak *gs);
+ListNode *ht_insert(HashTable *ht, HatterSpeak *gs);
 
 #endif

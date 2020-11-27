@@ -21,19 +21,28 @@ int main(void) {
   inbf = bf_probe(bf, "adam");
   printf("%d", inbf);
   //bf_delete(bf);
-  HatterSpeak *ds = (HatterSpeak *)malloc(sizeof(HatterSpeak));
-  ds->oldspeak = "hrmy";
-  ds->hatterspeak = "benny";
+//  HatterSpeak *ds = (HatterSpeak *)malloc(sizeof(HatterSpeak));
+ // ds->oldspeak = "hrmy";
+  //ds->hatterspeak = "benny";
   //ListNode* node = ll_node_create(ds);
   //printf("node %s", node->gs->oldspeak);
 
-  //ListNode *initial = ll_insert(&node, ds);     /// need these 2 lines to can print up to hrmy
+   HatterSpeak *ds = hs_create(NULL, NULL);
+  ListNode* node = ll_node_create(ds);
+    
+
+   HatterSpeak *fd = hs_create("htmy", "Ade");
+    HatterSpeak *dd = hs_create("steve", "broew");
+  ListNode *initial = ll_insert(&node, fd);     /// need these 2 lines to can print up to hrmy
+printf("\n nodes %s\n", initial->gs->oldspeak);
+ ListNode *park = ll_insert(&node, dd);
+printf("\n nodes %s\n", park->gs->oldspeak);
   //printf("head is %s\n", initial->gs->oldspeak);
 
-  HatterSpeak *ss = (HatterSpeak *)malloc(sizeof(HatterSpeak));
+/*  HatterSpeak *ss = (HatterSpeak *)malloc(sizeof(HatterSpeak));
   ss->oldspeak = "redd";
   ss->hatterspeak = "defef";
-  /*HHHHEEEERRRRListNode *head = ll_insert(&node, ss);
+  HHHHEEEERRRRListNode *head = ll_insert(&node, ss);
 printf("head is %s\n", head->gs->oldspeak);
 
 HatterSpeak *bb = (HatterSpeak*)malloc(sizeof(HatterSpeak));
@@ -49,14 +58,14 @@ ListNode *hety = ll_insert(&node, ed);
 printf("head is %s\n", hety->gs->oldspeak);
 
 
+*/
+//while(initial != NIL)
+//{
+//printf("\n nodes %s\n", initial->gs->oldspeak);  //show list with searched found value moved to front of list
+//initial = initial->next;
+//} // print out nodes works
 
-while(node != NIL)
-{
-printf("\n nodes %s\n", node->gs->oldspeak);  //show list with searched found value moved to front of list
-node = node->next;
-} // print out nodes works
-
-
+/*
  move_to_front = 0;
 
 // works for case 0, but need to change move to front whrn its activated at 1, to display proper node !!!!!!!!!
@@ -166,10 +175,10 @@ linked_helper(ht->heads, ht);
     return -1;
   }
 
-  while (fgets(buffer, 50, stdin) != NULL) {
-    fputs(buffer, input_stream);
-  }
-  fclose(input_stream);
+  //while (fgets(buffer, 50, stdin) != NULL) {
+//    fputs(buffer, input_stream);
+ // }
+ // fclose(input_stream);
 
   FILE *input_read = fopen("checker.txt", "r");
 

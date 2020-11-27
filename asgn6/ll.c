@@ -15,7 +15,10 @@ ListNode *ll_node_create(HatterSpeak *gs) {
     return (ListNode *)NIL;
   }
   node->gs->oldspeak = malloc(100);
+if (gs->oldspeak != NULL)
   strcpy(node->gs->oldspeak, gs->oldspeak);
+else
+   gs->oldspeak = NULL;
 
   node->gs->hatterspeak = malloc(100);
   if (gs->hatterspeak != NULL) {
@@ -57,18 +60,33 @@ ListNode *ll_lookup(ListNode **head, char *key) {
   ++seek;
 
   ListNode *storehead = *head;
-  if ((*head)->next == NIL && key == (*head)->gs->oldspeak) {
-    return *head;
-  }
-  while ((*head)->next != NIL) {
-    ++numlinks;
-    *head = (*head)->next;
 
-    if ((*head)->gs->oldspeak == key && move_to_front == 0) {
+  if(strcmp(storehead->gs->oldspeak, key) == 0)
+  {
+    return storehead;
+   }
+ // printf( "grgr %s", storehead->next->next->gs->oldspeak);
+   //printf( "%s", storehead->next->gs->oldspeak);
+
+//   if ((*head)->next != NIL && strcmp(key, (*head)->gs->oldspeak) == 0) {
+   //  puts("faalo");
+  //  return *head;
+  //}
+
+storehead = storehead->next;
+  while (storehead != NIL) {
+    if(strcmp(key, storehead->gs->oldspeak) == 0)
+    {
+    return storehead;
+   }
+    ++numlinks;
+    storehead = storehead->next;
+    // printf( "%s", (*head)->next->next->gs->oldspeak);
+    if (strcmp((*head)->gs->oldspeak, key) ==0 && move_to_front == 0) {
       return *head;
     }
 
-    else if ((*head)->gs->oldspeak == key && move_to_front == 1) {
+    else if (strcmp((*head)->gs->oldspeak, key)==0 && move_to_front == 1) {
       HatterSpeak *keydataswap = (*head)->gs;
       (*head)->gs = storehead->gs;
       (storehead)->gs = keydataswap;
