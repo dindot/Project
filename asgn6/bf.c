@@ -40,13 +40,16 @@ void bf_insert(BloomFilter *bf, char *key) {
 }
 
 bool bf_probe(BloomFilter *bf, char *key) {
-  uint32_t index1 = hash(bf->primary, key)
+  uint32_t index1 = 0;
+   uint32_t index2 = 0;
+   uint32_t index3 = 0;
+  index1=  hash(bf->primary, key)
                     % BFSIZE; // get indices when applied 3 salts to hash
-  uint32_t index2 = hash(bf->secondary, key) % BFSIZE;
-  uint32_t index3 = hash(bf->tertiary, key) % BFSIZE;
+    index2 = hash(bf->secondary, key) % BFSIZE;
+   index3= hash(bf->tertiary, key) % BFSIZE;
 
   // check to see if each bit is turned on, then its an oldspeak word
-  if (bv_get_bit(bf->filter, index1) == 1 && bv_get_bit(bf->filter, index2) == 1
+ if (bv_get_bit(bf->filter, index1) == 1 && bv_get_bit(bf->filter, index2) == 1
       && bv_get_bit(bf->filter, index3) == 1) {
     return 1;
   }

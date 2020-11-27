@@ -15,7 +15,7 @@
 #define CONTRACTIONS "[a-zA-Z0-9]*[-_']*[a-zA-Z0-9]"
 
 void file_readin(BloomFilter *bf, HashTable *ht);
-void redir_input();
+void redir_input(BloomFilter *bf);
 
 bool tofront = 0, nofront = 0, stats = 0;
 
@@ -77,13 +77,15 @@ int main(int argc, char **argv) {
   }
 
   file_readin(bf, ht);
-  redir_input();
+  redir_input(bf);
   return 0;
 }
 
 void file_readin(BloomFilter *bf, HashTable *ht) {
 
-  FILE *file = fopen("oldspeak.txt", "r");
+
+ 
+   FILE *file = fopen("oldspeak.txt", "r");
   if (file == NULL) {
     puts("could not open file!\n");
     return;
@@ -114,8 +116,8 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
 
   while (!feof(hatter)) {
     fscanf(hatter, "%s\n%s", buffer, buffer2);
-
-    if (bf_probe(bf, buffer) == 0) {
+  
+    if ((bf_probe(bf, buffer)) == 0) {
       HatterSpeak *gs = hs_create(buffer, NULL);
       ht_insert(ht, gs);
     }
@@ -135,7 +137,7 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
   fclose(hatter);
 }
 
-void redir_input() {
+void redir_input(BloomFilter *bf) {
 
  // char *buffer = (char *)malloc(sizeof(char) * 1024);
 
@@ -150,15 +152,21 @@ void redir_input() {
   while(!feof(stdin))
 {
    char *matchedword = next_word(stdin, &regex);
-   
+  if(matchedword !=NULL){
+  
    for(unsigned long i = 0; i < strlen(matchedword); i++)
   {
    matchedword[i] = tolower(matchedword[i]);
    
    }
+   bool passbf = bf_probe(bf, matchedword);
+    printf("\n%d" , passbf); 
+
+    }
     
-   printf("%s",matchedword);
+   
 }
+clear_words();
 
 /// FILE *input_stream = fopen("input.txt", "w");
 
