@@ -5,13 +5,17 @@
 #include "parser.h"
 #include <ctype.h>
 #include <getopt.h>
+#include <regex.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define OPTIONS "mbh:f:s"
+#define CONTRACTIONS "[a-zA-Z0-9]*[-_']*[a-zA-Z0-9]"
 
 void file_readin(BloomFilter *bf, HashTable *ht);
+void redir_input();
 
 bool tofront = 0, nofront = 0, stats = 0;
 
@@ -73,6 +77,7 @@ int main(int argc, char **argv) {
   }
 
   file_readin(bf, ht);
+  redir_input();
   return 0;
 }
 
@@ -128,4 +133,57 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
   }
 
   fclose(hatter);
+}
+
+void redir_input() {
+
+ // char *buffer = (char *)malloc(sizeof(char) * 1024);
+
+  int returncode;
+  regex_t regex;
+  returncode = regcomp(&regex, CONTRACTIONS, REG_EXTENDED);
+  if (returncode) {
+    puts("compilation unsuccessful\n");
+    return;
+  }
+
+  while(!feof(stdin))
+{
+   char *matchedword = next_word(stdin, &regex);
+   
+   for(unsigned long i = 0; i < strlen(matchedword); i++)
+  {
+   matchedword[i] = tolower(matchedword[i]);
+   
+   }
+    
+   printf("%s",matchedword);
+}
+
+/// FILE *input_stream = fopen("input.txt", "w");
+
+ // if (input_stream == NULL) {
+  //  puts("file was not created");
+   // return;
+ // }
+  // allows for i/o redirection by first letting user type in desired words,
+  // prints them to stdout, so that when program ./hatter > checker.txt, will
+  // enter those words into the file for use in the parser using regex
+  //
+ // while (!feof(
+   //   stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
+ // {
+   // int c = tolower(getchar());
+    
+   // if(c != EOF)
+   // putchar(
+     //   c); //keep getting user input until they press ctrl+d to finish, then pass to parser
+ // fputc(c, input_stream);
+ // }
+ 
+
+ // while (fgets(buffer, 50, stdin)) {
+  // fputs(buffer, input_stream);
+ // }
+ // fclose(input_stream);
 }

@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define CONTRACTIONS "[a-zA-Z0-9]*[-_']*[a-zA-Z0-9]"
+#define CONTRACTIONS "[a-zA-Z0-9]*[-']*[a-zA-Z0-9]"
 
 void linked_helper(ListNode **nodes, HashTable *ht);
 
