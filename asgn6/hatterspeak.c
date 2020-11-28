@@ -16,9 +16,10 @@
 
 void file_readin(BloomFilter *bf, HashTable *ht);
 void redir_input(BloomFilter *bf, HashTable *ht);
-void printer(HashTable *ht, ListNode *node);
+void printer(ListNode *node);
+void oldspeakprint(ListNode *node);
 
-bool tofront = 0, nofront = 0, stats = 0, transwords = 0;
+bool tofront = 0, nofront = 0, stats = 0, transwords = 0, notrans = 0;
 
 int main(int argc, char **argv) {
 
@@ -153,7 +154,8 @@ puts("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void redir_input(BloomFilter *bf, HashTable *ht) {
    HatterSpeak *hs = hs_create((char*)NULL,(char*)NULL);
- ListNode *stored_transwords = ll_node_create(hs);
+ListNode *stored_notranswords = ll_node_create(hs); 
+ListNode *stored_transwords = ll_node_create(hs);
  // char *buffer = (char *)malloc(sizeof(char) * 1024);
 
   int returncode;
@@ -178,17 +180,27 @@ void redir_input(BloomFilter *bf, HashTable *ht) {
     if(passbf == 1)
     {
     ListNode *node =  ht_lookup(ht, matchedword);
-    printf("dfsdfsdfsfsdfsdf %s", node->gs->hatterspeak);
+//    printf("dfsdfsdfsfsdfsdf %s", node->gs->hatterspeak);
    if(node != NULL && isalpha(node->gs->hatterspeak[0]) != 0)
      {
         transwords = 1;
         ll_insert(&stored_transwords, node->gs);
      }
 //   printf("%s", node->gs->oldspeak);
+     else if (node != NULL && isalpha(node->gs->hatterspeak[0]) == 0)
+     {
+       notrans = 1;
+       ll_insert(&stored_notranswords, node->gs);
+      }
+     else if (node != NULL && (isalpha(node->gs->hatterspeak[0]) == 0 || isalpha(node->gs->hatterspeak[0]) !=0))
+     {
+       transwords = notrans = 1;
+     //  ll_insert(&stored_transwords, node->gs);
+      }
   
      }    
 
-    printf("\n%d" , passbf); 
+//    printf("\n%d" , passbf); 
 
     }
     
@@ -196,10 +208,22 @@ void redir_input(BloomFilter *bf, HashTable *ht) {
 }
 clear_words();
 
-printer(ht,stored_transwords);
+//printer(stored_transwords);
+if(transwords == 1 && notrans == 1)
+{
+printer(stored_notranswords);
+printer(stored_transwords);
+}
+else if (transwords == 1 && notrans == 0)
+{
+printer(stored_transwords);
+}
+else if (transwords == 0 && notrans == 1)
+{
+printer(stored_notranswords);
 
-
-/// FILE *input_stream = fopen("input.txt", "w");
+}
+// FILE *input_stream = fopen("input.txt", "w");
 
  // if (input_stream == NULL) {
   //  puts("file was not created");
@@ -227,14 +251,46 @@ printer(ht,stored_transwords);
  // fclose(input_stream);
 }
 
-void printer(HashTable *ht, ListNode *node)
+void printer(ListNode *node)
 {
-if(transwords == 1)
+
+
+if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) == 0)
+{
+puts("Dear Comrade,\n");
+puts("You have chosen to use words that the queen has decreed oldspeak.");
+puts("Due to your infraction you will be sent to the dungeon where you will");
+puts("   be taught hatterspeak.\n");
+puts("Your errors:\n");
+
+while(node->next != NULL)
+{
+ printf("%s\n", node->gs->oldspeak);
+  node = node->next;
+}
+}
+else if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) != 0)
+{
+
+
+puts("\nAppropriate hatterspeak translations.\n");
+while(node->next != NULL)
+{
+ printf("%s -> %s\n", node->gs->oldspeak, node->gs->hatterspeak);
+  node = node->next;
+}
+
+}
+
+
+
+
+else if(transwords == 1)
 {
 printf("Dear Wonderlander,\n");
 printf("\nThe decree for hatterspeak finds your message lacking. Some of the\n");
 printf("   words that you used are not hatterspeak.\n");
-printf("The list shows how to turn the oldspeak words into hatterspeak.\n");
+puts("The list shows how to turn the oldspeak words into hatterspeak.\n");
 
 while(node->next != NULL)// && node->gs->hatterspeak != NULL)
 {
@@ -246,9 +302,28 @@ while(node->next != NULL)// && node->gs->hatterspeak != NULL)
  // }
 }
 }
-uint32_t gf = ht->length;
-printf("%d", gf);
-//printf("%s", node->gs->hatterspeak);
+else if(notrans == 1)
+{
+oldspeakprint(node);
+}
 }
 
 
+void oldspeakprint(ListNode *node)
+{
+
+printf("Dear Wonderlander,\n");
+printf("\nYou have chosen to use words that the queen has decreed oldspeak.\n");
+printf("Due to your infraction you will be sent to the dungeon where you will\n");
+printf("   be taught hatterspeak.\n");
+puts("\nYour errors:\n");
+
+while(node->next != NULL)// && node->gs->hatterspeak != NULL)
+{
+ // if(node->gs->hatterspeak != NIL && node->next != NULL)
+ //  //  // {
+ //   // //printf(" %s\n", node->gs->hatterspeak);
+        printf("%s\n", node->gs->oldspeak);
+             node = node->next;
+ }
+       }
