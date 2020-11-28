@@ -66,7 +66,7 @@ ListNode *ll_lookup(ListNode **head, char *key) {
   {
     return storehead;
    }
-ListNode *prev = storehead;
+
 storehead = storehead->next;
   while (storehead != NIL) {
     if(strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 0)
@@ -75,16 +75,13 @@ storehead = storehead->next;
    }
    else if (strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 1)
    {
-    prev->next = prev->next->next;
-   storehead->next = headswap;    
-   // prev->next = prev->next->next;
-      
-      //HatterSpeak *keydataswap = storehead->gs;
-     // storehead->gs = headswap->gs;
-     // headswap->gs = keydataswap;
-      return storehead;
+     HatterSpeak *keydataswap = storehead->gs;
+      storehead->gs = headswap->gs;
+      headswap->gs = keydataswap;
+      return headswap;
     }
     ++numlinks;
+
     storehead = storehead->next;
     
   }
