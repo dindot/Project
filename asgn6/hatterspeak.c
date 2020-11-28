@@ -95,7 +95,7 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
   }
 
   FILE *hatter = fopen("hatterspeak.txt", "r");
-  if (file == NULL) {
+  if (hatter == NULL) {
     puts("could not open file!\n");
     return;
   }
@@ -111,52 +111,31 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
     fscanf(file, "%s", buffer);
     bf_insert(bf, buffer);
    HatterSpeak *gs = hs_create(buffer, (char*)NULL);
-   ListNode* hey =  ht_insert(ht, gs);
-if( hey->gs->hatterspeak == (char*)(NULL)) 
-printf("%s", hey->gs->oldspeak);
+   ht_insert(ht, gs);
+
     //  hs_delete(gs);           // later  might need to delete to put in rest
     //  gs = NULL;
   }
 
   fclose(file);
-puts("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-//  while (!feof(file)) {
-  //  fscanf(file, "%s\n%s", buffer);
-  
-   // if ((bf_probe(bf, buffer)) == 0) {
-      
-    //  HatterSpeak *gs = hs_create(buffer, NULL);
-//ListNode* hey =  ht_insert(ht, gs);
- //printf("%s            %s\n", hey->gs->oldspeak, hey->next->gs->oldspeak);
-   // }
- // }
 
- // rewind(hatter);
   while (!feof(hatter)) {
     fscanf(hatter, "%s\n%s", buffer, buffer2);
 
     bf_insert(bf, buffer);
     HatterSpeak *gs = hs_create(buffer, buffer2);
-  ListNode* hey=  ht_insert(ht, gs);
-
-   while(hey != NULL)
-  {
-    printf("%s      %s\n", hey->gs->oldspeak, hey->gs->hatterspeak);
-    hey = hey->next;
-   }
+    ht_insert(ht, gs);
 }
-    //if(ht->heads[688] != NULL)
-    //printf("%s", ht->heads[688]->gs->oldspeak);  // to test the values they appear to be printing!
-  
-
+     
   fclose(hatter);
 }
+
 
 void redir_input(BloomFilter *bf, HashTable *ht) {
    HatterSpeak *hs = hs_create((char*)NULL,(char*)NULL);
 ListNode *stored_notranswords = ll_node_create(hs); 
 ListNode *stored_transwords = ll_node_create(hs);
- // char *buffer = (char *)malloc(sizeof(char) * 1024);
+
 
   int returncode;
   regex_t regex;
@@ -180,13 +159,12 @@ ListNode *stored_transwords = ll_node_create(hs);
     if(passbf == 1)
     {
     ListNode *node =  ht_lookup(ht, matchedword);
-//    printf("dfsdfsdfsfsdfsdf %s", node->gs->hatterspeak);
+
    if(node != NULL && isalpha(node->gs->hatterspeak[0]) != 0)
      {
         transwords = 1;
         ll_insert(&stored_transwords, node->gs);
      }
-//   printf("%s", node->gs->oldspeak);
      else if (node != NULL && isalpha(node->gs->hatterspeak[0]) == 0)
      {
        notrans = 1;
@@ -195,20 +173,14 @@ ListNode *stored_transwords = ll_node_create(hs);
      else if (node != NULL && (isalpha(node->gs->hatterspeak[0]) == 0 || isalpha(node->gs->hatterspeak[0]) !=0))
      {
        transwords = notrans = 1;
-     //  ll_insert(&stored_transwords, node->gs);
       }
   
      }    
 
-//    printf("\n%d" , passbf); 
-
-    }
-    
-   
+    }  
 }
 clear_words();
 
-//printer(stored_transwords);
 if(transwords == 1 && notrans == 1)
 {
 printer(stored_notranswords);
@@ -223,38 +195,11 @@ else if (transwords == 0 && notrans == 1)
 printer(stored_notranswords);
 
 }
-// FILE *input_stream = fopen("input.txt", "w");
 
- // if (input_stream == NULL) {
-  //  puts("file was not created");
-   // return;
- // }
-  // allows for i/o redirection by first letting user type in desired words,
-  // prints them to stdout, so that when program ./hatter > checker.txt, will
-  // enter those words into the file for use in the parser using regex
-  //
- // while (!feof(
-   //   stdin)) // source cited used from lecture 2 notes from Prof Dunne echo program
- // {
-   // int c = tolower(getchar());
-    
-   // if(c != EOF)
-   // putchar(
-     //   c); //keep getting user input until they press ctrl+d to finish, then pass to parser
- // fputc(c, input_stream);
- // }
- 
-
- // while (fgets(buffer, 50, stdin)) {
-  // fputs(buffer, input_stream);
- // }
- // fclose(input_stream);
 }
 
 void printer(ListNode *node)
 {
-
-
 if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) == 0)
 {
 puts("Dear Comrade,\n");
@@ -272,7 +217,6 @@ while(node->next != NULL)
 else if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) != 0)
 {
 
-
 puts("\nAppropriate hatterspeak translations.\n");
 while(node->next != NULL)
 {
@@ -282,9 +226,6 @@ while(node->next != NULL)
 
 }
 
-
-
-
 else if(transwords == 1)
 {
 printf("Dear Wonderlander,\n");
@@ -292,14 +233,10 @@ printf("\nThe decree for hatterspeak finds your message lacking. Some of the\n")
 printf("   words that you used are not hatterspeak.\n");
 puts("The list shows how to turn the oldspeak words into hatterspeak.\n");
 
-while(node->next != NULL)// && node->gs->hatterspeak != NULL)
+while(node->next != NULL)
 {
- // if(node->gs->hatterspeak != NIL && node->next != NULL)
- // {
-//printf(" %s\n", node->gs->hatterspeak);
   printf("%s -> %s\n", node->gs->oldspeak, node->gs->hatterspeak);
   node = node->next;
- // }
 }
 }
 else if(notrans == 1)
@@ -307,7 +244,6 @@ else if(notrans == 1)
 oldspeakprint(node);
 }
 }
-
 
 void oldspeakprint(ListNode *node)
 {
@@ -318,11 +254,8 @@ printf("Due to your infraction you will be sent to the dungeon where you will\n"
 printf("   be taught hatterspeak.\n");
 puts("\nYour errors:\n");
 
-while(node->next != NULL)// && node->gs->hatterspeak != NULL)
+while(node->next != NULL)
 {
- // if(node->gs->hatterspeak != NIL && node->next != NULL)
- //  //  // {
- //   // //printf(" %s\n", node->gs->hatterspeak);
         printf("%s\n", node->gs->oldspeak);
              node = node->next;
  }

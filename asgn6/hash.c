@@ -49,7 +49,7 @@ ListNode *ht_lookup(HashTable *ht, char *key) {
   return NIL;
 }
 
-ListNode *ht_insert(HashTable *ht, HatterSpeak *gs) {
+void ht_insert(HashTable *ht, HatterSpeak *gs) {
  // open this up later ListNode *node = ll_node_create(gs);
  
 
@@ -85,5 +85,5 @@ ListNode *ht_insert(HashTable *ht, HatterSpeak *gs) {
 //  }
   //free(node->gs->oldspeak);
   //free(node->gs->hatterspeak);
-return ht->heads[index];
+
 }
