@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -Wpedantic
+CFLAGS = -Wall -Wextra -Werror -Wpedantic -std=c99
 CC = clang $(CFLAGS)
 OBJECTS = hatterspeak.o bf.o bv.o speck.o ll.o hs.o hash.o parser.o
 EXECBIN = hatterspeak

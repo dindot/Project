@@ -4,19 +4,19 @@
 #include <string.h>
 
 HatterSpeak *hs_create(char *oldspeak, char *hatterspeak) {
+
   HatterSpeak *gs = (HatterSpeak *)malloc(sizeof(HatterSpeak));
-  gs->oldspeak = malloc(100);
+  gs->oldspeak = malloc(100); // create space to copy the strings into
   gs->hatterspeak = malloc(100);
-   if(oldspeak != (char*)(NULL))
-  strcpy(gs->oldspeak, oldspeak);
-   else
-   gs->oldspeak = (char*)NULL;
-  if (hatterspeak != (char*)(NULL))
+  if (oldspeak != (char *)(NULL)) // check if allocated
+    strcpy(gs->oldspeak, oldspeak);
+  else
+    gs->oldspeak = (char *)NULL;
+  if (hatterspeak != (char *)(NULL))
     strcpy(gs->hatterspeak, hatterspeak);
   else
-    gs->hatterspeak = (char*)NULL;
+    gs->hatterspeak = (char *)NULL;
   return gs;
-
 }
 
 void hs_delete(HatterSpeak *gs) {
