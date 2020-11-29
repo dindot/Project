@@ -25,10 +25,10 @@ void ht_delete(HashTable *ht) {
   free(ht);
 }
 
-uint32_t ht_count(HashTable *ht) {
+uint32_t ht_count(HashTable *ht) {  // count nodes in the ht that are filled with other than NULL
   uint32_t counter = 0;
   for (uint32_t i = 0; i < ht->length; i++) {
-    if (ht->heads[i] != NULL) {
+    if (ht->heads[i]->next != NULL) {
       counter++;
     }
   }
@@ -39,7 +39,7 @@ uint32_t ht_count(HashTable *ht) {
 ListNode *ht_lookup(HashTable *ht, char *key) {
  uint32_t index = hash(ht->salt, key) % ht->length; 
  
-  ListNode *checknode = ll_lookup(&ht->heads[index], key);
+  ListNode *checknode = ll_lookup(&ht->heads[index], key);  // use index as inserted to search if node is there is table
   
     if (checknode != NIL) {
       return checknode;
@@ -50,40 +50,11 @@ ListNode *ht_lookup(HashTable *ht, char *key) {
 }
 
 void ht_insert(HashTable *ht, HatterSpeak *gs) {
- // open this up later ListNode *node = ll_node_create(gs);
- 
-
-  //printf("%s" , node->gs->oldspeak);
+ // create index using hash on key to place in given dayta
   uint32_t index = hash(ht->salt, gs->oldspeak) % ht->length;
- //printf("%s", ht->heads[index]->gs->hatterspeak);  
- //  if( ht->heads[index] ==NULL)
-   // {
-     // ht->heads[index]=node;
     ListNode *node = ll_insert(&ht->heads[index], gs);
-   // printf("%s" , node->gs->oldspeak);       
-
-    //head = &node;
-     //}
-    // if(ht->heads[index] != NULL)
-    // {
-      //  ListNode *node = ll_insert(head, gs);
-       
-     
-   if (node == NIL) {
+  
+   if (node == NIL) {  // check to see if node was inserted
       puts("nodenot in");
     }
- // printf("index %d:", index);
-  //printf("%s", ht->heads[index]->gs->oldspeak);
- // if (ht->heads[index] == NIL) {
-   // ht->heads[index] = node;
-    //printf("%s",  ht->heads[index]->gs->oldspeak);
- // } else {
-  //  ListNode *chainednode = ll_insert(&ht->heads[index], gs);
-   // if (chainednode == NIL) {
-     // puts("nodenot in");
-   // }
-//  }
-  //free(node->gs->oldspeak);
-  //free(node->gs->hatterspeak);
-
 }

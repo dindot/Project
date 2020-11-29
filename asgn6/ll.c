@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int avg_seek = 0;
-int seek = 0; // make these extern later
+#include <ctype.h>
+
+int avg_seek = 0;  // vars for display stats
+int seek = 0; 
 int nodes = 0;
 bool move_to_front;
-//static bool firstnode = 1;
 
 ListNode *ll_node_create(HatterSpeak *gs) {
   ListNode *node = (ListNode *)malloc(sizeof(ListNode));
@@ -15,13 +16,13 @@ ListNode *ll_node_create(HatterSpeak *gs) {
   if (node == NIL) {
     return (ListNode *)NIL;
   }
-  node->gs->oldspeak = malloc(100);
+  node->gs->oldspeak = malloc(100);  // to allow to copy new string into it
 if (gs->oldspeak !=(char*) (NULL))
   strcpy(node->gs->oldspeak, gs->oldspeak);
 else
    gs->oldspeak = (char*)NULL;
 
-  node->gs->hatterspeak = malloc(100);
+  node->gs->hatterspeak = malloc(100);  // to allow to copy new string into it
   if (gs->hatterspeak != (char*)(NULL)) {
     strcpy(node->gs->hatterspeak, gs->hatterspeak);
 
@@ -33,14 +34,13 @@ else
   return node;
 }
 
-void ll_node_delete(ListNode *n) {
-
-  free(n->gs);
+void ll_node_delete(ListNode *n) { 
+  hs_delete(n->gs);
   free(n);
 }
 
 void ll_delete(ListNode *head) {
-  while (head->next != NIL) {
+  while (head->next != NIL) {  // loop thru deleting each node
     ll_node_delete(head->next);
     head->next = (head->next)->next;
   }
@@ -59,26 +59,26 @@ ListNode *ll_insert(ListNode **head, HatterSpeak *gs) {
 }
 
 ListNode *ll_lookup(ListNode **head, char *key) {
-  ++seek;
-  ++avg_seek;
-  ListNode *headswap = *head;
-  ListNode *storehead = *head;
+ ++seek;
+ 
+  ListNode *headswap = *head;  // store head for later swaps
+  ListNode *storehead = *head;  // use this one to traverse
 
-  if(strcmp(storehead->gs->oldspeak, key) == 0)
+  if(strcmp(storehead->gs->oldspeak, key) == 0)  // if at first node
   {
     return storehead;
    }
 
 storehead = storehead->next;
-++avg_seek;
-  while (storehead != NIL) {
+
+  while (storehead != NIL) {  // keep traversing nodes until key found or not
     if(strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 0)
     {
     return storehead;
    }
    else if (strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 1)
    {
-     HatterSpeak *keydataswap = storehead->gs;
+     HatterSpeak *keydataswap = storehead->gs; // when key found swap it to the front of list
       storehead->gs = headswap->gs;
       headswap->gs = keydataswap;
       return headswap;
@@ -88,6 +88,6 @@ storehead = storehead->next;
     storehead = storehead->next;
     ++avg_seek; 
   }
+  return NIL;  // the node was not found in list
 
-  return NIL;
 }

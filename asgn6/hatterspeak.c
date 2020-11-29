@@ -19,12 +19,17 @@ void redir_input(BloomFilter *bf, HashTable *ht);
 void printer(ListNode *node);
 void oldspeakprint(ListNode *node);
 
+ extern int avg_seek;
+ extern int seek;
+   extern int nodes;
+   extern int slots;
+
 bool tofront = 0, nofront = 0, stats = 0, transwords = 0, notrans = 0;
 
 int main(int argc, char **argv) {
 
   char *input_num = (char *)NULL; // to get user changed values
-  int default_hashtable = 10000;
+  uint32_t default_hashtable = 10000;
   int default_bloom = 1048576;
   char c; // to obtain user input of choices
 
@@ -48,7 +53,6 @@ int main(int argc, char **argv) {
       default_bloom = atoi(input_num);
       break;
     case 's':
-      puts("display stats");
       stats = 1;
       break;
     default:
@@ -82,19 +86,24 @@ int main(int argc, char **argv) {
 
   file_readin(bf, ht);
   redir_input(bf, ht);
- extern int avg_seek; 
- extern int seek;
-   extern int nodes;
-   extern int slots;
+   uint32_t htcount = ht_count(ht); 
+  //uint32_t fasf = 34234;
+   double hashload = ((double)htcount / default_hashtable) * 100;
+ //  printf("%f" PRIu32 "\n", hashload);
+   
   if(stats == 1)
   {
     printf("Seeks: %d\n", seek);
     printf("Average seek length: %f\n", (double)avg_seek/seek); 
-    printf("Average Linked List Length: %f\n", (double)seek/default_hashtable);
-    printf("Hash table load: %f%%\n",    (double)nodes/default_hashtable);
-    printf("Bloom filter load: %f%%\n", (double)slots/default_bloom);
+    printf("Average Linked List Length: %f\n", (double)nodes/default_hashtable);
+   printf("Hash table load: %f%%\n",    hashload);
+    printf("Bloom filter load: %f%%\n", ((double)slots/default_bloom)*100);
 
 }
+ //for(uint32_t i = 0; i < ht->length; i++)
+ //ll_delete(ht->heads[i]);
+ ht_delete(ht);
+ bf_delete(bf); 
   return 0;
 }
 
@@ -124,8 +133,12 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
     fscanf(file, "%s", buffer);
     bf_insert(bf, buffer);
    HatterSpeak *gs = hs_create(buffer, (char*)NULL);
+  ListNode * checker = ht_lookup(ht,buffer);
+  if(checker == NULL)
+    {
+   
    ht_insert(ht, gs);
-
+  }
     //  hs_delete(gs);           // later  might need to delete to put in rest
     //  gs = NULL;
   }
@@ -137,10 +150,17 @@ void file_readin(BloomFilter *bf, HashTable *ht) {
 
     bf_insert(bf, buffer);
     HatterSpeak *gs = hs_create(buffer, buffer2);
-    ht_insert(ht, gs);
+    ListNode * checker = ht_lookup(ht,buffer);
+   if(checker == NULL)
+    {
+   
+    ht_insert(ht, gs); 
+    }
 }
      
   fclose(hatter);
+  free(buffer2);
+  free(buffer); 
 }
 
 
@@ -168,25 +188,28 @@ ListNode *stored_transwords = ll_node_create(hs);
    matchedword[i] = tolower(matchedword[i]);
    
    }
-    printf("%s", matchedword);
+    //printf("%s", matchedword);
    bool passbf = bf_probe(bf, matchedword);
-    printf("\n%d", passbf);
+    //printf("\n%d", passbf);
     if(passbf == 1)
     {
     ListNode *node =  ht_lookup(ht, matchedword);
-
+     ++seek;
    if(node != NULL && isalpha(node->gs->hatterspeak[0]) != 0)
      {
+       
         transwords = 1;
         ll_insert(&stored_transwords, node->gs);
      }
      else if (node != NULL && isalpha(node->gs->hatterspeak[0]) == 0)
      {
+      
        notrans = 1;
        ll_insert(&stored_notranswords, node->gs);
       }
      else if (node != NULL && (isalpha(node->gs->hatterspeak[0]) == 0 || isalpha(node->gs->hatterspeak[0]) !=0))
-     {
+     { 
+      
        transwords = notrans = 1;
       }
   
@@ -215,7 +238,7 @@ printer(stored_notranswords);
 
 void printer(ListNode *node)
 {
-if(stats == 0){
+
 if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) == 0)
 {
 puts("Dear Comrade,\n");
@@ -230,8 +253,7 @@ while(node->next != NULL)
   node = node->next;
 }
 }
-}
-else if(stats == 0 && (transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) != 0)
+else if( (transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) != 0)
 {
 
 puts("\nAppropriate hatterspeak translations.\n");
@@ -243,7 +265,7 @@ while(node->next != NULL)
 
 }
 
-else if(transwords == 1 && stats == 0)
+else if(transwords == 1)
 {
 printf("Dear Wonderlander,\n");
 printf("\nThe decree for hatterspeak finds your message lacking. Some of the\n");
