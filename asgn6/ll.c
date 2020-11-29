@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-static int seek = 0; // make these extern later
-static int numlinks = 0;
+int avg_seek = 0;
+int seek = 0; // make these extern later
+int nodes = 0;
 bool move_to_front;
 //static bool firstnode = 1;
 
@@ -47,8 +48,9 @@ void ll_delete(ListNode *head) {
 }
 
 ListNode *ll_insert(ListNode **head, HatterSpeak *gs) {
+  ++nodes;
   ListNode *node = ll_node_create(gs);
-
+  
   node->next = *head;
 
   *head = node;
@@ -58,7 +60,7 @@ ListNode *ll_insert(ListNode **head, HatterSpeak *gs) {
 
 ListNode *ll_lookup(ListNode **head, char *key) {
   ++seek;
-
+  ++avg_seek;
   ListNode *headswap = *head;
   ListNode *storehead = *head;
 
@@ -68,6 +70,7 @@ ListNode *ll_lookup(ListNode **head, char *key) {
    }
 
 storehead = storehead->next;
+++avg_seek;
   while (storehead != NIL) {
     if(strcmp(key, storehead->gs->oldspeak) == 0 && move_to_front == 0)
     {
@@ -80,10 +83,10 @@ storehead = storehead->next;
       headswap->gs = keydataswap;
       return headswap;
     }
-    ++numlinks;
+    
 
     storehead = storehead->next;
-    
+    ++avg_seek; 
   }
 
   return NIL;

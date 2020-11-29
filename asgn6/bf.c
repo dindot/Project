@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #define BFSIZE 1048576
+int slots = 0;
 //
 // Constructor for a BloomFilter.
 //
@@ -37,6 +38,7 @@ void bf_insert(BloomFilter *bf, char *key) {
   bv_set_bit(bf->filter, index);
   index = hash(bf->tertiary, key) % BFSIZE;
   bv_set_bit(bf->filter, index);
+  slots+=3;
 }
 
 bool bf_probe(BloomFilter *bf, char *key) {

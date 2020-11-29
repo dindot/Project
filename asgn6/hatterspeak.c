@@ -12,7 +12,7 @@
 #include <string.h>
 
 #define OPTIONS "mbh:f:s"
-#define CONTRACTIONS "[a-zA-Z0-9]*[-_']*[a-zA-Z0-9]"
+#define CONTRACTIONS "[a-zA-Z0-9]*[-_']?[a-zA-Z0-9]*[a-zA-Z0-9]"
 
 void file_readin(BloomFilter *bf, HashTable *ht);
 void redir_input(BloomFilter *bf, HashTable *ht);
@@ -62,9 +62,9 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  if (stats == 1) {
-    puts("stats are\n");
-  }
+//  if (stats == 1) {
+  //  puts("stats are\n");
+ // }
 
   if (tofront == 1 && nofront == 1) {
     puts("this combination is not supported!\n");
@@ -82,6 +82,19 @@ int main(int argc, char **argv) {
 
   file_readin(bf, ht);
   redir_input(bf, ht);
+ extern int avg_seek; 
+ extern int seek;
+   extern int nodes;
+   extern int slots;
+  if(stats == 1)
+  {
+    printf("Seeks: %d\n", seek);
+    printf("Average seek length: %f\n", (double)avg_seek/seek); 
+    printf("Average Linked List Length: %f\n", (double)seek/default_hashtable);
+    printf("Hash table load: %f%%\n",    (double)nodes/default_hashtable);
+    printf("Bloom filter load: %f%%\n", (double)slots/default_bloom);
+
+}
   return 0;
 }
 
@@ -155,7 +168,9 @@ ListNode *stored_transwords = ll_node_create(hs);
    matchedword[i] = tolower(matchedword[i]);
    
    }
+    printf("%s", matchedword);
    bool passbf = bf_probe(bf, matchedword);
+    printf("\n%d", passbf);
     if(passbf == 1)
     {
     ListNode *node =  ht_lookup(ht, matchedword);
@@ -200,6 +215,7 @@ printer(stored_notranswords);
 
 void printer(ListNode *node)
 {
+if(stats == 0){
 if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) == 0)
 {
 puts("Dear Comrade,\n");
@@ -214,7 +230,8 @@ while(node->next != NULL)
   node = node->next;
 }
 }
-else if((transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) != 0)
+}
+else if(stats == 0 && (transwords == 1 && notrans == 1) && isalpha(node->gs->hatterspeak[0]) != 0)
 {
 
 puts("\nAppropriate hatterspeak translations.\n");
@@ -226,7 +243,7 @@ while(node->next != NULL)
 
 }
 
-else if(transwords == 1)
+else if(transwords == 1 && stats == 0)
 {
 printf("Dear Wonderlander,\n");
 printf("\nThe decree for hatterspeak finds your message lacking. Some of the\n");
@@ -239,7 +256,7 @@ while(node->next != NULL)
   node = node->next;
 }
 }
-else if(notrans == 1)
+else if(notrans == 1 && stats == 0)
 {
 oldspeakprint(node);
 }
