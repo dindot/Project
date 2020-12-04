@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#define ALPHABET 2
+#define ALPHABET 256
 
 typedef struct TrieNode TrieNode;
 

@@ -83,19 +83,43 @@ trie_node_delete(curr);
 
 while(curr != (TrieNode*)NULL)
 {
-//if( curr->children[i]!= (TrieNode*)NULL)
-//{
 next = curr->children[i];
 
 curr->code = (uint16_t)NULL;
 trie_node_delete(curr);
 curr = next;
-//}
 if(curr == (TrieNode*)NULL)
 {
-//curr->code = (uint16_t)NULL;
 trie_node_delete(curr);
 }
 }
 }
+}
+
+
+TrieNode *trie_step(TrieNode *n, uint8_t sym)
+{
+//char character = sym;
+TrieNode *curr = n->children[sym];
+//printf("%hu", curr->code);
+if(curr == (TrieNode*)NULL)
+{
+return (TrieNode*)NULL;
+}
+
+if(curr != (TrieNode*)NULL)
+{
+
+return curr;
+
+}
+
+
+//if(n->children[sym] != (TrieNode*)NULL)
+//{
+
+//n = n->children[sym];
+
+//}
+return n;
 }
