@@ -1,13 +1,14 @@
 #include "trie.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #define EMPTY_CODE 1
 
 TrieNode *trie_node_create(uint16_t code)
 {
 
-TrieNode *treenode = (TrieNode*)calloc(1, sizeof(TrieNode));
+TrieNode *treenode = (TrieNode*)malloc(sizeof(TrieNode));
 if(treenode == NULL)
 {
   return (TrieNode*) NULL;
@@ -23,10 +24,11 @@ return treenode;
 
 void trie_node_delete(TrieNode *n)
 {
-if(n != NULL)
-{
+//if(n->code != (uint16_t)NULL)
+//{
 free(n);
-}
+n = NULL;
+//}
 }
 
 TrieNode *trie_create(void)
@@ -37,15 +39,46 @@ return root_node;
 
 void trie_reset(TrieNode *root)
 {
-for(int i = 0; i < ALPHABET; i++)
-{
 
-if(root->children[i]->code != (uint16_t)NULL)  // change to check is null nodes in array too
+TrieNode *next = root;
+
+uint16_t checkcode = 0;
+
+for(int i = 0; i < ALPHABET; i++){
+TrieNode *curr = root->children[i];
+while(curr->code != (uint16_t)NULL)
 {
-root->children[i]->code = (uint16_t)NULL;
+if( curr->children[i]->code!= (uint16_t)NULL)
+{
+next = curr->children[i];
+
+curr->code = (uint16_t)NULL;
+
+curr = next;
+
+//if(curr->code != (uint16_t) NULL)
+//printf("%hu", curr->code);
+
+}
+
+//for(int i =0; i < ALPHABET; i++){
+
+if(curr->children[i] == (TrieNode*)NULL)
+{
+curr->code = (uint16_t)NULL;
+}
+
+//else
+//{
+//curr->code = (uint16_t)NULL;
+//}
 }
 }
+
 }
+
+
+
 
 
 void trie_delete(TrieNode *n)
