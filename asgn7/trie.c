@@ -39,7 +39,7 @@ void trie_reset(TrieNode *root)
 
 TrieNode *next = root;
 
-uint16_t checkcode = 0;
+//uint16_t checkcode = 0;
 
 for(int i = 0; i < ALPHABET; i++){
 TrieNode *curr = root->children[i];
