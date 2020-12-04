@@ -69,42 +69,34 @@ curr->code = (uint16_t)NULL;
 
 void trie_delete(TrieNode *n)
 {
-
-
-TrieNode *next = n;
-
-uint16_t checkcode = 0;
-
-for(int i = 0; i < ALPHABET; i++){
-TrieNode *curr = n;
+TrieNode *curr = n->children[0];
+TrieNode *next = curr;
 TrieNode *temp = curr;
-/*if(curr->children[i] == (TrieNode*)NULL)
-{
-curr->code = (uint16_t)NULL;
 
-if(curr!= NULL)
-trie_node_delete(curr);
-}*/
+while(curr != (TrieNode*) NULL)
+{
+ if(curr->children[0] != (TrieNode*) NULL)
+{
+next = curr->children[0];
+ curr->code = (uint16_t) NULL;
+ trie_node_delete(curr);
+ curr = next;
 
-while(curr->children[i]->code != (uint16_t)NULL)
-{
-if( curr->children[i]->code!= (uint16_t)NULL)
-{
-next = curr->children[i];
 
-curr->code = (uint16_t)NULL;
-temp = curr;
-if(curr != NULL){
-trie_node_delete(curr);
+
+
+ //curr->code = (uint16_t) NULL;
+  
+ //trie_node_delete(curr);
+
 }
-temp = next;
-}
-if(temp->children[i]->children[i] == (TrieNode*)NULL)
-{
-temp->code = (uint16_t)NULL;
-if(temp != NULL)
-trie_node_delete(temp);
-}
-}
+//if (curr->children[0]->children[0] == (TrieNode*) NULL){
+ // curr->code = (uint16_t) NULL;
+  
+ // trie_node_delete(curr);
+//}
 }
 }
+
+
+
