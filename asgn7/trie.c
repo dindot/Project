@@ -9,13 +9,13 @@ TrieNode *trie_node_create(uint16_t code)
 {
 
 TrieNode *treenode = (TrieNode*)malloc(sizeof(TrieNode));
-if(treenode == NULL)
+if(treenode == (TrieNode*)NULL)
 {
   return (TrieNode*) NULL;
 }
 for(int i = 0; i < ALPHABET; i++)
 {
-treenode->children[i] = NULL;
+treenode->children[i] = (TrieNode*)NULL;
 }
 
 treenode->code = code;
@@ -25,7 +25,7 @@ return treenode;
 void trie_node_delete(TrieNode *n)
 {
 free(n);
-n = NULL;
+n = (TrieNode*) NULL;
 }
 
 TrieNode *trie_create(void)
@@ -69,45 +69,33 @@ curr->code = (uint16_t)NULL;
 
 void trie_delete(TrieNode *n)
 {
-TrieNode *curr = n;
-TrieNode *next = curr;
-TrieNode *temp = curr;
 
-while(curr != (TrieNode*) NULL)
+
+TrieNode *next = n;
+for(int i = 0; i < ALPHABET; i++){
+TrieNode *curr = n->children[i];
+if(curr->children[i] == (TrieNode*)NULL)
 {
- if(curr->children[0] != (TrieNode*) NULL)
-{
-next = curr->children[0]->curr->children[0];
- curr->code = (uint16_t) NULL;
- trie_node_delete(curr);
- curr = next;
-
-
- temp = curr;
-
-  if(temp->children[0] == (TrieNode*) NULL)
-  {
-   curr->code = (uint16_t) NULL;
- trie_node_delete(temp);
-
-   }
-
- //curr->code = (uint16_t) NULL;
-  
- //trie_node_delete(curr);
-
+curr->code = (uint16_t)NULL;
+trie_node_delete(curr);
 }
-//if (curr->children[0]->children[0] == (TrieNode*) NULL){
- // curr->code = (uint16_t) NULL;
-  
- // trie_node_delete(curr);
+
+
+while(curr != (TrieNode*)NULL)
+{
+//if( curr->children[i]!= (TrieNode*)NULL)
+//{
+next = curr->children[i];
+
+curr->code = (uint16_t)NULL;
+trie_node_delete(curr);
+curr = next;
 //}
+if(curr == (TrieNode*)NULL)
+{
+//curr->code = (uint16_t)NULL;
+trie_node_delete(curr);
 }
-
-curr->code = (uint16_t) NULL;
- trie_node_delete(curr);
-
 }
-
-
-
+}
+}
