@@ -69,7 +69,7 @@ curr->code = (uint16_t)NULL;
 
 void trie_delete(TrieNode *n)
 {
-TrieNode *curr = n->children[0];
+TrieNode *curr = n;
 TrieNode *next = curr;
 TrieNode *temp = curr;
 
@@ -77,13 +77,20 @@ while(curr != (TrieNode*) NULL)
 {
  if(curr->children[0] != (TrieNode*) NULL)
 {
-next = curr->children[0];
+next = curr->children[0]->curr->children[0];
  curr->code = (uint16_t) NULL;
  trie_node_delete(curr);
  curr = next;
 
 
+ temp = curr;
 
+  if(temp->children[0] == (TrieNode*) NULL)
+  {
+   curr->code = (uint16_t) NULL;
+ trie_node_delete(temp);
+
+   }
 
  //curr->code = (uint16_t) NULL;
   
@@ -96,6 +103,10 @@ next = curr->children[0];
  // trie_node_delete(curr);
 //}
 }
+
+curr->code = (uint16_t) NULL;
+ trie_node_delete(curr);
+
 }
 
 
