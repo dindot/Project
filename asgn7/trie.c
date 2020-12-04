@@ -24,11 +24,8 @@ return treenode;
 
 void trie_node_delete(TrieNode *n)
 {
-//if(n->code != (uint16_t)NULL)
-//{
 free(n);
 n = NULL;
-//}
 }
 
 TrieNode *trie_create(void)
@@ -46,6 +43,11 @@ uint16_t checkcode = 0;
 
 for(int i = 0; i < ALPHABET; i++){
 TrieNode *curr = root->children[i];
+if(curr->children[i] == (TrieNode*)NULL)
+{
+curr->code = (uint16_t)NULL;
+}
+
 while(curr->code != (uint16_t)NULL)
 {
 if( curr->children[i]->code!= (uint16_t)NULL)
@@ -55,49 +57,54 @@ next = curr->children[i];
 curr->code = (uint16_t)NULL;
 
 curr = next;
-
-//if(curr->code != (uint16_t) NULL)
-//printf("%hu", curr->code);
-
 }
-
-//for(int i =0; i < ALPHABET; i++){
-
 if(curr->children[i] == (TrieNode*)NULL)
 {
 curr->code = (uint16_t)NULL;
 }
-
-//else
-//{
-//curr->code = (uint16_t)NULL;
-//}
 }
 }
-
 }
-
-
-
 
 
 void trie_delete(TrieNode *n)
 {
-TrieNode *root = n;
-TrieNode *prev = n;
-int i = 0;
-while(n->children[i] != NULL)
+
+
+TrieNode *next = n;
+
+uint16_t checkcode = 0;
+
+for(int i = 0; i < ALPHABET; i++){
+TrieNode *curr = n;
+TrieNode *temp = curr;
+/*if(curr->children[i] == (TrieNode*)NULL)
 {
-n = n->children[i];
-if(n->children[i] != NULL)
+curr->code = (uint16_t)NULL;
+
+if(curr!= NULL)
+trie_node_delete(curr);
+}*/
+
+while(curr->children[i]->code != (uint16_t)NULL)
 {
- prev = n;
+if( curr->children[i]->code!= (uint16_t)NULL)
+{
+next = curr->children[i];
+
+curr->code = (uint16_t)NULL;
+temp = curr;
+if(curr != NULL){
+trie_node_delete(curr);
+}
+temp = next;
+}
+if(temp->children[i]->children[i] == (TrieNode*)NULL)
+{
+temp->code = (uint16_t)NULL;
+if(temp != NULL)
+trie_node_delete(temp);
 }
 }
-while(n->children[i] == NULL)
-{
-trie_node_delete(n->children[i]);
-trie_node_delete(prev);
 }
-trie_node_delete(root);
 }
