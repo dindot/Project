@@ -58,3 +58,20 @@ wt[i]->len = 0;
 }
 }
 }
+
+void wt_delete(WordTable *wt)
+{
+word_delete(wt[EMPTY_CODE]);
+
+for(uint16_t i = 2; i<UINT16_MAX -1; i++)
+{
+if(wt[i] != (Word*)NULL)
+{
+word_delete(wt[i]);
+
+}
+}
+free(wt);
+
+wt= (WordTable*)NULL;
+}
