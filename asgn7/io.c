@@ -51,7 +51,7 @@ int bytes = 0;
 bool toread = 0;
 static int endbuf = 4096;
 
-bytes = read(infile, readbuf, sizeof(readbuf));
+bytes = read(infile, readbuf+i, sizeof(readbuf));
 
 if(bytes == 4096 || block == 1)
 {
@@ -91,16 +91,29 @@ return toread;
 
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 {
-writebuf[2] =3;
-char bits[16];
+static int i = 0;
+uint16_t masker = 
+
+
+
+
+//writebuf[2] =3;
+/*char bits[16];
 int counter = 0;
  while (code > 0) {
     int x = code; // temp storing num
     code = (code / 2); // find the quotient of num and keep going until its 0
     int remainder = x % 2;
+    //writebuf[i] = remainder;
+    //i++;
     bits[counter] = remainder;
     counter++;
   }
+
+//static int i = 0;
+for(i< bitlen; i++);
+writebuf[i] = bits[i];
+ */
 
 
 
