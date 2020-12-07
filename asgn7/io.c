@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "code.h"
+#include "bv.h"
 
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
@@ -92,8 +93,44 @@ return toread;
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 {
 static int i = 0;
-uint16_t masker = 
 
+  int thebit = 0;
+
+ while(thebit != bitlen){
+  uint8_t thebyte = code;
+
+  uint8_t shiftbyte = (00000001 << thebit);
+  uint8_t newresult = thebyte & shiftbyte;
+  uint8_t valueinbit = newresult >> thebit;
+
+  writebuf[i] = valueinbit;
+  ++i;
+  ++thebit;
+}
+printf("\n sym %d    i %d", sym,i);
+int symbit = 0;
+writebuf[i+1] = 0;
+while(symbit != 8){
+  uint8_t thebyte = sym;
+
+  uint8_t shiftbyte = (00000001 << symbit);
+  uint8_t newresult = thebyte & shiftbyte;
+  uint8_t valueinbit = newresult >> symbit;
+
+  writebuf[i] = valueinbit;
+  ++i;
+  ++symbit;
+}
+
+if(i != 4096)
+{
+
+write(outfile, writebuf, i);
+
+}
+
+//uint16_t masker = 
+//uint8_t bit = bv_get_bit(BitVector *v, uint32_t i);
 
 
 
