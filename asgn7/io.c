@@ -4,7 +4,7 @@
 #include "code.h"
 
 static uint8_t readbuf[4096];
-//static uint8_t writebuf[4096];
+static uint8_t writebuf[4096];
 
 void read_header(int infile, FileHeader *header)
 {
@@ -89,13 +89,24 @@ if(x < endbuf){
 return toread;
 }
 
-/*void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
+void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 {
 writebuf[2] =3;
+char bits[16];
+int counter = 0;
+ while (code > 0) {
+    int x = code; // temp storing num
+    code = (code / 2); // find the quotient of num and keep going until its 0
+    int remainder = x % 2;
+    bits[counter] = remainder;
+    counter++;
+  }
 
 
 
-}*/
+
+}
+
 
 
 
