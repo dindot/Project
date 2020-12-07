@@ -2,12 +2,10 @@
 #define __IO_H__
 
 #include "word.h"
-
 #include <inttypes.h>
 #include <stdbool.h>
 
-extern uint64_t total_syms;
-extern uint64_t total_bits;
+#define MAGIC 0x8badbeef     // Program's magic number.
 
 //
 // Struct definition of a FileHeader.
@@ -21,31 +19,8 @@ typedef struct FileHeader {
 } FileHeader;
 
 //
-// Wrapper for the read() syscall.
-// Loops to read the specified number of bytes, or until input is exhausted.
-// Returns the number of bytes read.
-//
-// infile:  File descriptor of the input file to read from.
-// buf:     Buffer to store read bytes into.
-// to_read: Number of bytes to read.
-// returns: Number of bytes read.
-//
-int read_bytes(int infile, uint8_t *buf, int to_read);
-
-//
-// Wrapper for the write() syscall.
-// Loops to write the specified number of bytes, or until nothing is written.
-// Returns the number of bytes written.
-//
-// outfile:   File descriptor of the output file to write to.
-// buf:       Buffer that stores the bytes to write out.
-// to_write:  Number of bytes to write.
-// returns:   Number of bytes written.
-//
-int write_bytes(int outfile, uint8_t *buf, int to_write);
-
-//
-// Reads in a FileHeader from the input file.
+// Reads in sizeof(FileHeader) bytes from the input file.
+// These bytes are read into the supplied FileHeader, header.
 //
 // infile:  File descriptor of input file to read header from.
 // header:  Pointer to memory where the bytes of the read header should go.
@@ -54,7 +29,8 @@ int write_bytes(int outfile, uint8_t *buf, int to_write);
 void read_header(int infile, FileHeader *header);
 
 //
-// Writes a FileHeader to the output file.
+// Writes sizeof(FileHeader) bytes to the output file.
+// These bytes are from the supplied FileHeader, header.
 //
 // outfile: File descriptor of output file to write header to.
 // header:  Pointer to the header to write out.
@@ -64,7 +40,7 @@ void write_header(int outfile, FileHeader *header);
 
 //
 // "Reads" a symbol from the input file.
-// The "read" symbol is placed into the pointer to sym (pass by reference).
+// The "read" symbol is placed into the pointer to sym. (e.g. *sym = val)
 // In reality, a block of symbols is read into a buffer.
 // An index keeps track of the currently read symbol in the buffer.
 // Once all symbols are processed, another block is read.
@@ -75,7 +51,7 @@ void write_header(int outfile, FileHeader *header);
 // sym:     Pointer to memory which stores the read symbol.
 // returns: True if there are symbols to be read, false otherwise.
 //
-bool read_sym(int infile, uint8_t *byte);
+bool read_sym(int infile, uint8_t *sym);
 
 //
 // Buffers a pair. A pair is comprised of a symbol and an index.

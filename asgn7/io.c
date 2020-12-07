@@ -2,97 +2,78 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
-
-int read_bytes(int infile, uint8_t *buf, int to_read)
-{
-int bytes = 0;
-int counter = 0;
-
-bytes = read(infile, buf, to_read);
-counter +=bytes;
-if(to_read != counter){
-while(bytes != 0)
-{
-bytes = read(infile,buf,to_read);
-counter+=bytes;
-
-}}
-return counter;
-
-}
-
-int write_bytes(int outfile, uint8_t *buf, int to_write)
-{
-
-int bytes = 0;
-int counter = 0;
-
-bytes = write(outfile, buf, to_write);
-counter +=bytes;
-if(to_write != counter){
-while(bytes != 0)
-{
-bytes = write(outfile,buf,to_write);
-counter+=bytes;
-
-}}
-return counter;
-
-
-
-}
-
+//static int var = 4096;
+static uint8_t readbuf[4096];
+//static uint8_t writebuf[4096];
 
 void read_header(int infile, FileHeader *header)
 {
 
-read_bytes(infile, (uint8_t*)header, sizeof(FileHeader));
+
+
+int bytes = 0;
+int counter = 0;
+if(header->magic == MAGIC){
+bytes = read(infile, (uint8_t*)header, sizeof(FileHeader));
+counter +=bytes;
+if(sizeof(FileHeader) != counter){
+while(bytes != 0)
+{
+bytes = read(infile, (uint8_t*)header,sizeof(FileHeader));
+counter+=bytes;
+
+}}
+}
 }
 
 void write_header(int outfile, FileHeader *header)
 {
 
-write_bytes(outfile, (uint8_t*)header, sizeof(FileHeader));
+int bytes = 0;
+int counter = 0;
+
+bytes = write(outfile, (uint8_t*)header, sizeof(FileHeader));
+counter +=bytes;
+if(sizeof(FileHeader) != counter){
+while(bytes != 0)
+{
+bytes = write(outfile, (uint8_t*)header,sizeof(FileHeader));
+counter+=bytes;
+
+}}
 }
 
-bool read_sym(int infile, uint8_t *byte)
+bool read_sym(int infile, uint8_t *sym)
 {
 
 int bytes = 0;
+bool toread = 0;
+int i =0;
 
-uint8_t buf[4096];
+bytes = read(infile, readbuf, sizeof(readbuf));
 
-bytes = read_bytes(infile, buf, sizeof(buf));
+sym=readbuf[i];
+ printf("sym is %d", *sym);
+  toread = 1;
+++i;
 
-printf("bytessssss %d, %s", bytes, byte);
+if(i == bytes+1)
+return false;
 
-printf("\n check buf: %hhu", buf[4]);
-/*while(bytes!=0){
-for(uint8_t i = 0; i<bytes; i++)
+
+if(bytes == 4096)
 {
-*byte = buf[i];
-printf("\n check bytes: %s", byte);
-}
-}*/
-
-/*if(bytes == 4095)
+while(bytes != 0){
+for(int i = 0; i<bytes-1;i++)
 {
-bytes = read_bytes(infile, buf, sizeof(buf));
+*sym=readbuf[i];
+ printf("sym is %d", *sym);
 
 }
 
+bytes = read(infile, readbuf, sizeof(readbuf));
+
+}}
+
+return toread;
 }
-
-if(buf[bytes+1] == (uint8_t)NULL)
-{
-return true;
-
-}
-else
-return false;*/
-return true;
-}
-
-
-
