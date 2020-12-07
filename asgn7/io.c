@@ -1,18 +1,16 @@
 #include "io.h"
 #include <stdio.h>
 #include <unistd.h>
+#include "code.h"
 
-//static int var = 4096;
 static uint8_t readbuf[4096];
 //static uint8_t writebuf[4096];
 
 void read_header(int infile, FileHeader *header)
 {
-
-
-
 int bytes = 0;
 int counter = 0;
+//printf("magic man %d",header->magic);
 if(header->magic == MAGIC){
 bytes = read(infile, (uint8_t*)header, sizeof(FileHeader));
 counter +=bytes;
@@ -45,35 +43,59 @@ counter+=bytes;
 
 bool read_sym(int infile, uint8_t *sym)
 {
-
+static bool notblock = 0;
+static bool block = 0;
+static int i = 0;
+static int x = 0;
 int bytes = 0;
 bool toread = 0;
-int i =0;
+static int endbuf = 4096;
 
 bytes = read(infile, readbuf, sizeof(readbuf));
 
-sym=readbuf[i];
- printf("sym is %d", *sym);
+if(bytes == 4096 || block == 1)
+{
+block = 1;
+if(i < bytes){
   toread = 1;
-++i;
+  *sym = readbuf[i];
+   i++;
+  if(readbuf[i] == (uint8_t)NULL)
+  toread= false;
+}
+//if(i==bytes)  // check to realloc for when i reaches max buffer if theres more
+//{
 
-if(i == bytes+1)
-return false;
-
-
-if(bytes == 4096)
-{
-while(bytes != 0){
-for(int i = 0; i<bytes-1;i++)
-{
-*sym=readbuf[i];
- printf("sym is %d", *sym);
-
+//}
 }
 
-bytes = read(infile, readbuf, sizeof(readbuf));
+if(bytes < 4096 && bytes !=0)
+{
+endbuf = bytes;
+}
 
-}}
+if(bytes < 4096 || notblock ==1)
+{
+notblock = 1;
+if(x < endbuf){
+  toread = 1;
+  *sym = readbuf[x];
+  x++;
+  if(readbuf[x] == (uint8_t)NULL)
+  toread= false;
+}
+}
 
 return toread;
 }
+
+/*void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
+{
+writebuf[2] =3;
+
+
+
+}*/
+
+
+

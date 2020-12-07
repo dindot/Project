@@ -6,7 +6,7 @@ EXECBIN = tester
 all: tester
 
 $(EXECBIN): $(OBJECTS)
-	$(CC) $(OBJECTS) -ggdb -o $(EXECBIN)
+	$(CC) $(OBJECTS) -lm -ggdb -o $(EXECBIN)
 tester.o: tester.c trie.c word.c io.c
 	$(CC) -c tester.c
 trie.o: trie.c trie.h
