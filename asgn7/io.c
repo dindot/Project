@@ -109,7 +109,8 @@ static int i = 0;
 }
 printf("\n sym %d    i %d", sym,i);
 int symbit = 0;
-writebuf[i+1] = 0;
+writebuf[i] = 0;
+++i;
 while(symbit != 8){
   uint8_t thebyte = sym;
 
@@ -122,39 +123,12 @@ while(symbit != 8){
   ++symbit;
 }
 
-if(i != 4096)
+if(i == 4096)
 {
 
-write(outfile, writebuf, i);
+write(outfile, writebuf, sizeof(writebuf));i
 
 }
-
-//uint16_t masker = 
-//uint8_t bit = bv_get_bit(BitVector *v, uint32_t i);
-
-
-
-//writebuf[2] =3;
-/*char bits[16];
-int counter = 0;
- while (code > 0) {
-    int x = code; // temp storing num
-    code = (code / 2); // find the quotient of num and keep going until its 0
-    int remainder = x % 2;
-    //writebuf[i] = remainder;
-    //i++;
-    bits[counter] = remainder;
-    counter++;
-  }
-
-//static int i = 0;
-for(i< bitlen; i++);
-writebuf[i] = bits[i];
- */
-
-
-
-
 }
 
 
