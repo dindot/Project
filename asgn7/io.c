@@ -93,35 +93,45 @@ return toread;
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 {
 static int i = 0;
-
+int index = 0;
   int thebit = 0;
+ uint8_t codebit = 0;
+int len = bitlen;
 
- while(thebit != bitlen){
+ while(index != bitlen){
   uint8_t thebyte = code;
 
   uint8_t shiftbyte = (00000001 << thebit);
   uint8_t newresult = thebyte & shiftbyte;
-  uint8_t valueinbit = newresult >> thebit;
-
-  writebuf[i] = valueinbit;
-  ++i;
+   //newresult = newresult << thebit;
+ uint8_t val = newresult >> thebit; 
+//printf("code bit: %d", val);
+uint8_t ia = 0000;
+uint8_t thep = val << (--len);
+uint8_t cea = ia | thep;
+printf("code bit: %d", cea);
+  codebit|=cea;
+  ++index;
   ++thebit;
 }
-printf("\n sym %d    i %d", sym,i);
+
+printf("\ncode bit: %d", codebit);
 int symbit = 0;
-writebuf[i] = 0;
-++i;
-while(symbit != 8){
+codebit = codebit << index;
+while(index !=8 ){
   uint8_t thebyte = sym;
 
-  uint8_t shiftbyte = (00000001 << symbit);
+  uint8_t shiftbyte = (00000001 << sym);
   uint8_t newresult = thebyte & shiftbyte;
-  uint8_t valueinbit = newresult >> symbit;
+printf("\n%d", newresult);
 
-  writebuf[i] = valueinbit;
-  ++i;
-  ++symbit;
+ codebit|=newresult;
+//printf("\n%d", codebit);
+  ++index;
+   ++symbit;
 }
+
+printf("\n%d", codebit);
 
 if(i == 4096)
 {
@@ -147,63 +157,27 @@ counter+=bytes;
 }}
 }
 
-bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
+/*bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
 {
 
-//uint16_t codes[bitlen];
-//uint8_t syms[8];
+int counter = 0;
 static uint8_t readbuffer[4096];
-int counter = 7;
-//int x = 0;
 int index = counter % 8;
-static int i = 0;
-static uint8_t codebit;
-
 
 int bytes = read(infile, readbuffer, sizeof(readbuffer));
 if(bytes == 4096)
 {
 
 uint8_t thebyte = readbuffer[i];
- 
- uint8_t shiftbyte = (thebyte >> bitlen);
-while(bitlen-1 >=0){
- uint8_t masker = 00000001 << bitlen-1;
- uint8_t thenew = masker | 00000000;
- codebit |= thenew;
-  --bitlen;
-  }
-  uint8_t getlowerbits = shiftbyte & codebit;
-  counter-=bitlen;
-  
-
-
-
-//uint8_t shiftbyte = (thebyte >> bitlen);
-while(counter-1 >=0){
- uint8_t masker = 00000001 << bitlen-1;
- uint8_t thenew = masker | 00000000;
- codebit |= thenew;
-  --bitcounter;
-  }
-
-
-
-  *sym = 
- 
-
-
-
-++i;
-
-
-}
-
-}
-
-
 
 
 
 }
 
+
+
+
+
+
+
+}*/
