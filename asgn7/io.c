@@ -126,11 +126,84 @@ while(symbit != 8){
 if(i == 4096)
 {
 
-write(outfile, writebuf, sizeof(writebuf));i
+write(outfile, writebuf, sizeof(writebuf));
 
 }
 }
 
 
+void flush_pairs(int outfile)
+{
+int bytes = 0;
+int counter = 0;
 
+bytes = write(outfile, writebuf, sizeof(writebuf));
+counter +=bytes;
+if(sizeof(writebuf) != counter){
+while(bytes != 0)
+{
+bytes = write(outfile, writebuf, sizeof(writebuf));
+counter+=bytes;
+}}
+}
+
+bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
+{
+
+//uint16_t codes[bitlen];
+//uint8_t syms[8];
+static uint8_t readbuffer[4096];
+int counter = 7;
+//int x = 0;
+int index = counter % 8;
+static int i = 0;
+static uint8_t codebit;
+
+
+int bytes = read(infile, readbuffer, sizeof(readbuffer));
+if(bytes == 4096)
+{
+
+uint8_t thebyte = readbuffer[i];
+ 
+ uint8_t shiftbyte = (thebyte >> bitlen);
+while(bitlen-1 >=0){
+ uint8_t masker = 00000001 << bitlen-1;
+ uint8_t thenew = masker | 00000000;
+ codebit |= thenew;
+  --bitlen;
+  }
+  uint8_t getlowerbits = shiftbyte & codebit;
+  counter-=bitlen;
+  
+
+
+
+//uint8_t shiftbyte = (thebyte >> bitlen);
+while(counter-1 >=0){
+ uint8_t masker = 00000001 << bitlen-1;
+ uint8_t thenew = masker | 00000000;
+ codebit |= thenew;
+  --bitcounter;
+  }
+
+
+
+  *sym = 
+ 
+
+
+
+++i;
+
+
+}
+
+}
+
+
+
+
+
+}
 
