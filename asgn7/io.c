@@ -1,9 +1,9 @@
 #include "io.h"
 #include "code.h"
-#include <stdio.h>
-#include <unistd.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <unistd.h>
 
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
@@ -106,12 +106,12 @@ void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
   // until index is 7 and then use the syms to fill up accordingly.
   storecode = storecode << (pad + 1);
   index += pad;
-  
+
   uint8_t symbyte = sym;
   symcodeindex = 0;
   int lentrack = index;
   uint8_t thebit = 0;
-  
+
   while (index != 8) {
     // now track it with the symcodeindex, must be 8 to fill sym
     uint8_t shiftbyte = (00000001 << (symcodeindex));
@@ -145,8 +145,8 @@ void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
       }
     }
   }
- //printf("the symbol %d", storecode);  
-  if (i == 4096) {
+  //printf("the symbol %d", storecode);
+  if (i != 4096) {
 
     write(outfile, writebuf, sizeof(writebuf));
   }
@@ -168,18 +168,18 @@ void flush_pairs(int outfile) {
 
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
 
- // int minbitscurrcode = (log2(*code)) + 1;
- 
+  // int minbitscurrcode = (log2(*code)) + 1;
+
   static uint8_t readbuffer[4096];
   int static i = 0;
   uint8_t finalcode = 0;
-   static int index = 0;
+  static int index = 0;
 
   uint8_t symcodeindex = bitlen;
 
   read(infile, &(readbuffer[i]), sizeof(readbuffer));
   uint8_t storecode = readbuffer[i];
-//printf("the symbol %d", storecode);
+  //printf("the symbol %d", storecode);
   while (index != bitlen) {
     uint8_t shiftbyte = (00000001 << symcodeindex);
     uint8_t newresult = storecode & shiftbyte;
@@ -189,9 +189,8 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
     ++index;
     --symcodeindex;
     if (index == 8) {
-       
+
       *code = finalcode;
-      //printf("\nfianlcode %d", finalcode);
       ++i;
       read(infile, &(readbuffer[i]), sizeof(readbuffer));
       storecode = readbuffer[i];
@@ -199,14 +198,14 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
       *sym = storecode;
     }
   }
-  
- // bool moretoread = 1;
+  printf("\n thebit %d   %d", finalcode, index);
+  bool moretoread = 1;
   symcodeindex = 0;
   int finalsym = 0;
-  printf("\n thebit %d   %d", finalcode, index);
-//   if(finalcode == STOP_CODE)
- //  moretoread = 0;
-   *code = finalcode;
+
+  if (finalcode == STOP_CODE)
+    moretoread = 0;
+  *code = finalcode;
   int tracker = 0;
 
   if (index != 8) {
@@ -216,9 +215,9 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
       uint8_t newresult = storecode & shiftbyte;
       uint8_t valueinbit = newresult >> (symcodeindex);
       int power = 8 - (index + 1);
-      
+
       finalsym += valueinbit * pow(2, power);
-      
+
       ++index;
       ++symcodeindex;
       ++tracker;
@@ -239,3 +238,5 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
   }
   return true;
 }
+
+
