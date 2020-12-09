@@ -100,7 +100,7 @@ static int i = 0;
 
 int index = 0;
 int symcodeindex = 0;
-uint8_t storecode = 0;
+uint8_t storecode = 00000000;
 uint8_t storelen = minbitscurrcode;
 
 uint8_t thebyte = code;
@@ -110,13 +110,15 @@ while(symcodeindex != minbitscurrcode){
   uint8_t newresult = thebyte & shiftbyte;
   uint8_t valueinbit = newresult >> symcodeindex;
   uint8_t temp = valueinbit << (--storelen);
-  storecode |= temp;;
+  printf("\nthe temp %d" ,temp);
+  storecode |= temp;
   ++index;
   ++symcodeindex;
 }
 
-
-storecode = storecode << (pad);
+// check this ones fix later to make it loop at fill up entire byte based on index
+// until index is 7 and then use the syms to fill up accordingly.
+storecode = storecode << (pad+1);
 index+=pad;
 printf("\n stored code: %d   %d", storecode,index);
 
@@ -125,8 +127,8 @@ uint8_t symbyte = sym;
 
 
 printf("\n th555sym %d    %d", symbyte, 0x0001);
-symcodeindex = 1;
-int lentrack = index;;
+symcodeindex = 0;
+int lentrack = index;
 uint8_t thebit = 0;
 //int lentrack = 0;
 //int storedlen = bitlen;
@@ -134,10 +136,10 @@ while(index != 8)
 {
 // now track it with the symcodeindex, must be 8 to fill sym
  
-  uint8_t shiftbyte = (00000001 << (symcodeindex-1));
+  uint8_t shiftbyte = (00000001 << (symcodeindex));
 
   uint8_t newresult = symbyte & shiftbyte;
-  uint8_t valueinbit = newresult >> (symcodeindex-1);
+  uint8_t valueinbit = newresult >> (symcodeindex);
   if(index == 7){
   thebit =  newresult;
   //--lentrack;  
@@ -148,7 +150,7 @@ else if(index !=7){
 
   //thebit = thebit | 0x1;
   storecode |= thebit;
-printf("\ntheasdfasdfasd code inside%d", storecode);
+printf("\ntheasdfasdfasd code inside%d\n", storecode);
   ++index;
   ++symcodeindex;
 
@@ -176,7 +178,7 @@ break;
 
 }
 
-printf("\n code: %d, %d", writebuf[1], symcodeindex);
+printf("\n code in the back: %d, %d", writebuf[1], symcodeindex);
 
 
 
