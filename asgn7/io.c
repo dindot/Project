@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "code.h"
-#include "bv.h"
+//#include "bv.h"
 #include <math.h>
 
 static uint8_t readbuf[4096];
@@ -96,8 +96,8 @@ void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 
 int minbitscurrcode = (log2(code))+1;
 int pad = bitlen - minbitscurrcode;
-
 static int i = 0;
+
 int index = 0;
 int symcodeindex = 0;
 uint8_t storecode = 0;
@@ -110,18 +110,23 @@ while(symcodeindex != minbitscurrcode){
   uint8_t newresult = thebyte & shiftbyte;
   uint8_t valueinbit = newresult >> symcodeindex;
   uint8_t temp = valueinbit << (--storelen);
-  storecode |= temp;
+  storecode |= temp;;
   ++index;
   ++symcodeindex;
 }
-storecode = storecode << (pad+1);
+
+
+storecode = storecode << (pad);
 index+=pad;
-printf("\n code: %d", storecode);
+printf("\n stored code: %d   %d", storecode,index);
 
-uint8_t symbyte = sym | 00000000;
 
+uint8_t symbyte = sym;
+
+
+printf("\n th555sym %d    %d", symbyte, 0x0001);
 symcodeindex = 1;
-int lentrack =7;
+int lentrack = index;;
 uint8_t thebit = 0;
 //int lentrack = 0;
 //int storedlen = bitlen;
@@ -134,15 +139,16 @@ while(index != 8)
   uint8_t newresult = symbyte & shiftbyte;
   uint8_t valueinbit = newresult >> (symcodeindex-1);
   if(index == 7){
-  thebit =  valueinbit;
+  thebit =  newresult;
   //--lentrack;  
 }
 else if(index !=7){
    thebit =  valueinbit << (lentrack);
 }  --lentrack;
 
+  //thebit = thebit | 0x1;
   storecode |= thebit;
-printf("\nthe code inside%d", storecode);
+printf("\ntheasdfasdfasd code inside%d", storecode);
   ++index;
   ++symcodeindex;
 
@@ -212,33 +218,74 @@ int index = 0;
 
 uint8_t symcodeindex =bitlen;
 
-
-//int storelen = bitlen;
 read(infile, &(readbuffer[i]), sizeof(readbuffer));
 uint8_t storecode = readbuffer[i];
-
-
 
 while(index != bitlen){
   uint8_t shiftbyte = (00000001 << symcodeindex);
   uint8_t newresult = storecode & shiftbyte;
-  uint8_t valueinbit = newresult >> (symcodeindex-1);
-  ///uint8_t temp = valueinbit << (--storelen);
-  finalcode |= valueinbit;
+  uint8_t valueinbit = newresult >> (symcodeindex);
+
+  finalcode += valueinbit*pow(2,index);
   ++index;
   --symcodeindex;
+if(index == 8)
+{
+printf("\n thebit %d   %d",finalcode,index);
+// need it later     *code = finalcode;
 
+++i;
+read(infile, &(readbuffer[i]), sizeof(readbuffer));
+storecode = readbuffer[i];
+printf("\n thebit %d   %d",finalcode,index);
+// need it later     *sym = finalcode;
+}
 }
 
-printf("\n thebit %d",finalcode);
-//printf("\n thebit %d",finalcode);
 
-//uint8_t thebyte = readbuffer[i];
+symcodeindex = 0;
+int finalsym = 0;
+printf("\n thebit %d   %d",finalcode,index);
+int tracker = 0;
+
+if(index != 8)
+{
+while(index != 8){
+
+  uint8_t shiftbyte = (00000001 << symcodeindex);
+  uint8_t newresult = storecode & shiftbyte;
+  uint8_t valueinbit = newresult >> (symcodeindex);
+ //int power = 8-index;
+ 
+  finalsym += valueinbit*pow(2,index);
+  printf("first once 2^7 %d", finalsym);
+   ++index;
+    ++symcodeindex;
+   ++tracker;
 
 
+if(index ==8)
+{
+++i;
+read(infile, &(readbuffer[i]), sizeof(readbuffer));
+storecode = readbuffer[i];
+index = 0;
+symcodeindex=0;
+}
+else if(tracker == 8)
+{
+
+
+++i;
+break;
+}
+}
+printf("\n final sym %d",finalsym);
+
+}
 return true;
-}
 
+}
 
 
 
