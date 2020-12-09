@@ -5,7 +5,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
-#define MAGIC 0x8badbeef     // Program's magic number.
+#define MAGIC 0x8badbeef // Program's magic number.
 
 //
 // Struct definition of a FileHeader.
