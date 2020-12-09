@@ -201,18 +201,23 @@ counter+=bytes;
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
 {
 
-int counter = 0;
+int minbitscurrcode = (log2(*code))+1;
+
+printf("\n%d   %d    %d    %d", minbitscurrcode, *code, *sym, bitlen);
+//int counter = 0;
 static uint8_t readbuffer[4096];
-int index = counter % 8;
+int static i = 0;
 
-int bytes = read(infile, readbuffer, sizeof(readbuffer));
-if(bytes == 4096)
-{
-
-uint8_t thebyte = readbuffer[i];
+read(infile, &(readbuffer[i]), sizeof(readbuffer));
 
 
 
+
+
+//uint8_t thebyte = readbuffer[i];
+
+
+return true;
 }
 
 
@@ -221,4 +226,3 @@ uint8_t thebyte = readbuffer[i];
 
 
 
-}
