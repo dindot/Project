@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "code.h"
 #include "bv.h"
+#include <math.h>
 
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
@@ -92,16 +93,19 @@ return toread;
 
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 {
+
+int minbitscurrcode = (log2(code))+1;
+int pad = bitlen - minbitscurrcode;
+
 static int i = 0;
 int index = 0;
 int symcodeindex = 0;
 uint8_t storecode = 0;
-uint8_t storelen = bitlen;
-
-sym = 0;
+uint8_t storelen = minbitscurrcode;
 
 uint8_t thebyte = code;
-while(symcodeindex != bitlen){
+
+while(symcodeindex != minbitscurrcode){
   uint8_t shiftbyte = (00000001 << symcodeindex);
   uint8_t newresult = thebyte & shiftbyte;
   uint8_t valueinbit = newresult >> symcodeindex;
@@ -109,35 +113,64 @@ while(symcodeindex != bitlen){
   storecode |= temp;
   ++index;
   ++symcodeindex;
-  if(symcodeindex == bitlen)
-  {
-    symcodeindex = 0;
-   }
 }
-
+storecode = storecode << (pad+1);
+index+=pad;
 printf("\n code: %d", storecode);
 
+uint8_t symbyte = sym | 00000000;
 
+symcodeindex = 1;
+int lentrack =7;
+uint8_t thebit = 0;
+//int lentrack = 0;
+//int storedlen = bitlen;
 while(index != 8)
 {
 // now track it with the symcodeindex, must be 8 to fill sym
-  uint8_t shiftbyte = (00000001 << symcodeindex);
-  uint8_t newresult = thebyte & shiftbyte;
-  uint8_t valueinbit = newresult >> symcodeindex;
-  uint8_t temp = valueinbit << (--storelen);
-  storecode |= temp;
+ 
+  uint8_t shiftbyte = (00000001 << (symcodeindex-1));
+
+  uint8_t newresult = symbyte & shiftbyte;
+  uint8_t valueinbit = newresult >> (symcodeindex-1);
+  if(index == 7){
+  thebit =  valueinbit;
+  //--lentrack;  
+}
+else if(index !=7){
+   thebit =  valueinbit << (lentrack);
+}  --lentrack;
+
+  storecode |= thebit;
+printf("\nthe code inside%d", storecode);
   ++index;
   ++symcodeindex;
-  if(symcodeindex == bitlen)
-  {
-    symcodeindex = 0;
-   }
+
+if(index == 8 || symcodeindex == 8)
+{
+if(index == 8){
+writebuf[i] = storecode;
+storecode = 00000000;
+++i;
+index = 0;
+printf("the sym%d", symcodeindex);
+}
+else if(symcodeindex == 8){
+storecode |= 00000000;
+writebuf[i] = storecode;
+storecode = 00000000;
+++i;
+index = 0;
+break;
+}
 
 
 }
 
 
+}
 
+printf("\n code: %d, %d", writebuf[1], symcodeindex);
 
 
 
@@ -147,8 +180,8 @@ if(i == 4096)
 write(outfile, writebuf, sizeof(writebuf));
 
 }
-}
 
+}
 
 void flush_pairs(int outfile)
 {
@@ -165,7 +198,7 @@ counter+=bytes;
 }}
 }
 
-/*bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
+bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
 {
 
 int counter = 0;
@@ -188,4 +221,4 @@ uint8_t thebyte = readbuffer[i];
 
 
 
-}*/
+}
