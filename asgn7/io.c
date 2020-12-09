@@ -174,7 +174,7 @@ printf("\n code: %d, %d", writebuf[1], symcodeindex);
 
 
 
-if(i == 4096)
+if(i != 4096)
 {
 
 write(outfile, writebuf, sizeof(writebuf));
@@ -204,15 +204,34 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen)
 int minbitscurrcode = (log2(*code))+1;
 
 printf("\n%d   %d    %d    %d", minbitscurrcode, *code, *sym, bitlen);
-//int counter = 0;
+
 static uint8_t readbuffer[4096];
 int static i = 0;
+uint8_t finalcode = 0;
+int index = 0;
 
+uint8_t symcodeindex =bitlen;
+
+
+//int storelen = bitlen;
 read(infile, &(readbuffer[i]), sizeof(readbuffer));
+uint8_t storecode = readbuffer[i];
 
 
 
+while(index != bitlen){
+  uint8_t shiftbyte = (00000001 << symcodeindex);
+  uint8_t newresult = storecode & shiftbyte;
+  uint8_t valueinbit = newresult >> (symcodeindex-1);
+  ///uint8_t temp = valueinbit << (--storelen);
+  finalcode |= valueinbit;
+  ++index;
+  --symcodeindex;
 
+}
+
+printf("\n thebit %d",finalcode);
+//printf("\n thebit %d",finalcode);
 
 //uint8_t thebyte = readbuffer[i];
 
