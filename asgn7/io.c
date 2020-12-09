@@ -94,44 +94,52 @@ void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen)
 {
 static int i = 0;
 int index = 0;
-  int thebit = 0;
- uint8_t codebit = 0;
-int len = bitlen;
+int symcodeindex = 0;
+uint8_t storecode = 0;
+uint8_t storelen = bitlen;
 
- while(index != bitlen){
-  uint8_t thebyte = code;
+sym = 0;
 
-  uint8_t shiftbyte = (00000001 << thebit);
+uint8_t thebyte = code;
+while(symcodeindex != bitlen){
+  uint8_t shiftbyte = (00000001 << symcodeindex);
   uint8_t newresult = thebyte & shiftbyte;
-   //newresult = newresult << thebit;
- uint8_t val = newresult >> thebit; 
-//printf("code bit: %d", val);
-uint8_t ia = 0000;
-uint8_t thep = val << (--len);
-uint8_t cea = ia | thep;
-printf("code bit: %d", cea);
-  codebit|=cea;
+  uint8_t valueinbit = newresult >> symcodeindex;
+  uint8_t temp = valueinbit << (--storelen);
+  storecode |= temp;
   ++index;
-  ++thebit;
+  ++symcodeindex;
+  if(symcodeindex == bitlen)
+  {
+    symcodeindex = 0;
+   }
 }
 
-printf("\ncode bit: %d", codebit);
-int symbit = 0;
-codebit = codebit << index;
-while(index !=8 ){
-  uint8_t thebyte = sym;
+printf("\n code: %d", storecode);
 
-  uint8_t shiftbyte = (00000001 << sym);
+
+while(index != 8)
+{
+// now track it with the symcodeindex, must be 8 to fill sym
+  uint8_t shiftbyte = (00000001 << symcodeindex);
   uint8_t newresult = thebyte & shiftbyte;
-printf("\n%d", newresult);
-
- codebit|=newresult;
-//printf("\n%d", codebit);
+  uint8_t valueinbit = newresult >> symcodeindex;
+  uint8_t temp = valueinbit << (--storelen);
+  storecode |= temp;
   ++index;
-   ++symbit;
+  ++symcodeindex;
+  if(symcodeindex == bitlen)
+  {
+    symcodeindex = 0;
+   }
+
+
 }
 
-printf("\n%d", codebit);
+
+
+
+
 
 if(i == 4096)
 {
