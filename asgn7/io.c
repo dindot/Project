@@ -239,4 +239,24 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
   return true;
 }
 
+void buffer_word(int outfile, Word *w)
+{
 
+static uint8_t writebuffer[4096];
+static int x = 0;
+
+for(uint32_t i = 0; i<w->len;i++)
+{
+
+writebuffer[x] = w->syms[i];
+++x;
+
+}
+
+if(x == 4096)
+{
+write(outfile, writebuffer, sizeof(writebuffer));
+
+}
+
+}
