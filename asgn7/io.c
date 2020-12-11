@@ -14,50 +14,34 @@ static uint8_t word_buff[4096];
 
 int read_bytes(int infile, uint8_t *buf, int to_read)
 {
-int offset = 0;
-int bytes = read(infile, buf+offset, to_read);
-int counter = 0;
+static int offset= 0;
+int read_bytes;
 
-if(bytes == 0)
+while((read_bytes=read(infile, buf+offset, to_read)) !=0)
 {
-return to_read;
+offset +=  read_bytes;
+printf("\nin reader %d", read_bytes);
+}
+return  offset;
 }
 
-counter += bytes;
 
-offset = to_read - bytes;
-while(bytes != 0)
-{
-bytes = read(infile, buf+offset, offset);
-counter+= bytes;
-}
 
-return counter;
-}
+
+
+
 
 int write_bytes(int outfile, uint8_t *buf, int to_write)
 {
-int offset = 0;
-int bytes = write(outfile, buf+offset, to_write);
-int counter = 0;
+static int offset= 0;
+int write_bytes;
 
-if(bytes == 0)
+while((write_bytes=write(outfile, buf+offset, to_write-offset)) != 0 )
 {
-return to_write;
+offset +=  write_bytes;
+printf("\nin the writr %d", write_bytes);
 }
-
-counter += bytes;
-
-offset = to_write - bytes;
-while(bytes != 0)
-{
-bytes = write(outfile, buf+offset, offset);
-counter+= bytes;
-}
-
-return counter;
-
-
+return  offset;
 }
 
 
@@ -87,8 +71,25 @@ bool toread = 1;
 static int i = 0;
 
 int bytes = read_bytes(infile, readbuf, sizeof(readbuf));
+//i+=bytes;
+printf("haliuiuil %d",i);
 
-if(bytes == 0)
+
+if(bytes < 4096)
+{
+*sym = readbuf[i];
+++i;
+if(i == bytes)
+{
+lseek(infile,i, SEEK_CUR);
+return 0;
+}
+}
+
+
+
+
+/*if(bytes == 0)
 {
 *sym = readbuf[i];
 ++i;
@@ -121,7 +122,7 @@ if(i == bytes)
 {
 return 0;
 }
-}
+}*/
 return toread;
 }
 
