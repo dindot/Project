@@ -8,6 +8,7 @@
 
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
+static int bits_written = 0;
 
 int read_bytes(int infile, uint8_t *buf, int to_read)
 {
@@ -177,7 +178,7 @@ return toread;
 
 // making the compressed versiob, putting into outfile, use write buffer, track w bits write
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
-  static int bits_written = 0;
+ // static int bits_written = 0;
   int minbitscurrcode = (log2(code)) + 1;
   int pad = bitlen - minbitscurrcode;
   printf("\n the pad is : %d", pad);
@@ -253,99 +254,96 @@ printf("\n the final byte: %d", writebuf[1]);
 }
 }
 
-/*
-void flush_pairs(int outfile) {
-  int bytes = 0;
-  int counter = 0;
 
-  bytes = write(outfile, writebuf, sizeof(writebuf));
-  counter += bytes;
-  if (sizeof(writebuf) != counter) {
-    while (bytes != 0) {
-      bytes = write(outfile, writebuf, sizeof(writebuf));
-      counter += bytes;
-    }
-  i}
+void flush_pairs(int outfile) {
+if(bits_written != 4096 * 8)
+{
+write_bytes(outfile, writebuf, bits_written);
 }
+}
+
 
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
 
-  // int minbitscurrcode = (log2(*code)) + 1;
+bool moreread = 1;
+*code = 0;
+*sym = 0;
 
-  static uint8_t readbuffer[4096];
-  int static i = 0;
-  uint8_t finalcode = 0;
-  static int index = 0;
+static int bits_read = 0;
 
-  uint8_t symcodeindex = bitlen;
+for(int i = 0; i < bitlen; i++)
+{
+if(bits_read == 4096 * 8)
+{
+read_bytes(infile, readbuf, sizeof(readbuf));
 
-  read(infile, &(readbuffer[i]), sizeof(readbuffer));
-  uint8_t storecode = readbuffer[i];
-  //printf("the symbol %d", storecode);
-  while (index != bitlen) {
-    uint8_t shiftbyte = (00000001 << symcodeindex);
-    uint8_t newresult = storecode & shiftbyte;
-    uint8_t valueinbit = newresult >> (symcodeindex);
-
-    finalcode += valueinbit * pow(2, index);
-    ++index;
-    --symcodeindex;
-    if (index == 8) {
-
-      *code = finalcode;
-      ++i;
-      read(infile, &(readbuffer[i]), sizeof(readbuffer));
-      storecode = readbuffer[i];
-      printf("\n thebit %d   %d", finalcode, index);
-      *sym = storecode;
-    }
-  }
-  printf("\n thebit %d   %d", finalcode, index);
-  bool moretoread = 1;
-  symcodeindex = 0;
-  int finalsym = 0;
-
-  if (finalcode == STOP_CODE)
-    moretoread = 0;
-  *code = finalcode;
-  int tracker = 0;
-
-  if (index != 8) {
-    while (index != 8) {
-
-      uint8_t shiftbyte = (00000001 << symcodeindex);
-      uint8_t newresult = storecode & shiftbyte;
-      uint8_t valueinbit = newresult >> (symcodeindex);
-      int power = 8 - (index + 1);
-
-      finalsym += valueinbit * pow(2, power);
-
-      ++index;
-      ++symcodeindex;
-      ++tracker;
-
-      if (index == 8) {
-        ++i;
-        read(infile, &(readbuffer[i]), sizeof(readbuffer));
-        storecode = readbuffer[i];
-        index = 0;
-        symcodeindex = 0;
-      } else if (symcodeindex == 7) {
-        *sym = finalsym;
-        ++i;
-        break;
-      }
-    }
-    printf("\n final sym %d", finalsym);
-  }
-  return true;
 }
+
+uint8_t curr_byt = readbuf[bits_read/8];
+uint16_t curr_bit = bits_read % bitlen;
+uint16_t the_bitval = curr_byt & (00000001 << curr_bit);
+the_bitval = the_bitval >> curr_bit;
+if(the_bitval == 1)
+{
+uint16_t bit = *code | (00000001 << curr_bit);
+*code = bit;
+printf("\n *the supposed byte: %d", bit);
+++bits_read;
+}
+else if(the_bitval == 0)
+{
+uint16_t bit = *code & (00000001 << curr_bit);
+*code = bit;
+printf("\n *the supposed byte: %d", bit);
+++bits_read;
+}
+
+}
+
+if(*code == STOP_CODE)
+{
+moreread = 0;
+return moreread;
+}
+printf("\n read code: %d", *code);  
+
+
+
+
+for(int i = 0; i < 8; i++)
+{
+if(bits_read == 4096 * 8)
+{
+read_bytes(infile, readbuf, sizeof(readbuf));
+
+}
+
+uint8_t curr_byt = readbuf[bits_read/8];
+uint16_t curr_bit = bits_read % bitlen;
+uint16_t the_bitval = curr_byt & (00000001 << curr_bit);
+the_bitval = the_bitval >> curr_bit;
+if(the_bitval == 1)
+{
+uint16_t bit = *sym | (00000001 << ((curr_bit-curr_bit)+i ));
+*sym = bit;
+printf("\n *the supposed byte: %d", bit);
+++bits_read;
+}
+else if(the_bitval == 0)
+{
+uint16_t bit = *sym & (00000001 << ((curr_bit-curr_bit)+i ));
+*sym = bit;
+printf("\n *the supposed byte: %d", bit);
+++bits_read;
+}
+
+}
+return moreread;
+}
+
 
 void buffer_word(int outfile, Word *w)
 {
-
-static uint8_t writebuffer[4096];
-static int x = 0;
 
 for(uint32_t i = 0; i<w->len;i++)
 {
@@ -355,10 +353,6 @@ writebuffer[x] = w->syms[i];
 
 }
 
-if(x == 4096)
-{
-write(outfile, writebuffer, sizeof(writebuffer));
-
 }
 
-}*/
+
