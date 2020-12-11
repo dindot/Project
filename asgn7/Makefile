@@ -1,14 +1,12 @@
-CFLAGS = -Wall -Wextra -Werror -Wpedantic
+CFLAGS = -Wall -Wextra -Werror -Wpedantic -lm -ggdb
 CC = clang $(CFLAGS)
-OBJECTS = tester.o trie.o word.o io.o bv.o
-EXECBIN = tester
 
-all: tester
+all: tester encode
 
-$(EXECBIN): $(OBJECTS)
-	$(CC) $(OBJECTS) -lm -ggdb -o $(EXECBIN)
-tester.o: tester.c trie.c word.c io.c bv.c
-	$(CC) -c tester.c
+tester: tester.c trie.c word.c io.c bv.c
+	$(CC) -o tester tester.c trie.c word.c io.c bv.c
+encode: encode.c trie.c word.c io.c bv.c
+	$(CC) -o encode encode.c trie.c word.c io.c bv.c
 trie.o: trie.c trie.h
 	$(CC) -c trie.c
 word.o: word.c word.h

@@ -73,11 +73,11 @@ if (header->magic == MAGIC) {
 
 void write_header(int outfile, FileHeader *header) {
 
- struct stat srcstats;
- fstat(outfile, &srcstats);
+ //struct stat srcstats;
+ //fstat(outfile, &srcstats);
 
-header->magic = MAGIC;
-header->protection = srcstats.st_mode;
+//header->magic = MAGIC;
+//header->protection = srcstats.st_mode;
 write_bytes(outfile, (uint8_t*)header, sizeof(FileHeader));
 }
 
