@@ -16,7 +16,7 @@ int counter = 0;
 
 if(bytes == 0)
 {
-return bytes;
+return to_read;
 }
 
 counter += bytes;
@@ -39,7 +39,7 @@ int counter = 0;
 
 if(bytes == 0)
 {
-return bytes;
+return to_write;
 }
 
 counter += bytes;
@@ -83,7 +83,58 @@ write_bytes(outfile, (uint8_t*)header, sizeof(FileHeader));
 // read is decompress  (decode)
 
 bool read_sym(int infile, uint8_t *sym) {
-  static bool notblock = 0;
+
+bool toread = 1;
+static int i = 0;
+
+// change this i here later maybe
+int bytes = read_bytes(infile, readbuf+i, sizeof(readbuf));
+
+if(bytes == 0)
+{
+toread = 0;
+}
+//printf("\n bytes are %d", bytes);
+
+
+if(bytes == 4096)
+{
+*sym = readbuf[i];
+++i;
+
+if(i == 4096)
+{
+i = 0;
+
+for(int i = 0; i < 4096; i++)
+{
+readbuf[i] = 0;
+}
+
+bytes = read_bytes(infile, readbuf+i, sizeof(readbuf));
+
+if(bytes==0){
+   toread = 0;
+}
+}
+
+}
+if(bytes < 4096)
+{
+*sym = readbuf[i];
+++i;
+if(i == bytes)
+{
+return 0;
+}
+}
+return toread;
+}
+
+
+
+
+/*  static bool notblock = 0;
   static bool block = 0;
   static int i = 0;
   static int x = 0;
@@ -118,15 +169,65 @@ bool read_sym(int infile, uint8_t *sym) {
         toread = false;
     }
   }
+*/
+//  return toread;
+//}
 
-  return toread;
-}
 
+
+// making the compressed versiob, putting into outfile, use write buffer, track w bits write
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
-
+  static int bits_written = 0;
   int minbitscurrcode = (log2(code)) + 1;
   int pad = bitlen - minbitscurrcode;
-  static int i = 0;
+  printf("\n the pad is : %d", pad);
+  printf("\n the sym: %d", sym);
+ 
+  
+ for(int i = 0; i < bitlen; i++)
+{
+if(bits_written == 4096 * 8)
+{
+write_bytes(outfile, writebuf, sizeof(writebuf));
+
+}
+uint8_t curr_byt = bits_written / 4096;
+uint8_t curr_bit = bits_written % bitlen;
+uint8_t the_bitval = code & (00000001 << curr_bit);
+the_bitval = the_bitval >> curr_bit;
+if(the_bitval == 1)
+{
+uint8_t writebyte = writebuf[curr_byt];
+uint8_t bit = writebyte | (00000001 << curr_bit);
+printf("\n the supposed byte: %d", bit);
+writebuf[curr_byt] = bit;
+}
+else if(the_bitval == 0)
+{
+uint8_t writebyte = writebuf[curr_byt];
+uint8_t bit = writebyte & (00000001 << curr_bit);
+printf("\n the supposed byte: %d", bit);
+writebuf[curr_byt] |= bit;
+}
+
+//printf("\n at the bit: %d", curr_bit);
+++bits_written;
+
+}
+printf("\n the final byte: %d", writebuf[0]);
+  
+
+
+
+
+
+
+
+
+
+
+
+  /*static int i = 0;
 
   int index = 0;
   int symcodeindex = 0;
@@ -206,7 +307,7 @@ void flush_pairs(int outfile) {
       bytes = write(outfile, writebuf, sizeof(writebuf));
       counter += bytes;
     }
-  }
+  }*/
 }
 
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
