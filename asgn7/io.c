@@ -191,7 +191,7 @@ if(bits_written == 4096 * 8)
 write_bytes(outfile, writebuf, sizeof(writebuf));
 
 }
-uint8_t curr_byt = bits_written / 4096;
+uint8_t curr_byt = bits_written / 8;
 uint8_t curr_bit = bits_written % bitlen;
 uint8_t the_bitval = code & (00000001 << curr_bit);
 the_bitval = the_bitval >> curr_bit;
@@ -201,6 +201,7 @@ uint8_t writebyte = writebuf[curr_byt];
 uint8_t bit = writebyte | (00000001 << curr_bit);
 printf("\n the supposed byte: %d", bit);
 writebuf[curr_byt] = bit;
+++bits_written;
 }
 else if(the_bitval == 0)
 {
@@ -208,94 +209,51 @@ uint8_t writebyte = writebuf[curr_byt];
 uint8_t bit = writebyte & (00000001 << curr_bit);
 printf("\n the supposed byte: %d", bit);
 writebuf[curr_byt] |= bit;
+++bits_written;
 }
 
 //printf("\n at the bit: %d", curr_bit);
-++bits_written;
 
 }
 printf("\n the final byte: %d", writebuf[0]);
   
 
 
+for(int i = 0; i < 8; i++)
+{
+if(bits_written == 4096 * 8)
+{
+write_bytes(outfile, writebuf, sizeof(writebuf));
 
-
-
-
-
-
-
-
-
-  /*static int i = 0;
-
-  int index = 0;
-  int symcodeindex = 0;
-  uint8_t storecode = 00000000;
-  uint8_t storelen = minbitscurrcode;
-
-  uint8_t thebyte = code;
-
-  while (symcodeindex != minbitscurrcode) {
-    uint8_t shiftbyte = (00000001 << symcodeindex);
-    uint8_t newresult = thebyte & shiftbyte;
-    uint8_t valueinbit = newresult >> symcodeindex;
-    uint8_t temp = valueinbit << (--storelen);
-    storecode |= temp;
-    ++index;
-    ++symcodeindex;
-  }
-
-  // check this ones fix later to make it loop at fill up entire byte based on index
-  // until index is 7 and then use the syms to fill up accordingly.
-  storecode = storecode << (pad + 1);
-  index += pad;
-
-  uint8_t symbyte = sym;
-  symcodeindex = 0;
-  int lentrack = index;
-  uint8_t thebit = 0;
-
-  while (index != 8) {
-    // now track it with the symcodeindex, must be 8 to fill sym
-    uint8_t shiftbyte = (00000001 << (symcodeindex));
-    uint8_t newresult = symbyte & shiftbyte;
-    uint8_t valueinbit = newresult >> (symcodeindex);
-    if (index == 7) {
-      thebit = newresult;
-    } else if (index != 7) {
-      thebit = valueinbit << (lentrack);
-    }
-    --lentrack;
-
-    storecode |= thebit;
-    ++index;
-    ++symcodeindex;
-
-    if (index == 8 || symcodeindex == 8) {
-      if (index == 8) {
-        writebuf[i] = storecode;
-        storecode = 00000000;
-        ++i;
-        index = 0;
-        printf("the symbol %d", symcodeindex);
-      } else if (symcodeindex == 8) {
-        storecode |= 00000000;
-        writebuf[i] = storecode;
-        storecode = 00000000;
-        ++i;
-        index = 0;
-        break;
-      }
-    }
-  }
-  //printf("the symbol %d", storecode);
-  if (i != 4096) {
-
-    write(outfile, writebuf, sizeof(writebuf));
-  }
+}
+printf("\n bits wrote: %d", bits_written);
+uint8_t curr_byt = bits_written / 8;
+uint8_t curr_bit = bits_written % 8;
+uint8_t the_bitval = sym & (00000001 <<((curr_bit-curr_bit)+i ));
+the_bitval = the_bitval >> ((curr_bit-curr_bit)+i);
+if(the_bitval == 1)
+{
+uint8_t writebyte = writebuf[curr_byt];
+uint8_t bit = writebyte | (00000001 << curr_bit);
+printf("\n the supposed byte: %d", bit);
+writebuf[curr_byt] = bit;
+++bits_written;
+}
+else if(the_bitval == 0)
+{
+uint8_t writebyte = writebuf[curr_byt];
+uint8_t bit = writebyte & (00000001 << curr_bit);
+printf("\n the supposed byte: %d", bit);
+writebuf[curr_byt] |= bit;
+++bits_written;
 }
 
+
+printf("\n the final byte: %d", writebuf[1]);
+}
+}
+
+/*
 void flush_pairs(int outfile) {
   int bytes = 0;
   int counter = 0;
@@ -307,7 +265,7 @@ void flush_pairs(int outfile) {
       bytes = write(outfile, writebuf, sizeof(writebuf));
       counter += bytes;
     }
-  }*/
+  i}
 }
 
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
@@ -403,4 +361,4 @@ write(outfile, writebuffer, sizeof(writebuffer));
 
 }
 
-}
+}*/
