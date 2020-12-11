@@ -6,18 +6,18 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-static uint8_t readbuf[4096];
-static uint8_t writebuf[4096];
+static char readbuf[4096];
+static char writebuf[4096];
 static int bits_written = 0;
 static int words_write = 0;
 static uint8_t word_buff[4096];
 
-int read_bytes(int infile, uint8_t *buf, int to_read)
+int read_bytes(int infile, char *buf, int to_read)
 {
 static int offset= 0;
 int read_bytes;
 
-while((read_bytes=read(infile, buf+offset, to_read)) !=0)
+while((read_bytes=read(infile, buf+offset, to_read-offset)) >0)
 {
 offset +=  read_bytes;
 printf("\nin reader %d", read_bytes);
@@ -27,16 +27,12 @@ return  offset;
 
 
 
-
-
-
-
 int write_bytes(int outfile, uint8_t *buf, int to_write)
 {
 static int offset= 0;
 int write_bytes;
 
-while((write_bytes=write(outfile, buf+offset, to_write-offset)) != 0 )
+while((write_bytes=write(outfile, buf+offset, to_write-offset)) > 0 )
 {
 offset +=  write_bytes;
 printf("\nin the writr %d", write_bytes);
@@ -48,7 +44,7 @@ return  offset;
 void read_header(int infile, FileHeader *header) { 
 
 if (header->magic == MAGIC) {
-   read_bytes(infile, (uint8_t*)header, sizeof(FileHeader));
+   read_bytes(infile, (char*)header, sizeof(FileHeader));
  }
 
 
@@ -58,7 +54,7 @@ if (header->magic == MAGIC) {
 
 void write_header(int outfile, FileHeader *header) {
 
-write_bytes(outfile, (uint8_t*)header, sizeof(FileHeader));
+write_bytes(outfile, (char*)header, sizeof(FileHeader));
 }
 
 
@@ -71,8 +67,10 @@ bool toread = 1;
 static int i = 0;
 
 int bytes = read_bytes(infile, readbuf, sizeof(readbuf));
+
 //i+=bytes;
-printf("haliuiuil %d",i);
+
+printf("haliuiuil %d",bytes);
 
 
 if(bytes < 4096)
@@ -81,7 +79,7 @@ if(bytes < 4096)
 ++i;
 if(i == bytes)
 {
-lseek(infile,i, SEEK_CUR);
+//lseek(infile,i, SEEK_CUR);
 return 0;
 }
 }
@@ -89,7 +87,7 @@ return 0;
 
 
 
-/*if(bytes == 0)
+//if(bytes == 0)
 {
 *sym = readbuf[i];
 ++i;
@@ -122,7 +120,7 @@ if(i == bytes)
 {
 return 0;
 }
-}*/
+}
 return toread;
 }
 
