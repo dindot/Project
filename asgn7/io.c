@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
@@ -30,43 +31,56 @@ counter+= bytes;
 return counter;
 }
 
+int write_bytes(int outfile, uint8_t *buf, int to_write)
+{
+
+int bytes = write(outfile, buf, to_write);
+int counter = 0;
+
+if(bytes == 0)
+{
+return bytes;
+}
+
+counter += bytes;
+
+int offset = to_write - bytes;
+while(bytes != 0)
+{
+bytes = write(outfile, buf+offset, offset);
+counter+= bytes;
+}
+
+return counter;
 
 
+}
 
 
+void read_header(int infile, FileHeader *header) { 
+
+if (header->magic == MAGIC) {
+   read_bytes(infile, (uint8_t*)header, sizeof(FileHeader));
+ }
 
 
+// then use fchmod here to match permisisons and set back to original
 
-void read_header(int infile, FileHeader *header) {
-  int bytes = 0;
-  int counter = 0;
-  //printf("magic man %d",header->magic);
-  if (header->magic == MAGIC) {
-    bytes = read(infile, (uint8_t *)header, sizeof(FileHeader));
-    counter += bytes;
-    if (sizeof(FileHeader) != counter) {
-      while (bytes != 0) {
-        bytes = read(infile, (uint8_t *)header, sizeof(FileHeader));
-        counter += bytes;
-      }
-    }
-  }
 }
 
 void write_header(int outfile, FileHeader *header) {
 
-  int bytes = 0;
-  int counter = 0;
+ struct stat srcstats;
+ fstat(outfile, &srcstats);
 
-  bytes = write(outfile, (uint8_t *)header, sizeof(FileHeader));
-  counter += bytes;
-  if (sizeof(FileHeader) != counter) {
-    while (bytes != 0) {
-      bytes = write(outfile, (uint8_t *)header, sizeof(FileHeader));
-      counter += bytes;
-    }
-  }
+header->magic = MAGIC;
+header->protection = srcstats.st_mode;
+write_bytes(outfile, (uint8_t*)header, sizeof(FileHeader));
 }
+
+
+//write is compression  (encode)
+// read is decompress  (decode)
 
 bool read_sym(int infile, uint8_t *sym) {
   static bool notblock = 0;
