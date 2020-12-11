@@ -9,6 +9,8 @@
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
 static int bits_written = 0;
+static int words_write = 0;
+static uint8_t word_buff[4096];
 
 int read_bytes(int infile, uint8_t *buf, int to_read)
 {
@@ -193,21 +195,21 @@ write_bytes(outfile, writebuf, sizeof(writebuf));
 
 }
 uint8_t curr_byt = bits_written / 8;
-uint8_t curr_bit = bits_written % bitlen;
-uint8_t the_bitval = code & (00000001 << curr_bit);
+uint16_t curr_bit = bits_written % bitlen;
+uint16_t the_bitval = code & (00000001 << curr_bit);
 the_bitval = the_bitval >> curr_bit;
 if(the_bitval == 1)
 {
-uint8_t writebyte = writebuf[curr_byt];
-uint8_t bit = writebyte | (00000001 << curr_bit);
+uint16_t writebyte = writebuf[curr_byt];
+uint16_t bit = writebyte | (00000001 << curr_bit);
 printf("\n the supposed byte: %d", bit);
 writebuf[curr_byt] = bit;
 ++bits_written;
 }
 else if(the_bitval == 0)
 {
-uint8_t writebyte = writebuf[curr_byt];
-uint8_t bit = writebyte & (00000001 << curr_bit);
+uint16_t writebyte = writebuf[curr_byt];
+uint16_t bit = writebyte & (00000001 << curr_bit);
 printf("\n the supposed byte: %d", bit);
 writebuf[curr_byt] |= bit;
 ++bits_written;
@@ -319,19 +321,19 @@ read_bytes(infile, readbuf, sizeof(readbuf));
 }
 
 uint8_t curr_byt = readbuf[bits_read/8];
-uint16_t curr_bit = bits_read % bitlen;
-uint16_t the_bitval = curr_byt & (00000001 << curr_bit);
+uint8_t curr_bit = bits_read % bitlen;
+uint8_t the_bitval = curr_byt & (00000001 << curr_bit);
 the_bitval = the_bitval >> curr_bit;
 if(the_bitval == 1)
 {
-uint16_t bit = *sym | (00000001 << ((curr_bit-curr_bit)+i ));
+uint8_t bit = *sym | (00000001 << ((curr_bit-curr_bit)+i ));
 *sym = bit;
 printf("\n *the supposed byte: %d", bit);
 ++bits_read;
 }
 else if(the_bitval == 0)
 {
-uint16_t bit = *sym & (00000001 << ((curr_bit-curr_bit)+i ));
+uint8_t bit = *sym & (00000001 << ((curr_bit-curr_bit)+i ));
 *sym = bit;
 printf("\n *the supposed byte: %d", bit);
 ++bits_read;
@@ -344,15 +346,33 @@ return moreread;
 
 void buffer_word(int outfile, Word *w)
 {
+//static int words_write = 0;
+//static uint8_t word_buff[4096];        
+ // or might need to use global one and change the words write var
+
 
 for(uint32_t i = 0; i<w->len;i++)
 {
+if(words_write == 4096)
+{
+write_bytes(outfile, word_buff, sizeof(word_buff));
+}
 
-writebuffer[x] = w->syms[i];
-++x;
+word_buff[i] = w->syms[i];
+++words_write;
 
 }
 
 }
+
+void flush_words(int outfile)
+{
+if(words_write != 4096)
+{
+write_bytes(outfile, word_buff, sizeof(word_buff));
+}
+
+}
+
 
 
