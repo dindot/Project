@@ -115,4 +115,24 @@ void buffer_word(int outfile, Word *w);
 //
 void flush_words(int outfile);
 
+// Wrapper for the read() syscall.
+// Loops to read the specified number of bytes, or until input is exhausted.
+// Returns the number of bytes read.
+// infile:  File descriptor of the input file to read from.
+// buf:     Buffer to store read bytes into.
+// to_read: Number of bytes to read. 
+// returns: Number of bytes read.
+//
+int read_bytes(int infile, uint8_t *buf, int to_read);
+
+
+// Wrapper for the write() syscall.
+// Loops to write the specified number of bytes, or until nothing is written.
+// Returns the number of bytes written.
+// outfile:   File descriptor of the output file to write to.
+// buf:       Buffer that stores the bytes to write out.
+// to_write:  Number of bytes to write.
+// returns:   Number of bytes written.
+//
+int write_bytes(int outfile, uint8_t *buf, int to_write);
 #endif

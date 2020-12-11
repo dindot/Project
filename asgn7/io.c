@@ -8,6 +8,35 @@
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
 
+int read_bytes(int infile, uint8_t *buf, int to_read)
+{
+int bytes = read(infile, buf, to_read);
+int counter = 0;
+
+if(bytes == 0)
+{
+return bytes;
+}
+
+counter += bytes;
+
+int offset = to_read - bytes;
+while(bytes != 0)
+{
+bytes = read(infile, buf+offset, offset);
+counter+= bytes;
+}
+
+return counter;
+}
+
+
+
+
+
+
+
+
 void read_header(int infile, FileHeader *header) {
   int bytes = 0;
   int counter = 0;
