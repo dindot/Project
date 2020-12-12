@@ -1,7 +1,7 @@
 #include "word.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define EMPTY_CODE 1
+#include "code.h"
 
 Word *word_create(uint8_t *syms, uint64_t len) {
 
@@ -36,14 +36,14 @@ void word_delete(Word *w) {
 
 WordTable *wt_create(void) {
 
-  WordTable *wt = (WordTable *)calloc(UINT16_MAX - 1, sizeof(Word));
+  WordTable *wt = (WordTable *)calloc(MAX_CODE - 1, sizeof(Word));
   Word *word = word_create(0, 0);
   wt[EMPTY_CODE] = word;
   return wt;
 }
 
 void wt_reset(WordTable *wt) {
-  for (uint16_t i = 2; i < UINT16_MAX - 1; i++) {
+  for (uint16_t i = 2; i < MAX_CODE - 1; i++) {
     if (wt[i] != (Word *)NULL) {
       wt[i]->syms = 0;
       wt[i]->len = 0;

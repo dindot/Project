@@ -1,12 +1,14 @@
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -lm -ggdb
 CC = clang $(CFLAGS)
 
-all: tester encode
+all: tester encode decode
 
 tester: tester.c trie.c word.c io.c bv.c
 	$(CC) -o tester tester.c trie.c word.c io.c bv.c
 encode: encode.c trie.c word.c io.c bv.c
 	$(CC) -o encode encode.c trie.c word.c io.c bv.c
+decode: decode.c trie.c word.c io.c bv.c
+	$(CC) -o decode decode.c trie.c word.c io.c bv.c
 trie.o: trie.c trie.h
 	$(CC) -c trie.c
 word.o: word.c word.h

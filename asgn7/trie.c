@@ -2,8 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define EMPTY_CODE 1
+#include "code.h"
 
 TrieNode *trie_node_create(uint16_t code) {
 
