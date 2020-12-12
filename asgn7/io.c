@@ -69,7 +69,7 @@ int readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
 
   if (readinbytes < 4096) {
     *sym = readbuf[i];
-  printf("\n whats the buf: %d\n", readbuf[i]);
+  printf("\n whats in the buf: %d\n", readbuf[i]);
     ++i;
     if (i == readinbytes)
       toread = 0;
@@ -80,10 +80,12 @@ int readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
 
 // making the compressed versiob, putting into outfile, use write buffer, track w bits write
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
+
 static int checkbytes = 0;
- printf("\n thr sym %d", sym);
+ printf("\n the sym %d", sym);
 ++checkbytes;
  printf("\n total byts %d", checkbytes);
+
   for (int i = 0; i < bitlen; i++) {
     if (bits_written == 4096 *8) {
       write_bytes(outfile, writebuf, sizeof(writebuf));
@@ -106,9 +108,7 @@ static int checkbytes = 0;
       ++bits_written;
     }
 
-    //printf("\n at the bit: %d", curr_bit);
-  }
-  //printf("\n the final byte: %d", writebuf[0]);
+}
 
   for (int i = 0; i < 8; i++) {
     if (bits_written == 4096 * 8) {
