@@ -7,13 +7,19 @@
 #include <unistd.h>
 
 
+<<<<<<< HEAD
 //int readinbytes = 0;
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
+=======
+static char readbuf[4096];
+static char writebuf[4096];
+>>>>>>> a809f7126498695b8387771537a9abd28e8c2d45
 static int bits_written = 0;
 static int words_write = 0;
 static uint8_t word_buff[4096];
 
+<<<<<<< HEAD
 int read_bytes(int infile, uint8_t *buf, int to_read) {
   static int offset = 0;
   int read_bytes;
@@ -26,6 +32,34 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
     return to_read;
 
   return offset;
+=======
+int read_bytes(int infile, char *buf, int to_read)
+{
+static int offset= 0;
+int read_bytes;
+
+while((read_bytes=read(infile, buf+offset, to_read-offset)) >0)
+{
+offset +=  read_bytes;
+printf("\nin reader %d", read_bytes);
+}
+return  offset;
+}
+
+
+
+int write_bytes(int outfile, uint8_t *buf, int to_write)
+{
+static int offset= 0;
+int write_bytes;
+
+while((write_bytes=write(outfile, buf+offset, to_write-offset)) > 0 )
+{
+offset +=  write_bytes;
+printf("\nin the writr %d", write_bytes);
+}
+return  offset;
+>>>>>>> a809f7126498695b8387771537a9abd28e8c2d45
 }
 
 int write_bytes(int outfile, uint8_t *buf, int to_write) {
@@ -38,8 +72,14 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
   if (offset == to_write)
     return to_write;
 
+<<<<<<< HEAD
   return offset;
 }
+=======
+if (header->magic == MAGIC) {
+   read_bytes(infile, (char*)header, sizeof(FileHeader));
+ }
+>>>>>>> a809f7126498695b8387771537a9abd28e8c2d45
 
 void read_header(int infile, FileHeader *header) {
 
@@ -52,7 +92,11 @@ void read_header(int infile, FileHeader *header) {
 
 void write_header(int outfile, FileHeader *header) {
 
+<<<<<<< HEAD
   write_bytes(outfile, (uint8_t *)header, sizeof(FileHeader));
+=======
+write_bytes(outfile, (char*)header, sizeof(FileHeader));
+>>>>>>> a809f7126498695b8387771537a9abd28e8c2d45
 }
 
 //write is compression  (encode)
@@ -60,9 +104,57 @@ void write_header(int outfile, FileHeader *header) {
 
 bool read_sym(int infile, uint8_t *sym) {
 
+<<<<<<< HEAD
   
   bool toread = 1;
   static int i = 0;
+=======
+bool toread = 1;
+static int i = 0;
+
+int bytes = read_bytes(infile, readbuf, sizeof(readbuf));
+
+//i+=bytes;
+
+printf("haliuiuil %d",bytes);
+
+
+if(bytes < 4096)
+{
+*sym = readbuf[i];
+++i;
+if(i == bytes)
+{
+//lseek(infile,i, SEEK_CUR);
+return 0;
+}
+}
+
+
+
+
+//if(bytes == 0)
+{
+*sym = readbuf[i];
+++i;
+
+
+if(i == 4096)
+{
+i = 0;
+
+for(int i = 0; i < 4096; i++)
+{
+readbuf[i] = 0;
+}
+
+bytes = read_bytes(infile, readbuf, sizeof(readbuf));
+
+if(bytes==0){
+   toread = 0;
+}
+}
+>>>>>>> a809f7126498695b8387771537a9abd28e8c2d45
 
  int readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
 
@@ -74,7 +166,20 @@ bool read_sym(int infile, uint8_t *sym) {
       toread = 0;
   }
 
+<<<<<<< HEAD
   return toread;
+=======
+if(bytes < 4096)
+{
+*sym = readbuf[i];
+++i;
+if(i == bytes)
+{
+return 0;
+}
+}
+return toread;
+>>>>>>> a809f7126498695b8387771537a9abd28e8c2d45
 }
 
 // making the compressed versiob, putting into outfile, use write buffer, track w bits write

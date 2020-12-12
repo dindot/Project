@@ -123,7 +123,7 @@ void flush_words(int outfile);
 // to_read: Number of bytes to read.
 // returns: Number of bytes read.
 //
-int read_bytes(int infile, uint8_t *buf, int to_read);
+int read_bytes(int infile, char *buf, int to_read);
 
 // Wrapper for the write() syscall.
 // Loops to write the specified number of bytes, or until nothing is written.
