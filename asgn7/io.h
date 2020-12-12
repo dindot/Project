@@ -120,11 +120,10 @@ void flush_words(int outfile);
 // Returns the number of bytes read.
 // infile:  File descriptor of the input file to read from.
 // buf:     Buffer to store read bytes into.
-// to_read: Number of bytes to read. 
+// to_read: Number of bytes to read.
 // returns: Number of bytes read.
 //
 int read_bytes(int infile, uint8_t *buf, int to_read);
-
 
 // Wrapper for the write() syscall.
 // Loops to write the specified number of bytes, or until nothing is written.

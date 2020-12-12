@@ -6,9 +6,9 @@
 Word *word_create(uint8_t *syms, uint64_t len) {
 
   Word *wrd = (Word *)malloc(sizeof(Word));
-  if(wrd == NULL)
-  return (Word*)NULL;
-  
+  if (wrd == NULL)
+    return (Word *)NULL;
+
   wrd->len = len;
   wrd->syms = syms;
   return wrd;
