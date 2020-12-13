@@ -17,9 +17,14 @@ static uint8_t word_buff[4096];
 int read_bytes(int infile, uint8_t *buf, int to_read) {
   static int offset = 0;
   int read_bytes;
-
-  while ((read_bytes = read(infile, buf + offset, to_read)) > 0)
+ 
+  read_bytes = read(infile, buf + offset, to_read);
+   printf("read bydft %d", read_bytes);
+   
+  while (read_bytes!=0)
   {
+     read_bytes = read(infile, buf + offset, to_read);
+     printf("read byt %d", read_bytes);
     offset += read_bytes;
   }
   if (offset == 0)
