@@ -8,6 +8,7 @@
 
 
 //int readinbytes = 0;
+static int offset = 0;
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
 static int bits_written = 0;
@@ -15,27 +16,102 @@ static int words_write = 0;
 static uint8_t word_buff[4096];
 
 int read_bytes(int infile, uint8_t *buf, int to_read) {
-  static int offset = 0;
-  int read_bytes;
- 
-  read_bytes = read(infile, buf + offset, to_read);
-   printf("read bydft %d", read_bytes);
-   
-  while (read_bytes!=0)
-  {
-     read_bytes = read(infile, buf + offset, to_read);
-     printf("read byt %d", read_bytes);
-    offset += read_bytes;
-  }
-  if (offset == 0)
-    return to_read;
 
-  return offset;
+ int read_bytes;
+//  static int atbit = 1;
+while((read_bytes = read(infile,buf+offset,to_read))!=0)
+{
+offset += read_bytes;
+//++atbit;
+printf("\n%d",read_bytes);
+
+
+}
+if(offset == to_read)
+return to_read;
+
+
+//printf("\n%d", offset);
+return offset;
+//printf("toread : %d",to_read);
+
+
+
+
+
+
+
+/*
+  int read_bytes;
+  static int atbit = 1; 
+  read_bytes = read(infile, buf + offset, to_read);
+ ++atbit;
+    offset += read_bytes;
+
+  while (read_bytes!=0 || atbit == to_read)
+  {
+     read_bytes = read(infile, buf + offset, atbit);
+    ++atbit;
+  printf("read byt %d", atbit);
+    offset += read_bytes;
+  
+  if (read_bytes == 0)
+    return offset;
+}*/
+//  return offset;
 }
 
 
 int write_bytes(int outfile, uint8_t *buf, int to_write) {
-  static int offset = 0;
+
+static int wrtoffset = 0;
+int write_bytes;
+to_write = offset;
+  while((write_bytes = write(outfile,buf+wrtoffset,to_write-wrtoffset))>0)
+  {
+  wrtoffset += write_bytes;
+  printf("\n%d",write_bytes);
+
+
+  }
+  if(wrtoffset == to_write)
+    return to_write;
+
+
+  //printf("\n%d", offset);
+  return wrtoffset;
+}
+
+
+
+
+
+
+
+ 
+/*static int offsets = 0;
+  int write_bytes;
+  static int atbit = 1;
+  write_bytes = write(outfile, buf + offsets, to_write);
+ ++atbit;
+    offsets += write_bytes;
+
+  while (write_bytes!=0 || atbit == to_write)
+  {
+     write_bytes = write(outfile, buf + offsets, atbit);
+    ++atbit;
+  printf("write byt %d", atbit);
+    offsets += write_bytes;
+
+  if (write_bytes == 0)
+    return offsets;
+}
+  return offsets;
+
+
+
+
+ static int offset = 0;
   int write_bytes;
 
   while ((write_bytes = write(outfile, buf + offset, to_write - offset)) > 0) {
@@ -44,8 +120,8 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
   if (offset == to_write)
     return to_write;
 
-  return offset;
-}
+  return offset;*/
+
 
 
 void read_header(int infile, FileHeader *header) {
@@ -74,7 +150,7 @@ int readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
 
   if (readinbytes < 4096) {
     *sym = readbuf[i];
-  printf("\n whats in the buf: %d\n", readbuf[i]);
+//  printf("\n whats in the buf: %d\n", readbuf[i]);
     ++i;
     if (i == readinbytes)
       toread = 0;
