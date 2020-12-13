@@ -1,7 +1,7 @@
 #include "word.h"
+#include "code.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "code.h"
 
 Word *word_create(uint8_t *syms, uint64_t len) {
 

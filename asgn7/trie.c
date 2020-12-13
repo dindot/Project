@@ -1,8 +1,8 @@
 #include "trie.h"
+#include "code.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "code.h"
 
 TrieNode *trie_node_create(uint16_t code) {
 

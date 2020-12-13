@@ -15,8 +15,8 @@
 bool input = 0, output = 0, stats = 0;
 
 int bitlen(uint16_t code) {
-  if(code == 0)
-  return 1;
+  if (code == 0)
+    return 1;
   int minbitscurrcode = (log2(code)) + 1;
   return minbitscurrcode;
 }
