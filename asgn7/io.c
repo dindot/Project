@@ -14,8 +14,8 @@ static int bits_written = 0;
 static int words_write = 0;
 static uint8_t word_buff[4096];
 
-uint16_t curr_byt = 0;
-uint8_t curr_bit = 0;
+//uint16_t curr_byt = 0;
+//uint8_t curr_bit = 0;
 
 
 int read_bytes(int infile, uint8_t *buf, int to_read) {
@@ -109,17 +109,19 @@ printf("nitlennn is %d", bitlen);
     }
    uint16_t curr_byt = bits_written / 8;
    uint8_t curr_bit = bits_written % bitlen;
-    uint16_t the_bitval = code & (00000001 << curr_bit);
-    the_bitval = the_bitval >> curr_bit;
+  
+    uint16_t the_bitval = code & (00000001 << i);
+    the_bitval = the_bitval >> i;
 
     if (the_bitval == 1) {
       uint16_t writebyte = writebuf[curr_byt];
-      uint16_t bit = writebyte | (00000001 << curr_bit);
-      writebuf[curr_byt] = bit;
+      uint16_t bit = writebyte | (00000001 << (i+curr_bit));
+      writebuf[curr_byt] |= bit;
+       //printf("cccjcjc %d",   writebuf[curr_byt]);
      ++bits_written;
     } else if (the_bitval == 0) {
       uint16_t writebyte = writebuf[curr_byt];
-      uint16_t bit = writebyte & (00000001 << curr_bit);
+      uint16_t bit = writebyte & (00000001 << (i+curr_bit));
       writebuf[curr_byt] |= bit;
      ++bits_written;
     }
@@ -133,12 +135,12 @@ printf("nitlennn is %d", bitlen);
     }
     uint8_t curr_byt = bits_written / 8;
     uint8_t curr_bit = bits_written % 8;
-    uint8_t the_bitval = sym & (00000001 << ((curr_bit - curr_bit) + i));
-    the_bitval = the_bitval >> ((curr_bit - curr_bit) + i);
+    uint8_t the_bitval = sym & (00000001 << ((curr_bit-curr_bit) +  i));
+    the_bitval = the_bitval >>  ((curr_bit-curr_bit) +  i);
     if (the_bitval == 1) {
       uint8_t writebyte = writebuf[curr_byt];
       uint8_t bit = writebyte | (00000001 << curr_bit);
-      writebuf[curr_byt] = bit;
+      writebuf[curr_byt] |= bit;
       ++bits_written;
     } else if (the_bitval == 0) {
       uint8_t writebyte = writebuf[curr_byt];
@@ -148,7 +150,8 @@ printf("nitlennn is %d", bitlen);
     }
   }
 //++bits_written;
-//  printf("\n bits wr: %d", bits_written);
+ printf("\n bits wr: %d", bits_written);
+printf("\n bytes writeen: %d", writebuf[1]);
 }
 
 void flush_pairs(int outfile) {
