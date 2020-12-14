@@ -32,9 +32,7 @@ void trie_reset(TrieNode *root) {
 
   TrieNode *next = root;
 
-  //uint16_t checkcode = 0;
-
-  for (int i = 0; i < ALPHABET; i++) {
+   for (int i = 0; i < ALPHABET; i++) {
     TrieNode *curr = root->children[i];
     if (curr->children[i] == (TrieNode *)NULL) {
       curr->code = (uint16_t)NULL;
@@ -79,10 +77,8 @@ void trie_delete(TrieNode *n) {
 }
 
 TrieNode *trie_step(TrieNode *n, uint8_t sym) {
-  //char character = sym;
   TrieNode *curr = n->children[sym];
-  //printf("%hu", curr->code);
-  if (curr == (TrieNode *)NULL) {
+    if (curr == (TrieNode *)NULL) {
     return (TrieNode *)NULL;
   }
 
@@ -90,12 +86,5 @@ TrieNode *trie_step(TrieNode *n, uint8_t sym) {
 
     return curr;
   }
-
-  //if(n->children[sym] != (TrieNode*)NULL)
-  //{
-
-  //n = n->children[sym];
-
-  //}
   return n;
 }

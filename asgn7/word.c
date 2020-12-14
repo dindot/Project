@@ -19,35 +19,23 @@ Word *word_create(uint8_t *syms, uint64_t len) {
 
 Word *word_append_sym(Word *w, uint8_t sym) {
 
-/*if(w != (Word*) NULL){
+Word* rw = NULL;
+
+if(w != (Word*) NULL){
+printf("Gfggfgfg");
 w->syms = (uint8_t*)realloc(w->syms, w->len+1);
 w->syms[w->len] = sym;	 
-return w;
+
+rw = word_create(w->syms, w->len);
 }
-if(sym == 0){
-w->syms[0] = sym;
 
-*for(uint32_t i = 0; i < w->len; i++){
- if (w->syms[i] == (uint8_t)NULL) {
-
-    w->syms[i] = sym;
-    w->len = 1;
-    return w;
-  }
-}*/
-  //printf("len %u\n", w->len);
- // w->syms[(w->len)] = sym;
- // w->len = ++(w->len);
-  //printf("len %u\n", w->len);
-//  return w;}
-printf("syms %d", sym);
-if(w == (Word*) NULL)
+if(w != (Word*) NULL){
+if(w->len == 0)
 {
-printf("hallo");//Word* y = word_create(w->syms, 1);
-}return 0;
-
-
-//return w;
+rw->syms = (uint8_t*)malloc(sizeof(w->syms) * 1);
+rw->syms[0] = sym;
+}}
+return rw;
 }
 
 void word_delete(Word *w) {
