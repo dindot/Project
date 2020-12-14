@@ -102,14 +102,14 @@ printf("code is %d", code);
 printf("sym is %d", sym);
 printf("nitlennn is %d", bitlen);
   for (int i = 0; i < bitlen; i++) {
-    if (bits_written == (offset-8) * 8) {
+    if (bits_written == (offset) * 8) {
       //printf("\n bits wr: %d", bits_written);
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
    
-   uint16_t curr_byt = bits_written / 8;
-   uint8_t curr_bit = bits_written % 8;
+   uint16_t curr_byt = (bits_written) / 8;
+   uint8_t curr_bit = (bits_written) % 8;
   
     uint16_t the_bitval = code & (00000001 << i);
     the_bitval = the_bitval >> i;
@@ -137,12 +137,12 @@ printf("nitlennn is %d", bitlen);
 
    int i = 0;
   for (i = 0; i < 8; i++) {
-    if (bits_written == (offset-8) * 8) {
+    if (bits_written == (offset) * 8) {
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
-    uint8_t curr_byt = bits_written / 8;
-    uint8_t curr_bit = bits_written % 8;
+    uint8_t curr_byt = (bits_written) / 8;
+    uint8_t curr_bit = (bits_written) %8;
     uint8_t the_bitval = sym & (00000001 << ((curr_bit-curr_bit) +  i));
     the_bitval = the_bitval >>  ((curr_bit-curr_bit) +  i);
     if (the_bitval == 1) {
@@ -166,7 +166,8 @@ printf("\n bytes writeen: %d", writebuf[1]);
 }
 
 void flush_pairs(int outfile) {
-  if (bits_written != offset * 8) {
+// bits_written+=8;
+ if (bits_written != offset * 8) {
     write_bytes(outfile, writebuf, bits_written);
   }
 }
