@@ -107,28 +107,36 @@ printf("nitlennn is %d", bitlen);
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
+   
    uint16_t curr_byt = bits_written / 8;
-   uint8_t curr_bit = bits_written % bitlen;
+   uint8_t curr_bit = bits_written % 8;
   
     uint16_t the_bitval = code & (00000001 << i);
     the_bitval = the_bitval >> i;
 
     if (the_bitval == 1) {
+      printf("\n the bit %d", the_bitval);
       uint16_t writebyte = writebuf[curr_byt];
-      uint16_t bit = writebyte | (00000001 << (i+curr_bit));
+  //   printf("\nwritebyee %d", writebyte); 
+    printf("currbyt %d",   curr_byt);
+     uint16_t bit = writebyte | (00000001 << (curr_bit));
+     // printf("cccjcjc %d",  bit);
       writebuf[curr_byt] |= bit;
-       //printf("cccjcjc %d",   writebuf[curr_byt]);
+      // printf("cccjcjc %d",   writebuf[curr_byt]);
      ++bits_written;
     } else if (the_bitval == 0) {
+     printf("\n the bit %d", the_bitval);
       uint16_t writebyte = writebuf[curr_byt];
-      uint16_t bit = writebyte & (00000001 << (i+curr_bit));
+      uint16_t bit = writebyte & (00000001 << (curr_bit));
       writebuf[curr_byt] |= bit;
      ++bits_written;
     }
 //  ++bits_written;
   }
 
-  for (int i = 0; i < 8; i++) {
+
+   int i = 0;
+  for (i = 0; i < 8; i++) {
     if (bits_written == (offset-8) * 8) {
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
@@ -138,11 +146,14 @@ printf("nitlennn is %d", bitlen);
     uint8_t the_bitval = sym & (00000001 << ((curr_bit-curr_bit) +  i));
     the_bitval = the_bitval >>  ((curr_bit-curr_bit) +  i);
     if (the_bitval == 1) {
+        printf("\n the bit %d", the_bitval);
       uint8_t writebyte = writebuf[curr_byt];
-      uint8_t bit = writebyte | (00000001 << curr_bit);
+printf("\n bytte val%d", curr_byt);      
+uint8_t bit = writebyte | (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
       ++bits_written;
     } else if (the_bitval == 0) {
+       printf("\n the bit %d", the_bitval);
       uint8_t writebyte = writebuf[curr_byt];
       uint8_t bit = writebyte & (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
