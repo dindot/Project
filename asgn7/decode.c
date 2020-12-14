@@ -23,8 +23,6 @@ int bitlen(uint16_t code) {
   return minbitscurrcode;
 }
 
-void compress(int infile, int outfile);
-
 int main(int argc, char **argv) {
   char inputfile[50] = { '0' };
   char outputfile[50] = { '0' };
