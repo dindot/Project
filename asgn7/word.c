@@ -11,22 +11,36 @@ Word *word_create(uint8_t *syms, uint64_t len) {
 
   wrd->len = len;
   wrd->syms = (uint8_t*)malloc(sizeof(syms) * len);
+  if(wrd->syms == NULL)
+  return (Word *)NULL;
+
   return wrd;
 }
 
 Word *word_append_sym(Word *w, uint8_t sym) {
 
-  if (w->syms[0] == (uint8_t)NULL) {
+if(w != (Word*) NULL){
+w->syms = (uint8_t*)realloc(w->syms, w->len+1);
+w->syms[w->len] = sym;	 
+return w;
+}
+if(w != (Word*) NULL){
+w->syms[0] = sym;
 
-    w->syms[0] = sym;
+/*for(uint32_t i = 0; i < w->len; i++){
+ if (w->syms[i] == (uint8_t)NULL) {
+
+    w->syms[i] = sym;
     w->len = 1;
     return w;
   }
+}*/
   //printf("len %u\n", w->len);
-  w->syms[(w->len)] = sym;
-  w->len = ++(w->len);
+ // w->syms[(w->len)] = sym;
+ // w->len = ++(w->len);
   //printf("len %u\n", w->len);
-  return w;
+  return w;}
+return;
 }
 
 void word_delete(Word *w) {

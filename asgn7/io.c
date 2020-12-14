@@ -103,7 +103,6 @@ printf("sym is %d", sym);
 printf("nitlennn is %d", bitlen);
   for (int i = 0; i < bitlen; i++) {
     if (bits_written == (offset) * 8) {
-      //printf("\n bits wr: %d", bits_written);
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
@@ -115,23 +114,18 @@ printf("nitlennn is %d", bitlen);
     the_bitval = the_bitval >> i;
 
     if (the_bitval == 1) {
-      printf("\n the bit %d", the_bitval);
       uint16_t writebyte = writebuf[curr_byt];
-  //   printf("\nwritebyee %d", writebyte); 
-    printf("currbyt %d",   curr_byt);
      uint16_t bit = writebyte | (00000001 << (curr_bit));
-     // printf("cccjcjc %d",  bit);
       writebuf[curr_byt] |= bit;
-      // printf("cccjcjc %d",   writebuf[curr_byt]);
      ++bits_written;
-    } else if (the_bitval == 0) {
+ } 
+    else if (the_bitval == 0) {
      printf("\n the bit %d", the_bitval);
       uint16_t writebyte = writebuf[curr_byt];
       uint16_t bit = writebyte & (00000001 << (curr_bit));
       writebuf[curr_byt] |= bit;
      ++bits_written;
-    }
-//  ++bits_written;
+   }
   }
 
 
@@ -146,9 +140,7 @@ printf("nitlennn is %d", bitlen);
     uint8_t the_bitval = sym & (00000001 << ((curr_bit-curr_bit) +  i));
     the_bitval = the_bitval >>  ((curr_bit-curr_bit) +  i);
     if (the_bitval == 1) {
-        printf("\n the bit %d", the_bitval);
       uint8_t writebyte = writebuf[curr_byt];
-printf("\n bytte val%d", curr_byt);      
 uint8_t bit = writebyte | (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
       ++bits_written;
@@ -160,13 +152,11 @@ uint8_t bit = writebyte | (00000001 << curr_bit);
      ++bits_written;
     }
   }
-//++bits_written;
- printf("\n bits wr: %d", bits_written);
-printf("\n bytes writeen: %d", writebuf[1]);
+ //printf("\n bits wr: %d", bits_written);
+//printf("\n bytes writeen: %d", writebuf[1]);
 }
 
 void flush_pairs(int outfile) {
-// bits_written+=8;
  if (bits_written != offset * 8) {
     write_bytes(outfile, writebuf, bits_written);
   }
@@ -185,13 +175,13 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
       read_bytes(infile, readbuf, sizeof(readbuf));
       bits_read = 0;
     }
-    read_bytes(infile, readbuf, sizeof(readbuf));
+ //   read_bytes(infile, readbuf, sizeof(readbuf));
 
     uint8_t curr_byt = readbuf[bits_read / 8];
-    uint16_t curr_bit = bits_read % bitlen;
-    uint16_t the_bitval = curr_byt & (00000001 << curr_bit);
+    uint16_t curr_bit = bits_read % 8;
+    uint16_t the_bitval = curr_byt & (00000001 << i);
 
-    the_bitval = the_bitval >> curr_bit;
+    the_bitval = the_bitval >> i;
     if (the_bitval == 1) {
       uint16_t bit = *code | (00000001 << curr_bit);
       *code |= bit;
@@ -210,25 +200,26 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
   }
 
   for (int i = 0; i < 8; i++) {
-    if (bits_read == bits_read * 8) {
+    if (bits_read == offset * 8) {
       read_bytes(infile, readbuf, sizeof(readbuf));
+      bits_read = 0;
     }
 
     uint8_t curr_byt = readbuf[bits_read / 8];
-    uint8_t curr_bit = bits_read % bitlen;
-    uint8_t the_bitval = curr_byt & (00000001 << curr_bit);
-    the_bitval = the_bitval >> curr_bit;
+    uint8_t curr_bit = bits_read % 8;
+    uint8_t the_bitval = curr_byt & (00000001 << i);
+    the_bitval = the_bitval >> i;
     if (the_bitval == 1) {
-      uint8_t bit = *sym | (00000001 << ((curr_bit - curr_bit) + i));
+      uint8_t bit = *sym | (00000001 << curr_bit);
       *sym |= bit;
       ++bits_read;
     } else if (the_bitval == 0) {
-      uint8_t bit = *sym & (00000001 << ((curr_bit - curr_bit) + i));
+      uint8_t bit = *sym & (00000001 << curr_bit);
       *sym |= bit;
       ++bits_read;
     }
   }
-  read_bytes(infile, readbuf, sizeof(readbuf));
+ // read_bytes(infile, readbuf, sizeof(readbuf));
   return moreread;
 }
 
