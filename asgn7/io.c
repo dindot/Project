@@ -13,6 +13,7 @@ static uint8_t writebuf[4096];
 static int bits_written = 0;
 static int words_write = 0;
 static uint8_t word_buff[4096];
+ static int bits_read = 0;
 
 //uint16_t curr_byt = 0;
 //uint8_t curr_bit = 0;
@@ -168,9 +169,7 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
   *code = 0;
   *sym = 0;
 
-  static int bits_read = 0;
-
-  for (int i = 0; i < bitlen; i++) {
+   for (int i = 0; i < bitlen; i++) {
     if (bits_read == offset * 8) {
       read_bytes(infile, readbuf, sizeof(readbuf));
       bits_read = 0;
@@ -178,9 +177,10 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
  //   read_bytes(infile, readbuf, sizeof(readbuf));
 
     uint8_t curr_byt = readbuf[bits_read / 8];
-    uint16_t curr_bit = bits_read % 8;
+     printf("\n *the supposed rad byte: %d", curr_byt);
+     uint16_t curr_bit = bits_read % 8;
     uint16_t the_bitval = curr_byt & (00000001 << i);
-
+     printf("\n *the supposed rad byte: %d", the_bitval);
     the_bitval = the_bitval >> i;
     if (the_bitval == 1) {
       uint16_t bit = *code | (00000001 << curr_bit);
@@ -229,12 +229,12 @@ void buffer_word(int outfile, Word *w) {
   // or might need to use global one and change the words write var
 
   for (uint32_t i = 0; i < w->len; i++) {
-    if (words_write == 4096) {
+    if (bits_read != offset*8) {
       write_bytes(outfile, word_buff, sizeof(word_buff));
     }
 
-    word_buff[i] = w->syms[i];
-    ++words_write;
+ //   word_buff[i] = w->syms[i];
+   // ++words_write;
   }
 }
 
