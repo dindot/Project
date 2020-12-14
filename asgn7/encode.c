@@ -88,8 +88,8 @@ int main(int argc, char **argv) {
     }
 
     write_header(outfile, &h);
-
-    compress(infile, outfile);
+    
+   compress(infile, outfile);
   }
   //else
   //compress(defaultinput, defaultoutput);

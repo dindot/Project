@@ -7,11 +7,16 @@
 #include <unistd.h>
 
 static int offset = 0;
+static int wrtoffset = 0;
 static uint8_t readbuf[4096];
 static uint8_t writebuf[4096];
 static int bits_written = 0;
 static int words_write = 0;
 static uint8_t word_buff[4096];
+
+uint16_t curr_byt = 0;
+uint8_t curr_bit = 0;
+
 
 int read_bytes(int infile, uint8_t *buf, int to_read) {
 
@@ -19,6 +24,7 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
 
   while ((read_bytes = read(infile, buf + offset, to_read)) != 0) {
     offset += read_bytes;
+   // printf("byeeee %d",read_bytes);
   }
 
   if (offset == to_read)
@@ -29,15 +35,16 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
 
 int write_bytes(int outfile, uint8_t *buf, int to_write) {
 
-  static int wrtoffset = 0;
+ // static int wrtoffset = 0;
   int write_bytes;
   to_write = offset;
 
-  while ((write_bytes = write(outfile, buf + wrtoffset, to_write - wrtoffset))
-         > 0) {
+  while((write_bytes = write(outfile, buf + wrtoffset, to_write - wrtoffset)) >0)
+        {
     wrtoffset += write_bytes;
+//   printf("written %d", write_bytes);
   }
-
+ // printf("written %d", write_bytes);
   if (wrtoffset == to_write)
     return to_write;
 
@@ -54,9 +61,11 @@ void read_header(int infile, FileHeader *header) {
 }
 
 void write_header(int outfile, FileHeader *header) {
-
-  write_bytes(outfile, (uint8_t *)header, sizeof(FileHeader));
-  offset += 8;
+ 
+write(outfile,(uint8_t*)header, sizeof(FileHeader));
+// write_bytes(outfile, (uint8_t *)header, sizeof(FileHeader));
+ offset += sizeof(FileHeader);
+ // printf("head %lu", sizeof(FileHeader));
 }
 
 //write is compression  (encode)
@@ -65,17 +74,19 @@ void write_header(int outfile, FileHeader *header) {
 bool read_sym(int infile, uint8_t *sym) {
 
   bool toread = 1;
-  static int i = 0;
+  static int i = 8;
+   //i = wrtoffset;
   //static boo left = 0;
   static int readinbytes = 0;
 
-  if (i == 0)
+  if (i == 8){
     readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
-
+  printf("\n%d", readinbytes);}
   //left == 1;
 
   if (readinbytes < 4096) {
     *sym = readbuf[i];
+    printf("\n%d", *sym);
     //  printf("\n whats in the buf: %d\n", readbuf[i]);
     ++i;
     if (i == readinbytes)
@@ -87,15 +98,17 @@ bool read_sym(int infile, uint8_t *sym) {
 
 // making the compressed versiob, putting into outfile, use write buffer, track w bits write
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
-
+printf("code is %d", code);
+printf("sym is %d", sym);
+printf("nitlennn is %d", bitlen);
   for (int i = 0; i < bitlen; i++) {
-    if (bits_written == offset * 8) {
+    if (bits_written == (offset-8) * 8) {
       //printf("\n bits wr: %d", bits_written);
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
-    uint8_t curr_byt = bits_written / 8;
-    uint16_t curr_bit = bits_written % bitlen;
+   uint16_t curr_byt = bits_written / 8;
+   uint8_t curr_bit = bits_written % bitlen;
     uint16_t the_bitval = code & (00000001 << curr_bit);
     the_bitval = the_bitval >> curr_bit;
 
@@ -103,17 +116,18 @@ void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
       uint16_t writebyte = writebuf[curr_byt];
       uint16_t bit = writebyte | (00000001 << curr_bit);
       writebuf[curr_byt] = bit;
-      ++bits_written;
+     ++bits_written;
     } else if (the_bitval == 0) {
       uint16_t writebyte = writebuf[curr_byt];
       uint16_t bit = writebyte & (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
-      ++bits_written;
+     ++bits_written;
     }
+//  ++bits_written;
   }
 
   for (int i = 0; i < 8; i++) {
-    if (bits_written == offset * 8) {
+    if (bits_written == (offset-8) * 8) {
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
@@ -130,10 +144,11 @@ void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
       uint8_t writebyte = writebuf[curr_byt];
       uint8_t bit = writebyte & (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
-      ++bits_written;
+     ++bits_written;
     }
   }
-  printf("\n bits wr: %d", bits_written);
+//++bits_written;
+//  printf("\n bits wr: %d", bits_written);
 }
 
 void flush_pairs(int outfile) {

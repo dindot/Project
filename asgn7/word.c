@@ -10,7 +10,7 @@ Word *word_create(uint8_t *syms, uint64_t len) {
     return (Word *)NULL;
 
   wrd->len = len;
-  wrd->syms = syms;
+  wrd->syms = (uint8_t*)malloc(sizeof(syms) * len);
   return wrd;
 }
 
