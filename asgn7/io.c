@@ -19,7 +19,7 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
 
   while ((read_bytes = read(infile, buf + offset, to_read)) != 0) {
     offset += read_bytes;
-    }
+  }
 
   if (offset == to_read)
     return to_read;
@@ -32,8 +32,8 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
   int write_bytes;
   to_write = offset;
 
-  while((write_bytes = write(outfile, buf + wrtoffset, to_write - wrtoffset)) >0)
-        {
+  while ((write_bytes = write(outfile, buf + wrtoffset, to_write - wrtoffset))
+         > 0) {
     wrtoffset += write_bytes;
   }
   if (wrtoffset == to_write)
@@ -50,9 +50,9 @@ void read_header(int infile, FileHeader *header) {
 }
 
 void write_header(int outfile, FileHeader *header) {
- 
-write(outfile,(uint8_t*)header, sizeof(FileHeader));
- offset += sizeof(FileHeader);
+
+  write(outfile, (uint8_t *)header, sizeof(FileHeader));
+  offset += sizeof(FileHeader);
 }
 
 bool read_sym(int infile, uint8_t *sym) {
@@ -61,9 +61,9 @@ bool read_sym(int infile, uint8_t *sym) {
   static int i = 8;
   static int readinbytes = 0;
 
-  if (i == 8){
-   readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
-}
+  if (i == 8) {
+    readinbytes = read_bytes(infile, readbuf, sizeof(readbuf));
+  }
   if (readinbytes < 4096) {
     *sym = readbuf[i];
     ++i;
@@ -71,63 +71,61 @@ bool read_sym(int infile, uint8_t *sym) {
       toread = 0;
   }
   return toread;
-
 }
 
 void buffer_pair(int outfile, uint16_t code, uint8_t sym, uint8_t bitlen) {
 
   for (int i = 0; i < bitlen; i++) {
-    if (bits_written == (offset) * 8) {
+    if (bits_written == (offset)*8) {
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
-   
-   uint16_t curr_byt = (bits_written) / 8;
-   uint8_t curr_bit = (bits_written) % 8;
-  
+
+    uint16_t curr_byt = (bits_written) / 8;
+    uint8_t curr_bit = (bits_written) % 8;
+
     uint16_t the_bitval = code & (00000001 << i);
     the_bitval = the_bitval >> i;
 
     if (the_bitval == 1) {
       uint16_t writebyte = writebuf[curr_byt];
-     uint16_t bit = writebyte | (00000001 << (curr_bit));
+      uint16_t bit = writebyte | (00000001 << (curr_bit));
       writebuf[curr_byt] |= bit;
-     ++bits_written;
- } 
-    else if (the_bitval == 0) {
+      ++bits_written;
+    } else if (the_bitval == 0) {
       uint16_t writebyte = writebuf[curr_byt];
       uint16_t bit = writebyte & (00000001 << (curr_bit));
       writebuf[curr_byt] |= bit;
-     ++bits_written;
-   }
+      ++bits_written;
+    }
   }
 
-   int i = 0;
+  int i = 0;
   for (i = 0; i < 8; i++) {
-    if (bits_written == (offset) * 8) {
+    if (bits_written == (offset)*8) {
       write_bytes(outfile, writebuf, sizeof(writebuf));
       bits_written = 0;
     }
     uint8_t curr_byt = (bits_written) / 8;
-    uint8_t curr_bit = (bits_written) %8;
-    uint8_t the_bitval = sym & (00000001 << ((curr_bit-curr_bit) +  i));
-    the_bitval = the_bitval >>  ((curr_bit-curr_bit) +  i);
+    uint8_t curr_bit = (bits_written) % 8;
+    uint8_t the_bitval = sym & (00000001 << ((curr_bit - curr_bit) + i));
+    the_bitval = the_bitval >> ((curr_bit - curr_bit) + i);
     if (the_bitval == 1) {
       uint8_t writebyte = writebuf[curr_byt];
-uint8_t bit = writebyte | (00000001 << curr_bit);
+      uint8_t bit = writebyte | (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
       ++bits_written;
     } else if (the_bitval == 0) {
       uint8_t writebyte = writebuf[curr_byt];
       uint8_t bit = writebyte & (00000001 << curr_bit);
       writebuf[curr_byt] |= bit;
-     ++bits_written;
+      ++bits_written;
     }
   }
 }
 
 void flush_pairs(int outfile) {
- if (bits_written != offset * 8) {
+  if (bits_written != offset * 8) {
     write_bytes(outfile, writebuf, bits_written);
   }
 }
@@ -138,13 +136,13 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
   *code = 0;
   *sym = 0;
 
-   for (int i = 0; i < bitlen; i++) {
+  for (int i = 0; i < bitlen; i++) {
     if (bits_read == offset * 8) {
       read_bytes(infile, readbuf, sizeof(readbuf));
       bits_read = 0;
     }
     uint8_t curr_byt = readbuf[bits_read / 8];
-   uint16_t curr_bit = bits_read % 8;
+    uint16_t curr_bit = bits_read % 8;
     uint16_t the_bitval = curr_byt & (00000001 << i);
 
     the_bitval = the_bitval >> i;
@@ -159,10 +157,10 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
     }
   }
 
- if (*code == STOP_CODE) {
+  if (*code == STOP_CODE) {
     moreread = 0;
     return moreread;
- }
+  }
 
   for (int i = 0; i < 8; i++) {
     if (bits_read == offset * 8) {
@@ -171,8 +169,8 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
     }
 
     uint8_t curr_byt = readbuf[bits_read / 8];
-   uint8_t curr_bit = bits_read % 8;
-     uint8_t the_bitval = curr_byt & (00000001 << i);
+    uint8_t curr_bit = bits_read % 8;
+    uint8_t the_bitval = curr_byt & (00000001 << i);
     the_bitval = the_bitval >> i;
 
     if (the_bitval == 1) {
@@ -189,9 +187,9 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, uint8_t bitlen) {
 }
 
 void buffer_word(int outfile, Word *w) {
- 
-if(w != NULL){
-      if (bits_read != offset*8) {
+
+  if (w != NULL) {
+    if (bits_read != offset * 8) {
       write_bytes(outfile, readbuf, offset);
     }
   }

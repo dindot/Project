@@ -10,32 +10,32 @@ Word *word_create(uint8_t *syms, uint64_t len) {
     return (Word *)NULL;
 
   wrd->len = len;
-  wrd->syms = (uint8_t*)malloc(sizeof(syms) * len);
-  if(wrd->syms == NULL)
-  return (Word *)NULL;
+  wrd->syms = (uint8_t *)malloc(sizeof(syms) * len);
+  if (wrd->syms == NULL)
+    return (Word *)NULL;
 
   return wrd;
 }
 
 Word *word_append_sym(Word *w, uint8_t sym) {
 
-Word* rw = NULL;
+  Word *rw = NULL;
 
-if(w != (Word*) NULL){
-printf("Gfggfgfg");
-w->syms = (uint8_t*)realloc(w->syms, w->len+1);
-w->syms[w->len] = sym;	 
+  if (w != (Word *)NULL) {
+    printf("Gfggfgfg");
+    w->syms = (uint8_t *)realloc(w->syms, w->len + 1);
+    w->syms[w->len] = sym;
 
-rw = word_create(w->syms, w->len);
-}
+    rw = word_create(w->syms, w->len);
+  }
 
-if(w != (Word*) NULL){
-if(w->len == 0)
-{
-rw->syms = (uint8_t*)malloc(sizeof(w->syms) * 1);
-rw->syms[0] = sym;
-}}
-return rw;
+  if (w != (Word *)NULL) {
+    if (w->len == 0) {
+      rw->syms = (uint8_t *)malloc(sizeof(w->syms) * 1);
+      rw->syms[0] = sym;
+    }
+  }
+  return rw;
 }
 
 void word_delete(Word *w) {
