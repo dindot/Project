@@ -5,7 +5,7 @@
 
 Word *word_create(uint8_t *syms, uint64_t len) {
 
-  Word *wrd = (Word *)malloc(sizeof(Word));
+  Word *wrd = (Word *)calloc(sizeof(Word), 1);
   if (wrd == NULL)
     return (Word *)NULL;
 
