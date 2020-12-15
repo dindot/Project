@@ -13,8 +13,7 @@ word.o: word.c word.h
 	$(CC) -c word.c
 io.o: io.c io.h
 	$(CC) -c io.c
-	
-	
+		
 .PHONY: clean
 clean:
 	rm -rf $(OBJECTS) $(EXECBIN) infer-out

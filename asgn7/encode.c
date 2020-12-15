@@ -17,7 +17,7 @@ bool input = 0, output = 0, stats = 0;
 int bitlen(uint16_t code) {
   if (code == 0)
     return 1;
-  int minbitscurrcode = (log2(code)) + 1;
+  int minbitscurrcode = (log2(code)) + 1; // finds min bits to represent number
   return minbitscurrcode;
 }
 
@@ -26,9 +26,6 @@ void compress(int infile, int outfile);
 int main(int argc, char **argv) {
   char inputfile[50] = { '0' };
   char outputfile[50] = { '0' };
-  int defaultinput = STDIN_FILENO;
-  int defaultoutput = STDOUT_FILENO;
-
   char *input_num = (char *)NULL; // to get user changed values
   char c; // to obtain user input of choices
 
@@ -56,15 +53,11 @@ int main(int argc, char **argv) {
     }
   }
   if (argc == 1) { // user must supply arguments to run
-    char text[4096]
-        = { '0' }; // CHANGE THIS SO THAT IT TAKES INPUT TO BE PLACED INTO
-    while (!feof(stdin)) {
-      fgets(text, 4096, stdin);
-    }
+    char *inp = NULL;
+    char *outp = NULL;
 
-    compress(defaultinput, defaultoutput);
-    //    printf("No arguments supplied!");
-    //  return -1;
+    while (!feof(stdin))
+      fscanf(stdin, "%s %s", inp, outp);
   }
 
   if (input == 1 && output == 1) {
@@ -75,7 +68,7 @@ int main(int argc, char **argv) {
     }
 
     struct stat srcstats;
-    fstat(infile, &srcstats);
+    fstat(infile, &srcstats); // get the permissions of the file
     FileHeader h;
 
     h.magic = MAGIC;
@@ -89,11 +82,11 @@ int main(int argc, char **argv) {
 
     write_header(outfile, &h);
 
-    compress(infile, outfile);
-  }
-  //else
-  //compress(defaultinput, defaultoutput);
+    compress(infile, outfile); // start compression
 
+    close(infile);
+    close(outfile);
+  }
   return 0;
 }
 

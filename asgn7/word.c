@@ -22,9 +22,9 @@ Word *word_append_sym(Word *w, uint8_t sym) {
   Word *rw = NULL;
 
   if (w != (Word *)NULL) {
-    printf("Gfggfgfg");
     w->syms = (uint8_t *)realloc(w->syms, w->len + 1);
-    w->syms[w->len] = sym;
+    if (w->syms != (uint8_t *)NULL)
+      w->syms[w->len] = sym;
 
     rw = word_create(w->syms, w->len);
   }
@@ -32,7 +32,8 @@ Word *word_append_sym(Word *w, uint8_t sym) {
   if (w != (Word *)NULL) {
     if (w->len == 0) {
       rw->syms = (uint8_t *)malloc(sizeof(w->syms) * 1);
-      rw->syms[0] = sym;
+      if (rw->syms != (uint8_t *)NULL)
+        rw->syms[0] = sym;
     }
   }
   return rw;
@@ -47,7 +48,8 @@ WordTable *wt_create(void) {
 
   WordTable *wt = (WordTable *)calloc(MAX_CODE - 1, sizeof(Word));
   Word *word = word_create(0, 0);
-  wt[EMPTY_CODE] = word;
+  if (wt != (WordTable *)NULL)
+    wt[EMPTY_CODE] = word;
   return wt;
 }
 

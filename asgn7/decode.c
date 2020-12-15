@@ -82,9 +82,11 @@ int main(int argc, char **argv) {
       return -1;
     }
     fstat(outfile, &dststats);
-    fchmod(outfile, srcstats.st_mode);
+    fchmod(outfile, srcstats.st_mode); // set permissions as the read file
 
     decompress(infile, outfile);
+    close(infile);
+    close(outfile);
   }
 
   return 0;
